@@ -1,23 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_lstlast.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dda-cunh <dda-cunh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/30 18:23:56 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/06/30 18:31:06 by dda-cunh         ###   ########.fr       */
+/*   Created: 2023/04/12 21:27:38 by dda-cunh          #+#    #+#             */
+/*   Updated: 2023/04/13 16:14:18 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int ac, char **av, char **env)
+t_list	*ft_lstlast(t_list *lst)
 {
-	t_data	*shell;
-
-	(void) ac;
-	(void) av;
-	shell = init_shell(env);
-	return (minshell(shell));
+	if (!lst)
+		return (NULL);
+	while (lst->next)
+		lst = lst->next;
+	return (lst);
 }

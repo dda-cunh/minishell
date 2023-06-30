@@ -1,23 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_isalnum.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dda-cunh <dda-cunh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/30 18:23:56 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/06/30 18:31:06 by dda-cunh         ###   ########.fr       */
+/*   Created: 2023/04/11 13:41:11 by dda-cunh          #+#    #+#             */
+/*   Updated: 2023/04/11 14:28:35 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
-int	main(int ac, char **av, char **env)
+int	ft_isalnum(int c)
 {
-	t_data	*shell;
-
-	(void) ac;
-	(void) av;
-	shell = init_shell(env);
-	return (minshell(shell));
+	return ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')
+		|| (c >= '0' && c <= '9'));
 }

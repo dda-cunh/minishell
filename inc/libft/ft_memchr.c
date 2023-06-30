@@ -1,23 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_memchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dda-cunh <dda-cunh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/30 18:23:56 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/06/30 18:31:06 by dda-cunh         ###   ########.fr       */
+/*   Created: 2023/04/11 22:07:28 by dda-cunh          #+#    #+#             */
+/*   Updated: 2023/04/12 19:41:07 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int ac, char **av, char **env)
+void	*ft_memchr(const void *s, int c, size_t n)
 {
-	t_data	*shell;
+	unsigned char	*s_bytes;
 
-	(void) ac;
-	(void) av;
-	shell = init_shell(env);
-	return (minshell(shell));
+	s_bytes = (unsigned char *)s;
+	while (n--)
+	{
+		if (*s_bytes == (unsigned char)c)
+			return (s_bytes);
+		s_bytes++;
+	}
+	return (NULL);
 }

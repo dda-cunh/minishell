@@ -1,23 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strmapi.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dda-cunh <dda-cunh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/30 18:23:56 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/06/30 18:31:06 by dda-cunh         ###   ########.fr       */
+/*   Created: 2023/04/12 15:13:56 by dda-cunh          #+#    #+#             */
+/*   Updated: 2023/04/12 15:27:01 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int ac, char **av, char **env)
+char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
-	t_data	*shell;
+	size_t	i;
+	char	*mapped;
 
-	(void) ac;
-	(void) av;
-	shell = init_shell(env);
-	return (minshell(shell));
+	mapped = (char *)malloc(ft_strlen(s) + 1);
+	if (!mapped)
+		return (NULL);
+	i = -1;
+	while (s[++i])
+		mapped[i] = f(i, s[i]);
+	mapped[i] = '\0';
+	return (mapped);
 }

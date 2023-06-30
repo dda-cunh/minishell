@@ -1,23 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dda-cunh <dda-cunh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/30 18:23:56 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/06/30 18:31:06 by dda-cunh         ###   ########.fr       */
+/*   Created: 2023/04/12 12:44:34 by dda-cunh          #+#    #+#             */
+/*   Updated: 2023/04/12 17:59:44 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int ac, char **av, char **env)
+void	*ft_calloc(size_t nmemb, size_t size)
 {
-	t_data	*shell;
+	unsigned char	*bytes;
+	size_t			total_bytes;
 
-	(void) ac;
-	(void) av;
-	shell = init_shell(env);
-	return (minshell(shell));
+	total_bytes = size * nmemb;
+	bytes = (unsigned char *)malloc(total_bytes);
+	if (!bytes)
+		return (NULL);
+	ft_bzero(bytes, total_bytes);
+	return (bytes);
 }

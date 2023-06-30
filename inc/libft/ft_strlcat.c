@@ -1,23 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strlcat.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dda-cunh <dda-cunh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/30 18:23:56 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/06/30 18:31:06 by dda-cunh         ###   ########.fr       */
+/*   Created: 2023/04/11 21:27:27 by dda-cunh          #+#    #+#             */
+/*   Updated: 2023/04/13 17:34:18 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int ac, char **av, char **env)
+size_t	ft_strlcat(char *dst, const char *src, size_t size)
 {
-	t_data	*shell;
+	size_t	r;
+	size_t	dst_len;
+	size_t	src_len;
 
-	(void) ac;
-	(void) av;
-	shell = init_shell(env);
-	return (minshell(shell));
+	src_len = ft_strlen(src);
+	if (!size)
+		return (src_len);
+	dst_len = ft_strlen(dst);
+	if (dst_len >= size)
+		return (size + src_len);
+	dst += dst_len;
+	r = dst_len + src_len;
+	while ((dst_len < --size) && *src)
+		*dst++ = *src++;
+	*dst = '\0';
+	return (r);
 }

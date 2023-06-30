@@ -1,23 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_memcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dda-cunh <dda-cunh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/30 18:23:56 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/06/30 18:31:06 by dda-cunh         ###   ########.fr       */
+/*   Created: 2023/04/11 22:17:26 by dda-cunh          #+#    #+#             */
+/*   Updated: 2023/04/11 22:36:54 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int ac, char **av, char **env)
+int	ft_memcmp(const void *s1, const void *s2, size_t n)
 {
-	t_data	*shell;
+	unsigned char	*s1_bytes;
+	unsigned char	*s2_bytes;
 
-	(void) ac;
-	(void) av;
-	shell = init_shell(env);
-	return (minshell(shell));
+	s1_bytes = (unsigned char *)s1;
+	s2_bytes = (unsigned char *)s2;
+	if (!n)
+		return (0);
+	while (--n && *s1_bytes == *s2_bytes)
+	{
+		s1_bytes++;
+		s2_bytes++;
+	}
+	return (*s1_bytes - *s2_bytes);
 }
