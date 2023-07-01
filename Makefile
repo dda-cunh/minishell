@@ -1,5 +1,5 @@
 .SILENT:
-NAME		= 	abstract
+NAME		= 	minishell
 
 CC 			= 	cc
 
@@ -13,10 +13,33 @@ SRC_DIR		=	src/
 
 OBJ_DIR		=	temp/
 
-SRC			=	$(addprefix $(SRC_DIR),	minishell.c \
-										main.c)
+BIN_DIR		=	builtins/
 
-OBJ 		= 	$(addprefix $(OBJ_DIR), $(notdir $(SRC:.c=.o)))
+PIP_DIR		=	pipex/
+
+FT_DIR		=	libft/
+
+FT_FULL		=	$(addprefix $(INC_DIR), $(FT_DIR))
+
+LINKS		=	-L$(FT_FULL) -lft -lreadline
+
+SRC			=	$(addprefix $(SRC_DIR),	minishell.c \
+										utils.c \
+										main.c \
+										$(addprefix $(BIN_DIR), echo.c \
+																cd.c \
+																pwd.c \
+																export.c \
+																unset.c \
+																env.c \
+																exit.c) \
+										$(addprefix $(PIP_DIR), pipex.c \
+																pipex_io.c \
+																pipex_get_cmd.c))
+
+OBJ_DIRS	=	$(OBJ_DIR) $(addprefix $(OBJ_DIR), $(BIN_DIR)) $(addprefix $(OBJ_DIR), $(PIP_DIR))
+
+OBJ 		= 	$(SRC:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)
 
 GREEN		= 	\033[0;32m
 
@@ -29,31 +52,37 @@ HAMMER		=	\U0001F528
 BROOM		=	\U0001F9F9
 
 $(NAME):		$(OBJ)
-				printf '$(HAMMER)\n\t$(GREEN)Compiling	$(NAME)$(RESET)\n'
-				$(CC) $(CFLAGS) $^ -o $@ -I $(INC_DIR)
+				printf '$(HAMMER)\n\t$(GREEN)Compiling $(NAME)$(RESET)\n'
+				$(CC) $(CFLAGS) $^ -o $@ -I $(INC_DIR) $(LINKS)
 				make done
 
-$(OBJ_DIR)%.o:	$(SRC_DIR)%.c | $(OBJ_DIR)
-				$(CC) $(CFLAGS) -c $< -o $@ -I $(INC_DIR)
+$(OBJ_DIR)%.o:	$(SRC_DIR)%.c | $(OBJ_DIRS)
+				printf '$(HAMMER)\n\t$(GREEN)Compiling $(notdir $<)$(RESET)\n'
+				make -C $(FT_FULL)
+				$(CC) $(CFLAGS) -c $< -o $@ -I $(INC_DIR) -I $(FT_FULL)
 
-$(OBJ_DIR):
-				mkdir $(OBJ_DIR)
+$(OBJ_DIRS):
+				mkdir -p $@
 
 all: 			$(NAME)
 
 clean:
+				make clean -C $(FT_FULL)
 				$(RM) $(OBJ_DIR)
 
 fclean:			clean
 				printf '$(BROOM)\n$(BROOM)\t$(GREEN)Cleaning project$(RESET)\n'
+				make fclean -C $(FT_FULL)
 				$(RM) $(NAME)
 				printf '$(BROOM)\t\t\t$(SUS)\n'
 
-re:				fclean	all
+re:				fclean all
 
 done:
+				sleep 1
 				clear
 				make compiled
+
 compiled:
 				printf "															 	\n"
 				printf "$(GREEN)	$(NAME)							 			$(RESET)\n"
@@ -66,4 +95,4 @@ compiled:
 				printf "$(GREEN)                     |_|                        $(RESET)\n"
 				printf "																\n"
 
-.PHONY: 		all fclean re
+.PHONY: 		all clean fclean re

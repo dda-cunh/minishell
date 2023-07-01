@@ -6,11 +6,31 @@
 /*   By: dda-cunh <dda-cunh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 18:23:56 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/06/30 18:31:06 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/01 20:21:29 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../inc/minishell.h"
+
+static int	minishell(t_data *shell)
+{
+	char	*line;
+
+	(void) shell;
+	while (1)
+	{
+		line = readline(ANSI_CYAN PROMPT ANSI_RESET);
+		if (!line)
+		{
+			printf("\n");
+			return (127);
+		}
+		printf("%s\n", line);
+		//update shell with parsed line;
+		pipex(shell);
+	}
+	return (0);
+}
 
 int	main(int ac, char **av, char **env)
 {
@@ -18,6 +38,8 @@ int	main(int ac, char **av, char **env)
 
 	(void) ac;
 	(void) av;
-	shell = init_shell(env);
-	return (minshell(shell));
+	(void) env;
+	// shell = init_shell(env);
+	shell = NULL;
+	return (exit_(minishell(shell), shell));
 }

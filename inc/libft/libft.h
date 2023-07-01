@@ -6,16 +6,22 @@
 /*   By: dda-cunh <dda-cunh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 18:16:59 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/06/30 19:12:26 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/01 20:10:38 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
 
+# include <sys/wait.h>
+# include <stdbool.h>
 # include <string.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <errno.h>
+# include <fcntl.h>
+# include <stdio.h>
+# include "get_next_line.h"
 
 typedef struct s_list
 {

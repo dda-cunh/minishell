@@ -6,11 +6,11 @@
 /*   By: dda-cunh <dda-cunh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 20:52:22 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/06/30 19:25:16 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/01 18:48:18 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "../../inc/minishell.h"
 
 void	read_write(int from_fd, int to_fd)
 {
@@ -19,7 +19,7 @@ void	read_write(int from_fd, int to_fd)
 	a = "";
 	while (a)
 	{
-		a = readline(from_fd);
+		a = get_next_line(from_fd);
 		if (!a)
 			break ;
 		ft_putstr_fd(a, to_fd);
@@ -28,16 +28,20 @@ void	read_write(int from_fd, int to_fd)
 	close(from_fd);
 }
 
-int	print_out(int infd, int ac, char **av)
+int	print_out(t_data *data)
 {
 	int		tmp;
 	int		outfd;
 
 	tmp = open("tmp", O_RDONLY);
-	if (!infd)
-		outfd = open(av[ac - 1], O_WRONLY | O_CREAT | O_APPEND, 0777);
+	outfd = 1;
+	if (data->cmd->append)
+		outfd = open(data->cmd->outfile_path,
+				O_WRONLY | O_CREAT | O_APPEND, 0777);
 	else
-		outfd = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC | O_EXCL, 0777);
+		if (data->cmd->outfile_path)
+			outfd = open(data->cmd->outfile_path,
+					O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (outfd == -1)
 	{
 		close(tmp);
@@ -58,7 +62,7 @@ static void	here_doc(char *delim, int tmp)
 	while (a)
 	{
 		ft_putstr_fd(">>> ", 1);
-		a = readline(STDIN_FILENO);
+		a = get_next_line(STDIN_FILENO);
 		if (!a)
 			break ;
 		alen = ft_strlen(a) - 1;

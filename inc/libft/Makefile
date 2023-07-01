@@ -1,3 +1,4 @@
+.SILENT:
 NAME	= 	libft.a
 
 CC 		= 	clang
@@ -39,7 +40,9 @@ SRC		= 	ft_memset.c \
 			ft_putendl_fd.c \
 			ft_putnbr_fd.c \
 			ft_free_2d.c \
-			ft_close_fds.c
+			ft_close_fds.c \
+			get_next_line.c \
+			get_next_line_utils.c \
 
 SRCB	=	ft_lstnew.c \
 			ft_lstadd_front.c \

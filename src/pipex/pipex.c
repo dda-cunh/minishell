@@ -6,18 +6,18 @@
 /*   By: dda-cunh <dda-cunh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 12:25:12 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/06/30 20:55:08 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/01 19:50:14 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "../../inc/minishell.h"
 
-static int	parent(int pipefd[2], int tmp, int l)
+static int	parent(int pipefd[2], int tmp, int child_pid)
 {
 	int	status;
 
 	close_fds((int []){pipefd[1], tmp}, 2);
-	waitpid(l, &status, 0);
+	waitpid(child_pid, &status, 0);
 	if (status != 2)
 	{
 		tmp = open("tmp", O_RDWR | O_TRUNC);
@@ -29,64 +29,46 @@ static int	parent(int pipefd[2], int tmp, int l)
 	return (WEXITSTATUS(status));
 }
 
-static int	child(char **cmd, char **envp)
+static int	child(char **cmd, char **env)
 {
-	int		l;
+	int		child_pid;
 	int		tmp;
 	int		pipefd[2];
 
 	if (pipe(pipefd) == -1)
 		return (2);
 	tmp = open("tmp", O_RDONLY);
-	l = fork();
-	if (l == -1)
+	child_pid = fork();
+	if (child_pid == -1)
 		return (2);
-	if (l == 0)
+	if (child_pid == 0)
 	{
 		if (dup2(tmp, STDIN_FILENO) == -1
 			|| dup2(pipefd[1], STDOUT_FILENO) == -1)
 			return (2);
 		close_fds((int []){pipefd[0], pipefd[1], tmp}, 3);
-		execve(cmd[0], &cmd[1], envp);
+		execve(cmd[0], &cmd[1], env);
 		exit(2);
 	}
-	return (parent(pipefd, tmp, l));
+	return (parent(pipefd, tmp, child_pid));
 }
 
-static int	handle(t_data *data)
+int	pipex(t_data *data)
 {
 	int		i;
-	char	**cmd;
+	t_cmd	*cmd;
 
+	if (!data)
+		return (1);
 	i = 0;
-	while (i < cmd_size(data->cmd))
+	cmd = data->cmd;
+	while (cmd)
 	{
-		cmd = get_cmd(data->cmd[i], envp);
 		if (!cmd)
 			return (3);
-		if (child(cmd, envp) == 2)
-		{
-			free_2d(cmd);
+		if (child(cmd->args, data->env) == 2)
 			return (2);
-		}
-		free_2d(cmd);
+		cmd = cmd->next;
 	}
-	return (print_out(infd, ac, av));
-}
-
-static int	pipex(t_data *data)
-{
-	int		infd;
-
-	if (ac < 5)
-		return (1);
-	if (ft_strncmp(av[1], "here_doc", 9) != 0)
-		infd = open(av[1], O_RDONLY);
-	else
-		infd = STDIN_FILENO;
-	if (infd == -1)
-		return (2);
-	if (init_tmp(infd, av[2]) == 2)
-		return (2);
-	return (handle(data));
+	return (print_out(data));
 }
