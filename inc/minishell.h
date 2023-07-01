@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 15:43:46 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/01 20:11:40 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/01 22:00:44 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,12 @@
 
 # define ANSI_CYAN	"\x1b[36m"
 # define ANSI_RESET	"\x1b[0m"
+# define ANSI_GREEN	"\x1b[32m"
+# define ANSI_RED	"\x1b[31m"
 
-# define PROMPT "minishell \U00002192  "
+# define EXIT_OK	"\u2714"
+# define EXIT_KO	"\u2718"
+# define PROMPT		" minishell \u2192  "
 
 typedef struct s_data
 {
@@ -47,12 +51,18 @@ typedef struct s_cmd
 /*	INIT FUNCTIONS	*/
 t_data			*init_shell(char **env);
 
+/*		BUILTINS	*/
+int				env(t_data *shell);
+
 /*	UTILS FUNCTIONS	*/
+char			*get_env_val(t_data *data, const char *var);
 int				exit_(int status, t_data *data);
 
 /*		PIPEX		*/
-char			**get_cmd(char *s, char **envp);
+void			update_env_val(t_data *shell, const char *var
+					, const char *n_val);
 void			read_write(int from_fd, int to_fd);
+char			**get_cmd(char *s, char **envp);
 int				pipex(t_data *data);
 int				print_out(t_data *data);
 int				init_tmp(int infd, char *delim);
