@@ -16,11 +16,9 @@ static char	*sol(const char	*big, const char *little, size_t len, size_t l_len)
 {
 	size_t	b_i;
 	size_t	l_i;
-	size_t	start;
 
 	b_i = 0;
 	l_i = 0;
-	start = 0;
 	while (len > l_i && big[b_i + l_i])
 	{
 		if (big[b_i + l_i] == little[l_i])

@@ -55,12 +55,10 @@ static int	child(char **cmd, char **env)
 
 int	pipex(t_data *data)
 {
-	int		i;
 	t_cmd	*cmd;
 
 	if (!data)
 		return (1);
-	i = 0;
 	cmd = data->cmd;
 	while (cmd)
 	{
