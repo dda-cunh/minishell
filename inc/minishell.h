@@ -1,9 +1,10 @@
 #ifndef MINSHELL_H
 # define MINSHELL_H
 
-/*
-	includes go here
-*/
+# include <dirent.h>
+# include <signal.h>
+# include "libft.h"
+# include "pipex.h"
 
 typedef struct s_data
 {
@@ -15,9 +16,8 @@ typedef struct s_data
 
 typedef struct s_cmd
 {
-	/*
-		tokens, etc
-	*/
+	char			*bin;
+	char			*args;
 	struct s_cmd	*next;
 }				t_cmd;
 
