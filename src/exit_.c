@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 15:04:01 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/02 15:58:17 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/02 16:40:24 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,5 @@ int	exit_(int status, t_data *shell)
 		else if (status == 2)
 			ft_putendl_fd(strerror(errno), 2);
 	}
-	return (status);
+	exit(status);
 }

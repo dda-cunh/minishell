@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 18:23:56 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/02 16:32:59 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/02 18:45:55 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,11 @@ int	main(int ac, char **av, char **envi)
 	shell = init_shell(envi);
 	if (!shell)
 		return (exit_(-1, NULL));
-	update_env_val(shell, "USER", "NEWUSER");
-	exit_(env(shell), shell);
-	// return (exit_(minishell(shell), shell));
+	env(shell);
+	export_bin(&shell, "USER=LLOL");
+	export_bin(&shell, "LLLL=NEWUSER1");
+	env(shell);
+	export_bin(&shell, "LLLL=NEWUSER2");
+	env(shell);
+	return (exit_(0, shell));
 }

@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 15:17:11 by fmouronh          #+#    #+#             */
-/*   Updated: 2023/07/02 16:32:27 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/02 18:03:08 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ static char	**copy_envi(char **envi)
 		}
 		i++;
 	}
-	minish_envi[i] = NULL;
 	return (minish_envi);
 }
 

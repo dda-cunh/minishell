@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/02 15:10:44 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/02 18:50:04 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,14 @@ typedef struct s_cmd
 t_data			*init_shell(char **envi);
 
 /*		BUILTINS	*/
+int				export_bin(t_data **sh, char *var_value);
 int				env(t_data *shell);
+int				pwd(t_data *shell);
 
 /*	UTILS FUNCTIONS	*/
-void			update_env_val(t_data *shell, const char *var,
-					const char *n_val);
-char			*get_env_val(t_data *data, const char *var);
+int				update_env_val(t_data *shell, const char *var,
+					const char *new_val);
+char			*get_env_val(t_data *shell, const char *var);
 
 /*		PIPEX		*/
 void			read_write(int from_fd, int to_fd);
