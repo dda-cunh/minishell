@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 18:23:56 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/01 22:01:45 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/02 14:31:21 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,5 +54,6 @@ int	main(int ac, char **av, char **envi)
 	shell->env = envi;
 	update_env_val(shell, "lol", "OMEGALUL");
 	env(shell);
+    free(shell);
 	// return (exit_(minishell(shell), shell));
 }

@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 15:49:36 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/01 22:03:45 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/02 14:32:11 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ void	update_env_val(t_data *data, const char *var, const char *new_val)
 		{
 			// free(envi[i]);
 			temp = ft_strjoin(var, "=");
+			if (!temp)
+				return ;
 			envi[i] = ft_strjoin(temp, new_val);
 			free (temp);
 			return ;

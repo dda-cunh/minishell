@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 15:43:46 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/01 22:00:44 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/02 14:39:26 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,12 @@ t_data			*init_shell(char **env);
 int				env(t_data *shell);
 
 /*	UTILS FUNCTIONS	*/
+void			update_env_val(t_data *shell, const char *var,
+					const char *n_val);
 char			*get_env_val(t_data *data, const char *var);
 int				exit_(int status, t_data *data);
 
 /*		PIPEX		*/
-void			update_env_val(t_data *shell, const char *var
-					, const char *n_val);
 void			read_write(int from_fd, int to_fd);
 char			**get_cmd(char *s, char **envp);
 int				pipex(t_data *data);
