@@ -1,25 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   ft_len_2d.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dda-cunh <dda-cunh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/02 16:25:39 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/02 16:28:13 by dda-cunh         ###   ########.fr       */
+/*   Created: 2023/07/02 14:55:11 by dda-cunh          #+#    #+#             */
+/*   Updated: 2023/07/02 16:21:01 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/minishell.h"
-
-int	pwd(t_data *shell)
+int	len_2d(char **matrix)
 {
-	char	*pwd_val;
+	int	i;
 
-	pwd_val = get_env_val(shell, "PWD");
-	if (!pwd_val)
-		return (-1);
-	ft_putendl_fd(pwd_val, 1);
-	free(pwd_val);
-	return (0);
+	i = 0;
+	if (matrix)
+		while (matrix[i])
+			i++;
+	return (i);
 }

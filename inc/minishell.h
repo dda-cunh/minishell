@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/02 14:50:02 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/02 15:10:44 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ typedef struct s_cmd
 }				t_cmd;
 
 /*	INIT FUNCTIONS	*/
-t_data			*init_shell(char **env);
+t_data			*init_shell(char **envi);
 
 /*		BUILTINS	*/
 int				env(t_data *shell);
@@ -58,7 +58,6 @@ int				env(t_data *shell);
 void			update_env_val(t_data *shell, const char *var,
 					const char *n_val);
 char			*get_env_val(t_data *data, const char *var);
-int				exit_(int status, t_data *data);
 
 /*		PIPEX		*/
 void			read_write(int from_fd, int to_fd);
@@ -67,5 +66,8 @@ int				pipex(t_data *data);
 int				print_out(t_data *data);
 int				init_tmp(int infd, char *delim);
 int				cmd_index(int infd);
+
+/*	GRACEFUL EXIT	*/
+int				exit_(int status, t_data *data);
 
 #endif

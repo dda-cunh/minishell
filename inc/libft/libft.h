@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 18:16:59 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/01 20:10:38 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/02 14:56:42 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,5 +74,6 @@ void			ft_lstiter(t_list *lst, void (*f)(void *));
 t_list			*ft_lstmap(t_list *l, void *(*f)(void *), void (*d)(void *));
 void			free_2d(char **split);
 void			close_fds(int fd[], int n);
+int				len_2d(char **matrix);
 
 #endif

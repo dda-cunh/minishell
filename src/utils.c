@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 15:49:36 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/02 14:32:11 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/02 16:32:12 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	update_env_val(t_data *data, const char *var, const char *new_val)
 	{
 		if (ft_strncmp(envi[i], var, len) == 0)
 		{
-			// free(envi[i]);
+			free(envi[i]);
 			temp = ft_strjoin(var, "=");
 			if (!temp)
 				return ;
@@ -40,8 +40,8 @@ void	update_env_val(t_data *data, const char *var, const char *new_val)
 
 char	*get_env_val(t_data *data, const char *var)
 {
-	char	**envi;
 	size_t	len;
+	char	**envi;
 	int		i;
 
 	len = ft_strlen(var);
@@ -53,12 +53,4 @@ char	*get_env_val(t_data *data, const char *var)
 			return (ft_strdup((envi[i] + len + 1)));
 	}
 	return (NULL);
-}
-
-int	exit_(int status, t_data *data)
-{
-	if (data)
-		//clean all
-		free(data);
-	return (status);
 }
