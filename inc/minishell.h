@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dda-cunh <dda-cunh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/02 18:50:04 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/02 20:47:11 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,10 @@ typedef struct s_cmd
 
 /*	INIT FUNCTIONS	*/
 t_data			*init_shell(char **envi);
+
+/*		MINISHELL	*/
+int				minishell(t_data *shell);
+
 
 /*		BUILTINS	*/
 int				export_bin(t_data **sh, char *var_value);

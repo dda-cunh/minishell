@@ -14,9 +14,6 @@
 
 static void	free_all(t_data *shell)
 {
-	int	i;
-
-	i = -1;
 	if (shell->env)
 	{
 		free_2d(shell->env);
