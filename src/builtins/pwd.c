@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dda-cunh <dda-cunh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 16:25:39 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/02 18:03:15 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/03 16:49:50 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-int	pwd(t_data *shell)
+int	pwd(void)
 {
 	char	*pwd_val;
 
-	pwd_val = get_env_val(shell, "PWD");
+	pwd_val = getcwd(NULL, 0);
 	if (!pwd_val)
 		return (-1);
 	ft_putendl_fd(pwd_val, 1);

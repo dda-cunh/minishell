@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dda-cunh <dda-cunh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 15:04:01 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/02 16:40:24 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/03 18:04:26 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	exit_(int status, t_data *shell)
 		if (status == -1)
 			ft_putendl_fd("Error on Malloc", 2);
 		else if (status == 2)
-			ft_putendl_fd(strerror(errno), 2);
+			put_strerror();
 	}
 	exit(status);
 }
