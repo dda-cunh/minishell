@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 17:36:39 by fmouronh          #+#    #+#             */
-/*   Updated: 2023/07/04 16:45:01 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/04 17:47:10 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,12 @@ static bool	n_flag(char **arg)
 	return (false);
 }
 
-int	echo(char **arg)
+int	echo(t_data **shell, char **arg)
 {
 	bool	flag;
 	int		i;
 
+	(void)shell;
 	flag = n_flag(arg);
 	if (flag == true)
 		i = 0;

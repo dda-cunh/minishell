@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 00:43:34 by fmouronh          #+#    #+#             */
-/*   Updated: 2023/07/04 17:24:23 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/04 17:49:12 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static void	print_invalid(char *arg)
 	ft_putendl_fd("': not a valid identifier", 2);
 }
 
-int	unset(t_data *shell, char **args)
+int	unset(t_data **shell, char **args)
 {
 	int		index;
 	int		status;
@@ -63,9 +63,9 @@ int	unset(t_data *shell, char **args)
 		}
 		else
 		{
-			index = get_env_index(shell, args[i]);
+			index = get_env_index(*shell, args[i]);
 			if (index >= 0)
-				shell->env = unset_var(shell, index);
+				(*shell)->env = unset_var(*shell, index);
 		}
 		i++;
 	}

@@ -23,7 +23,8 @@ FT_FULL		=	$(addprefix $(INC_DIR), $(FT_DIR))
 
 LINKS		=	-L$(FT_FULL) -lft -lreadline
 
-SRC			=	$(addprefix $(SRC_DIR),	init_shell.c \
+SRC			=	$(addprefix $(SRC_DIR),	exec_builtin.c \
+										init_shell.c \
 										minishell.c \
 										utils.c \
 										exit_.c \

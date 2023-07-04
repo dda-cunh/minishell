@@ -6,13 +6,13 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 17:54:33 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/04 16:37:38 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/04 17:46:50 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-int	cd(t_data *shell, const char **path)
+int	cd(t_data **shell, char **path)
 {
 	char	*old_pwd;
 
@@ -28,8 +28,8 @@ int	cd(t_data *shell, const char **path)
 		put_strerror();
 	else
 	{
-		update_env_val(shell, "OLDPWD", old_pwd, true);
-		update_env_val(shell, "PWD", *path, true);
+		update_env_val(*shell, "OLDPWD", old_pwd, true);
+		update_env_val(*shell, "PWD", *path, true);
 	}
 	free(old_pwd);
 	return (0);

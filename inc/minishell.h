@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/04 17:22:57 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/04 17:46:12 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ typedef enum e_builtin
 	EXPORT = 4,
 	UNSET = 5,
 	ENV = 6,
-	EXIT = 7 
+	EXIT = 7
 }			t_builtin;
 
 typedef struct s_cmd
@@ -66,14 +66,16 @@ t_data			*init_shell(char **envi);
 
 /*		MINISHELL	*/
 int				minishell(t_data *shell);
-int				exec_builtin(t_data *shell, t_cmd cmd);
+int				exec_builtin(t_data **shell, t_cmd cmd);
 
 /*		BUILTINS	*/
 int				export_bin(t_data **sh, char **args);
-int				cd(t_data *shell, const char **path);
-int				env(t_data *shell, char **args);
-int				echo(char **arg);
-int				pwd(void);
+int				unset(t_data **sh, char **args);
+int				cd(t_data **shell, char **path);
+int				env(t_data **shell, char **args);
+int				echo(t_data **shell, char **arg);
+int				pwd(t_data **shell, char **arg);
+int				exit_bin(t_data **shell, char **arg);
 
 /*	UTILS FUNCTIONS	*/
 char			*get_env_val(t_data *shell, const char *var);

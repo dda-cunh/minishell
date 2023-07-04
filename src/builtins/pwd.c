@@ -6,16 +6,18 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 16:25:39 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/04 16:43:37 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/04 17:48:36 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-int	pwd(void)
+int	pwd(t_data **shell, char **args)
 {
 	char	*pwd_val;
 
+	(void) shell;
+	(void) args;
 	pwd_val = getcwd(NULL, 0);
 	if (!pwd_val)
 	{

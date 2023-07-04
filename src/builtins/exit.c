@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 21:17:46 by fmouronh          #+#    #+#             */
-/*   Updated: 2023/07/04 17:02:52 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/04 17:47:48 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static bool	str_is_num(char *arg)
 	return (true);
 }
 
-int	exit_cmd(t_data *shell, char **args)
+int	exit_bin(t_data **shell, char **args)
 {
 	int		status;
 
@@ -51,5 +51,5 @@ int	exit_cmd(t_data *shell, char **args)
 		}
 	}
 	ft_putendl_fd("exit", 2);
-	return (exit_(status, shell));
+	return (exit_(status, *shell));
 }
