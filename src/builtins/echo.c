@@ -6,29 +6,44 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 17:36:39 by fmouronh          #+#    #+#             */
-/*   Updated: 2023/07/03 17:49:12 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/04 16:31:08 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+#include <stdbool.h>
+
+static bool	n_flag(char **arg)
+{
+	int	i;
+
+	if (arg)
+	{
+		if (arg[0])
+		{
+			if (arg[0][0] == '-')
+			{
+				i = 1;
+				while (arg[0][i] == 'n')
+					i++;
+				if (arg[0][i] == '\0')
+					return (true);
+			}
+		}
+	}
+	return (false);
+}
 
 int	echo(char **arg)
 {
 	bool	flag;
 	int		i;
 
-	flag = false;
-	i = -1;
-	if (!arg)
-		return (1);
-	if (arg[0][0] == '-' && arg[0][1] == 'n')
-	{
-		i++;
-		if (arg[0][2])
-			printf("%s", arg[0]);
-		else
-			flag = true;
-	}
+	flag = n_flag(arg);
+	if (flag == true)
+		i = 0;
+	else
+		i = -1;
 	while (arg[++i])
 	{
 		printf("%s", arg[i]);

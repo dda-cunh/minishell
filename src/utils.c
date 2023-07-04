@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 15:49:36 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/03 18:04:35 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/04 16:18:40 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,46 +18,65 @@ void	put_strerror(void)
 	return ;
 }
 
-int	update_env_val(t_data *shell, const char *var, const char *new_val)
+static int	create_on_update(t_data *shell, const char *var,
+	const char *new_val)
+{
+	char	*tempa;
+	char	*tempb;
+
+	tempa = ft_strjoin(var, "=");
+	if (!tempa)
+		return (-1);
+	tempb = ft_strjoin(tempa, new_val);
+	if (!tempb)
+	{
+		free(tempa);
+		return (-1);
+	}
+	export_bin(&shell, tempb);
+	return (0);
+}
+
+int	update_env_val(t_data *shell, const char *var, const char *new_val,
+	bool should_create)
 {
 	size_t	len;
-	char	**envi;
 	char	*temp;
 	int		i;
 
 	len = ft_strlen(var);
 	i = -1;
-	envi = shell->env;
-	if (!envi)
+	if (!shell->env)
 		return (-1);
-	while (envi[++i])
+	while (shell->env[++i])
 	{
-		if (ft_strncmp(envi[i], var, len) == 0)
+		if (ft_strncmp(shell->env[i], var, len) == 0)
 		{
-			free(envi[i]);
+			free(shell->env[i]);
 			temp = ft_strjoin(var, "=");
 			if (!temp)
 				return (-1);
-			envi[i] = ft_strjoin(temp, new_val);
+			shell->env[i] = ft_strjoin(temp, new_val);
 			free (temp);
 			return (0);
 		}
 	}
+	if (should_create)
+		create_on_update(shell, var, new_val);
 	return (0);
 }
 
 char	*get_env_val(t_data *shell, const char *var)
 {
 	size_t	len;
-	char	**envi;
 	int		i;
 
 	len = ft_strlen(var);
 	i = -1;
-	envi = shell->env;
-	if (envi)
-		while (envi[++i])
-			if (ft_strncmp(envi[i], var, len) == 0)
-				return (ft_strdup((envi[i] + len + 1)));
+	shell->env = shell->env;
+	if (shell->env)
+		while (shell->env[++i])
+			if (ft_strncmp(shell->env[i], var, len) == 0)
+				return (ft_strdup((shell->env[i] + len + 1)));
 	return (NULL);
 }

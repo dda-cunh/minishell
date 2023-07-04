@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/03 20:51:27 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/04 16:18:28 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int				pwd(void);
 void			put_strerror(void);
 char			*get_env_val(t_data *shell, const char *var);
 int				update_env_val(t_data *shell, const char *var,
-					const char *new_val);
+					const char *new_val, bool should_create);
 
 /*		PIPEX		*/
 void			read_write(int from_fd, int to_fd);

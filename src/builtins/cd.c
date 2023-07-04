@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 17:54:33 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/03 18:14:54 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/04 16:37:38 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	cd(t_data *shell, const char **path)
 
 	if ((path + 1))
 	{
-		ft_putendl_fd("minishel: too many arguments", 2);
+		ft_putendl_fd("minishell: cd: too many arguments", 2);
 		return (0);
 	}
 	old_pwd = getcwd(NULL, 0);
@@ -28,8 +28,8 @@ int	cd(t_data *shell, const char **path)
 		put_strerror();
 	else
 	{
-		update_env_val(shell, "OLDPWD", old_pwd);
-		update_env_val(shell, "PWD", *path);
+		update_env_val(shell, "OLDPWD", old_pwd, true);
+		update_env_val(shell, "PWD", *path, true);
 	}
 	free(old_pwd);
 	return (0);

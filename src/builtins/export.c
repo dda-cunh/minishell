@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dda-cunh <dda-cunh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 18:25:14 by fmouronh          #+#    #+#             */
-/*   Updated: 2023/07/02 18:49:36 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/04 16:33:37 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	export_bin(t_data **sh, char *var_value)
 	if (value)
 	{
 		free(value);
-		update_env_val((*sh), var, &var_value[i + 1]);
+		update_env_val((*sh), var, &var_value[i + 1], false);
 	}
 	else
 		if ((*sh)->env)
