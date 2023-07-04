@@ -6,16 +6,33 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 15:49:36 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/04 16:18:40 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/04 17:22:35 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-void	put_strerror(void)
+int	get_env_index(t_data *shell, const char *env_var)
 {
-	ft_putendl_fd(strerror(errno), 2);
-	return ;
+	char	**envi;
+	char	*var;
+	size_t	len;
+	int		i;
+
+	envi = shell->env;
+	var = ft_strjoin(env_var, "=");
+	if (!var)
+		return (-1);
+	len = ft_strlen(var);
+	i = 0;
+	while (envi[i])
+	{
+		if (!strncmp(var, envi[i], len))
+			return (i);
+		i++;
+	}
+	free(var);
+	return (-1);
 }
 
 static int	create_on_update(t_data *shell, const char *var,
@@ -23,17 +40,25 @@ static int	create_on_update(t_data *shell, const char *var,
 {
 	char	*tempa;
 	char	*tempb;
+	char	**args;
 
 	tempa = ft_strjoin(var, "=");
 	if (!tempa)
 		return (-1);
 	tempb = ft_strjoin(tempa, new_val);
+	free(tempa);
 	if (!tempb)
+		return (-1);
+	args = ft_calloc(2, sizeof(char *));
+	if (!args)
 	{
-		free(tempa);
+		free(tempb);
 		return (-1);
 	}
-	export_bin(&shell, tempb);
+	args[0] = tempb;
+	free(tempb);
+	export_bin(&shell, args);
+	free(args);
 	return (0);
 }
 

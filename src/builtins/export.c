@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 18:25:14 by fmouronh          #+#    #+#             */
-/*   Updated: 2023/07/04 16:33:37 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/04 17:17:22 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ static char	**export_var(char *var_value, char **envi)
 		if (!new_envi[i])
 		{
 			free_2d(new_envi);
-			free_2d(envi);
 			return (NULL);
 		}
 	}
@@ -41,28 +40,48 @@ static char	**export_var(char *var_value, char **envi)
 	return (new_envi);
 }
 
-int	export_bin(t_data **sh, char *var_value)
+static void	print_invalid(char *arg)
 {
-	char	*value;
-	char	*var;
-	int		i;
+	ft_putstr_fd("minishell: export: '", 2);
+	ft_putstr_fd(arg, 2);
+	ft_putendl_fd("': not a valid identifier", 2);
+}
 
-	if (!ft_strchr(var_value, '='))
-		return (0);
-	i = -1;
-	while (var_value[++i])
-		if (var_value[i] == '=')
-			break ;
-	var = ft_substr(var_value, 0, i);
-	value = get_env_val((*sh), var);
-	if (value)
+static bool	valid_chars(char *arg)
+{
+	int	i;
+
+	i = 1;
+	if (arg[0] == '=' || ft_isdigit(arg[0]))
+		return (false);
+	while (arg[i])
 	{
-		free(value);
-		update_env_val((*sh), var, &var_value[i + 1], false);
+		if (!ft_isalnum(arg[i]) && arg[i] != '_')
+			return (false);
+		i++;
 	}
-	else
-		if ((*sh)->env)
-			(*sh)->env = export_var(var_value, (*sh)->env);
-	free(var);
+	return (true);
+}
+
+int	export_bin(t_data **sh, char **args)
+{
+	int	i;
+
+	i = 1;
+	while (args[i])
+	{
+		if (!valid_chars(args[i]))
+		{
+			print_invalid(args[i]);
+			return (1);
+		}
+		else if (ft_strchr(args[i] + 1, '='))
+		{
+			(*sh)->env = export_var(args[i], (*sh)->env);
+			if (!(*sh)->env)
+				exit_(-1, *sh);
+		}
+		i++;
+	}
 	return (0);
 }

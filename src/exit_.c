@@ -6,11 +6,17 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 15:04:01 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/03 18:04:26 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/04 17:15:25 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+void	put_strerror(void)
+{
+	ft_putendl_fd(strerror(errno), 2);
+	return ;
+}
 
 static void	free_all(t_data *shell)
 {

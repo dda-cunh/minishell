@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/04 16:18:28 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/04 17:22:57 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,15 +69,15 @@ int				minishell(t_data *shell);
 int				exec_builtin(t_data *shell, t_cmd cmd);
 
 /*		BUILTINS	*/
-int				export_bin(t_data **sh, char *var_value);
+int				export_bin(t_data **sh, char **args);
 int				cd(t_data *shell, const char **path);
-int				env(t_data *shell);
+int				env(t_data *shell, char **args);
 int				echo(char **arg);
 int				pwd(void);
 
 /*	UTILS FUNCTIONS	*/
-void			put_strerror(void);
 char			*get_env_val(t_data *shell, const char *var);
+int				get_env_index(t_data *shell, const char *env_var);
 int				update_env_val(t_data *shell, const char *var,
 					const char *new_val, bool should_create);
 
@@ -90,6 +90,7 @@ int				init_tmp(int infd, char *delim);
 int				cmd_index(int infd);
 
 /*	GRACEFUL EXIT	*/
+void			put_strerror(void);
 int				exit_(int status, t_data *data);
 
 #endif
