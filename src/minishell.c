@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/04 18:33:18 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/04 19:40:58 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,12 @@ int	minishell(t_data *shell)
 			printf("\n");
 			return (0);
 		}
+		add_history(line);
 		if (!ft_strncmp(line, "minishell", 10)
 			|| ! ft_strncmp(line, "./minishell", 12))
 			shell->status = new_shell(shell->env);
 		/*	UPDATE SHELL WITH PARSED LINE	*/
-		char **args = ft_split(&line[1],' ');
+		char **args = ft_split(&line[2], ' ');
 		shell->status = exec_builtin(&shell, (t_cmd){NULL, args, NULL,
 				NULL, 0, 0, ft_atoi(&line[0]), NULL});
 		free(args);

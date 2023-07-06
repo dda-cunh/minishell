@@ -5,6 +5,8 @@ CC 			= 	cc
 
 CFLAGS		= 	-Wall -Wextra -Werror -g #fsanitize=address
 
+VAL_SUPPRE	=	readline.supp
+
 RM 			= 	rm -rf
 
 INC_DIR		=	inc/
@@ -72,6 +74,8 @@ all: 			$(NAME)
 clean:
 				make clean -C $(FT_FULL)
 				$(RM) $(OBJ_DIR)
+				$(RM) $(VAL_SUPPRE)
+				$(RM) val_log.txt
 
 fclean:			clean
 				printf '$(BROOM)\n$(BROOM)\t$(GREEN)Cleaning project$(RESET)\n'
@@ -97,4 +101,7 @@ compiled:
 				printf "$(GREEN)                     |_|                        $(RESET)\n"
 				printf "																\n"
 
+valgrind:		$(NAME)
+				if ! [ -f $(VAL_SUPPRE) ]; then printf "{\n\tignore_libreadline_conditional_jump_errors\n\tMemcheck:Leak\n\t...\n\tobj:*/libreadline.so.*\n}" > $(VAL_SUPPRE); fi
+				valgrind --leak-check=full --show-leak-kinds=all --suppressions=$(VAL_SUPPRE) --track-origins=yes ./minishell
 .PHONY: 		all clean fclean re
