@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/04 17:46:12 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/06 15:43:20 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,10 @@
 # define EXIT_OK	"\u2714"
 # define EXIT_KO	"\u2718"
 # define PROMPT		" minishell \u2192  "
+
+# define VALID_TKNS "|> <$/\'?\"=_-."
+
+# define SHLVL_ERR	"minishell: shell level (1000) too high, resetting to 1\n"
 
 typedef enum e_builtin
 {
@@ -82,6 +86,16 @@ char			*get_env_val(t_data *shell, const char *var);
 int				get_env_index(t_data *shell, const char *env_var);
 int				update_env_val(t_data *shell, const char *var,
 					const char *new_val, bool should_create);
+/*		LEXER		*/
+char			**lex_line(t_data *shell, char *in_line);
+void			print_tkn_err(char tkn);
+bool			valid_redirect(char *line);
+bool			valid_quotes(char *line);
+bool			valid_tkn(char tkn);
+bool			valid_tkns(char *line);
+int				find_next_quote(char *line, char quote);
+int				redir_found(char *line, char tkn);
+
 
 /*		PIPEX		*/
 void			read_write(int from_fd, int to_fd);

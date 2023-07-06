@@ -19,6 +19,8 @@ BIN_DIR		=	builtins/
 
 PIP_DIR		=	pipex/
 
+LEX_DIR		=	lexer/
+
 FT_DIR		=	libft/
 
 FT_FULL		=	$(addprefix $(INC_DIR), $(FT_DIR))
@@ -31,18 +33,23 @@ SRC			=	$(addprefix $(SRC_DIR),	exec_builtin.c \
 										utils.c \
 										exit_.c \
 										main.c \
-										$(addprefix $(BIN_DIR), echo.c \
-																cd.c \
-																pwd.c \
-																export.c \
+										$(addprefix $(BIN_DIR), export.c \
 																unset.c \
+																echo.c \
+																exit.c \
+																pwd.c \
 																env.c \
-																exit.c) \
-										$(addprefix $(PIP_DIR), pipex.c \
+																cd.c) \
+										$(addprefix $(LEX_DIR), lex_validator_utils.c \
+																lex_validator.c \
+																lexer.c) \
+										$(addprefix $(PIP_DIR), pipex_get_cmd.c \
 																pipex_io.c \
-																pipex_get_cmd.c))
+																pipex.c))
 
-OBJ_DIRS	=	$(OBJ_DIR) $(addprefix $(OBJ_DIR), $(BIN_DIR)) $(addprefix $(OBJ_DIR), $(PIP_DIR))
+OBJ_DIRS	=	$(OBJ_DIR)	$(addprefix $(OBJ_DIR), $(BIN_DIR)) \
+							$(addprefix $(OBJ_DIR), $(LEX_DIR)) \
+							$(addprefix $(OBJ_DIR), $(PIP_DIR))
 
 OBJ 		= 	$(SRC:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)
 
@@ -75,7 +82,6 @@ clean:
 				make clean -C $(FT_FULL)
 				$(RM) $(OBJ_DIR)
 				$(RM) $(VAL_SUPPRE)
-				$(RM) val_log.txt
 
 fclean:			clean
 				printf '$(BROOM)\n$(BROOM)\t$(GREEN)Cleaning project$(RESET)\n'
@@ -104,4 +110,5 @@ compiled:
 valgrind:		$(NAME)
 				if ! [ -f $(VAL_SUPPRE) ]; then printf "{\n\tignore_libreadline_conditional_jump_errors\n\tMemcheck:Leak\n\t...\n\tobj:*/libreadline.so.*\n}" > $(VAL_SUPPRE); fi
 				valgrind --leak-check=full --show-leak-kinds=all --suppressions=$(VAL_SUPPRE) --track-origins=yes ./minishell
+
 .PHONY: 		all clean fclean re

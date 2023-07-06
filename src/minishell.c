@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/04 19:40:58 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/06 15:52:09 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,50 +20,63 @@ static char	*prompt(t_data *shell)
 		return (readline(ANSI_RED EXIT_KO ANSI_CYAN PROMPT ANSI_RESET));
 }
 
-static int	new_shell(char **envi)
-{
-	t_data	*shell;
-	int		child_pid;
-	int		status;
+// static int	new_shell(char **envi)
+// {
+// 	t_data	*shell;
+// 	int		child_pid;
+// 	int		status;
 
-	child_pid = fork();
-	if (child_pid == -1)
-		return (2);
-	if (child_pid == 0)
+// 	child_pid = fork();
+// 	if (child_pid == -1)
+// 		return (2);
+// 	if (child_pid == 0)
+// 	{
+// 		shell = init_shell(envi);
+// 		if (!shell)
+// 			return (exit_(-1, NULL));
+// 		return (exit_(minishell(shell), shell));
+// 	}
+// 	waitpid(child_pid, &status, 0);
+// 	return (WEXITSTATUS(status));
+// }
+
+static void	print_tokens(char **tokens)
+{
+	int	i;
+
+	i = 0;
+	while (tokens[i])
 	{
-		shell = init_shell(envi);
-		if (!shell)
-			return (exit_(-1, NULL));
-		return (exit_(minishell(shell), shell));
+		printf("%s\n", tokens[i]);
+		i++;
 	}
-	waitpid(child_pid, &status, 0);
-	return (WEXITSTATUS(status));
 }
 
 int	minishell(t_data *shell)
 {
 	char	*line;
+	char	**tokens;
 
-	(void) shell;
-	while (1)
+	while (true)
 	{
+		//	read line from input
 		line = prompt(shell);
 		if (!line)
 		{
 			printf("\n");
-			return (0);
+			continue ;
 		}
-		add_history(line);
-		if (!ft_strncmp(line, "minishell", 10)
-			|| ! ft_strncmp(line, "./minishell", 12))
-			shell->status = new_shell(shell->env);
-		/*	UPDATE SHELL WITH PARSED LINE	*/
-		char **args = ft_split(&line[2], ' ');
-		shell->status = exec_builtin(&shell, (t_cmd){NULL, args, NULL,
-				NULL, 0, 0, ft_atoi(&line[0]), NULL});
-		free(args);
+		//	divide by tokens with lexer
+		tokens = lex_line(shell, line);
 		free(line);
-		// pipex(shell);
+		if (!tokens)
+			continue ;
+		print_tokens(tokens);
+		// expander(shell, tokens);
+		//	parse tokens with parser
+		//parse_tokens(shell, tokens);
+		free_2d(tokens);
+		//	send to pipeline
+		//pipex(shell);
 	}
-	return (0);
 }
