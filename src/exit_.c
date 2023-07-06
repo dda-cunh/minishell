@@ -6,11 +6,12 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 15:04:01 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/04 17:15:25 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/06 17:49:16 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+#include <readline/history.h>
 
 void	put_strerror(void)
 {
@@ -39,5 +40,6 @@ int	exit_(int status, t_data *shell)
 		else if (status == 2)
 			put_strerror();
 	}
+	clear_history();
 	exit(status);
 }

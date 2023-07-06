@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/06 15:52:09 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/06 18:02:03 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,26 +19,6 @@ static char	*prompt(t_data *shell)
 	else
 		return (readline(ANSI_RED EXIT_KO ANSI_CYAN PROMPT ANSI_RESET));
 }
-
-// static int	new_shell(char **envi)
-// {
-// 	t_data	*shell;
-// 	int		child_pid;
-// 	int		status;
-
-// 	child_pid = fork();
-// 	if (child_pid == -1)
-// 		return (2);
-// 	if (child_pid == 0)
-// 	{
-// 		shell = init_shell(envi);
-// 		if (!shell)
-// 			return (exit_(-1, NULL));
-// 		return (exit_(minishell(shell), shell));
-// 	}
-// 	waitpid(child_pid, &status, 0);
-// 	return (WEXITSTATUS(status));
-// }
 
 static void	print_tokens(char **tokens)
 {
@@ -54,8 +34,8 @@ static void	print_tokens(char **tokens)
 
 int	minishell(t_data *shell)
 {
-	char	*line;
 	char	**tokens;
+	char	*line;
 
 	while (true)
 	{
@@ -63,16 +43,18 @@ int	minishell(t_data *shell)
 		line = prompt(shell);
 		if (!line)
 		{
-			printf("\n");
-			continue ;
+			printf("exit\n");
+			return (0);
 		}
+		if (*line)
+			add_history(line);
 		//	divide by tokens with lexer
 		tokens = lex_line(shell, line);
 		free(line);
 		if (!tokens)
 			continue ;
 		print_tokens(tokens);
-		// expander(shell, tokens);
+		//expander(shell, tokens);
 		//	parse tokens with parser
 		//parse_tokens(shell, tokens);
 		free_2d(tokens);

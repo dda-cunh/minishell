@@ -63,7 +63,7 @@ HAMMER		=	\U0001F528
 
 BROOM		=	\U0001F9F9
 
-$(NAME):		$(OBJ)
+$(NAME):		$(OBJ) | $(SRC)
 				printf '$(HAMMER)\n\t$(GREEN)Compiling $(NAME)$(RESET)\n'
 				$(CC) $(CFLAGS) $^ -o $@ -I $(INC_DIR) $(LINKS)
 				make done
