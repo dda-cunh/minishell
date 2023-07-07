@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 15:49:36 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/04 17:22:35 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/07 16:21:09 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,14 +94,23 @@ int	update_env_val(t_data *shell, const char *var, const char *new_val,
 char	*get_env_val(t_data *shell, const char *var)
 {
 	size_t	len;
+	char	*val;
 	int		i;
 
 	len = ft_strlen(var);
 	i = -1;
-	shell->env = shell->env;
 	if (shell->env)
+	{
 		while (shell->env[++i])
+		{
 			if (ft_strncmp(shell->env[i], var, len) == 0)
-				return (ft_strdup((shell->env[i] + len + 1)));
+			{
+				val = ft_strdup((shell->env[i] + len + 1));
+				if (!val)
+					exit_(-1, shell);
+				return (val);
+			}
+		}
+	}
 	return (NULL);
 }
