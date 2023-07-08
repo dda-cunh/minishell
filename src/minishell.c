@@ -20,24 +20,25 @@ static char	*prompt(t_data *shell)
 		return (readline(ANSI_RED EXIT_KO ANSI_CYAN PROMPT ANSI_RESET));
 }
 
-static void	print_tokens(char **tokens)
-{
-	int	i;
+// static void	print_tokens(char **tokens)
+// {
+// 	int	i;
 
-	i = 0;
-	while (tokens[i])
-	{
-		printf("%s\n", tokens[i]);
-		i++;
-	}
-}
+// 	i = 0;
+// 	while (tokens[i])
+// 	{
+// 		printf("%s\n", tokens[i]);
+// 		i++;
+// 	}
+// }
 
 int	minishell(t_data *shell)
 {
-	char	**tokens;
+	// char	**tokens;
 	char	*line;
 
-	while (shell->status >= 0)
+	shell->cmd = (t_cmd *)&(t_cmd){"ls", NULL, NULL, "ya", NULL, 0, 0, 0, NULL};
+	while (true)
 	{
 		line = prompt(shell);
 		if (!line)
@@ -47,17 +48,19 @@ int	minishell(t_data *shell)
 		}
 		if (*line)
 			add_history(line);
-		tokens = lex_line(shell, line);
-		free(line);
-		if (!tokens)
-			continue ;
-		print_tokens(tokens);
+		// tokens = lex_line(shell, line);
+		// free(line);
+		// if (!tokens)
+			// continue ;
+		// print_tokens(tokens);
 		//expander(shell, tokens);
 		//	parse tokens with parser
 		//parse_tokens(shell, tokens);
-		free_2d(tokens);
+		// free_2d(tokens);
 		//	send to pipeline
-		//shell->status = pipex(shell);
+		shell->status = pipex(shell);
+		if (shell->status == 2)
+			put_strerror();
 	}
 	return (shell->status);
 }
