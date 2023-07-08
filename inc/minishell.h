@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/08 19:23:26 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/08 20:21:17 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,9 @@ typedef struct s_data
 t_data			*init_shell(char **envi);
 
 /*		MINISHELL	*/
-int				minishell(t_data *shell);
+void			expander(t_data *shell, char **tokens);
 int				exec_builtin(t_data **shell, t_cmd cmd);
+int				minishell(t_data *shell);
 
 /*		BUILTINS	*/
 int				export_bin(t_data **sh, char **args);

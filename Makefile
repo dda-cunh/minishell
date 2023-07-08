@@ -30,6 +30,7 @@ LINKS		=	-L$(FT_FULL) -lft -lreadline
 SRC			=	$(addprefix $(SRC_DIR),	exec_builtin.c \
 										init_shell.c \
 										minishell.c \
+										expander.c \
 										utils.c \
 										exit_.c \
 										main.c \
