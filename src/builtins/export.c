@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 18:25:14 by fmouronh          #+#    #+#             */
-/*   Updated: 2023/07/04 17:17:22 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/08 19:59:55 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static bool	valid_chars(char *arg)
 		return (false);
 	while (arg[i])
 	{
-		if (!ft_isalnum(arg[i]) && arg[i] != '_')
+		if ((!ft_isalnum(arg[i]) && arg[i] != '=') && arg[i])
 			return (false);
 		i++;
 	}
@@ -67,7 +67,7 @@ int	export_bin(t_data **sh, char **args)
 {
 	int	i;
 
-	i = 1;
+	i = 0;
 	while (args[i])
 	{
 		if (!valid_chars(args[i]))

@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 15:49:36 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/07 16:21:09 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/08 20:03:16 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,8 @@ char	*get_env_val(t_data *shell, const char *var)
 	{
 		while (shell->env[++i])
 		{
-			if (ft_strncmp(shell->env[i], var, len) == 0)
+			if (ft_strncmp(shell->env[i], var, len) == 0
+				&& shell->env[i][len] && shell->env[i][len] == '=')
 			{
 				val = ft_strdup((shell->env[i] + len + 1));
 				if (!val)
@@ -112,5 +113,8 @@ char	*get_env_val(t_data *shell, const char *var)
 			}
 		}
 	}
-	return (NULL);
+	val = ft_strdup("");
+	if (!val)
+		exit_(-1, shell);
+	return (val);
 }
