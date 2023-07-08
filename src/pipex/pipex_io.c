@@ -3,51 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_io.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dda-cunh <dda-cunh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 20:52:22 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/01 18:48:18 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/08 19:23:36 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-void	read_write(int from_fd, int to_fd)
-{
-	char	*a;
-
-	a = "";
-	while (a)
-	{
-		a = get_next_line(from_fd);
-		if (!a)
-			break ;
-		ft_putstr_fd(a, to_fd);
-		free(a);
-	}
-	close(from_fd);
-}
-
-int	print_out(t_data *data)
+int	print_out(t_cmd *cmd)
 {
 	int		tmp;
 	int		outfd;
 
 	tmp = open("tmp", O_RDONLY);
 	outfd = 1;
-	if (data->cmd->append)
-		outfd = open(data->cmd->outfile_path,
+	if (cmd->append)
+		outfd = open(cmd->outfile_path,
 				O_WRONLY | O_CREAT | O_APPEND, 0777);
 	else
-		if (data->cmd->outfile_path)
-			outfd = open(data->cmd->outfile_path,
+		if (cmd->outfile_path)
+			outfd = open(cmd->outfile_path,
 					O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (outfd == -1)
 	{
 		close(tmp);
 		return (2);
 	}
-	read_write(tmp, outfd);
+	ft_read_write_fd(tmp, outfd);
 	close(outfd);
 	return (0);
 }
@@ -80,15 +64,23 @@ static void	here_doc(char *delim, int tmp)
 	}
 }
 
-int	init_tmp(int infd, char *delim)
+int	init_tmp(char	*inpath, char *delim)
 {
+	int		infd;
 	int		tmp;
 
 	tmp = open("tmp", O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (tmp == -1)
 		return (2);
+	infd = 0;
+	if (!delim)
+	{
+		infd = open(inpath, O_RDONLY, 0777);
+		if (infd == -1)
+			return (2);
+	}
 	if (infd)
-		read_write(infd, tmp);
+		ft_read_write_fd(infd, tmp);
 	else
 		here_doc(delim, tmp);
 	close(tmp);

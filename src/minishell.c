@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/06 18:02:03 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/08 17:48:49 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,8 @@ int	minishell(t_data *shell)
 	char	**tokens;
 	char	*line;
 
-	while (true)
+	while (shell->status >= 0)
 	{
-		//	read line from input
 		line = prompt(shell);
 		if (!line)
 		{
@@ -48,7 +47,6 @@ int	minishell(t_data *shell)
 		}
 		if (*line)
 			add_history(line);
-		//	divide by tokens with lexer
 		tokens = lex_line(shell, line);
 		free(line);
 		if (!tokens)
@@ -59,6 +57,7 @@ int	minishell(t_data *shell)
 		//parse_tokens(shell, tokens);
 		free_2d(tokens);
 		//	send to pipeline
-		//pipex(shell);
+		//shell->status = pipex(shell);
 	}
+	return (shell->status);
 }

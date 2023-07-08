@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dda-cunh <dda-cunh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 12:25:12 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/01 19:50:14 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/08 19:23:19 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,16 @@ static int	parent(int pipefd[2], int tmp, int child_pid)
 	waitpid(child_pid, &status, 0);
 	if (status != 2)
 	{
-		tmp = open("tmp", O_RDWR | O_TRUNC);
+		tmp = open("tmp", O_WRONLY | O_TRUNC);
 		if (tmp == -1)
 			return (2);
-		read_write(pipefd[0], tmp);
+		ft_read_write_fd(pipefd[0], tmp);
 		close(tmp);
 	}
 	return (WEXITSTATUS(status));
 }
 
-static int	child(char **cmd, char **env)
+static int	child(t_cmd *cmd, char **env)
 {
 	int		child_pid;
 	int		tmp;
@@ -47,7 +47,7 @@ static int	child(char **cmd, char **env)
 			|| dup2(pipefd[1], STDOUT_FILENO) == -1)
 			return (2);
 		close_fds((int []){pipefd[0], pipefd[1], tmp}, 3);
-		execve(cmd[0], &cmd[1], env);
+		execve(cmd->bin, cmd->args, env);
 		exit(2);
 	}
 	return (parent(pipefd, tmp, child_pid));
@@ -59,14 +59,23 @@ int	pipex(t_data *data)
 
 	if (!data)
 		return (1);
+	if (!access("tmp", F_OK))
+		unlink("tmp");
 	cmd = data->cmd;
 	while (cmd)
 	{
-		if (!cmd)
-			return (3);
-		if (child(cmd->args, data->env) == 2)
-			return (2);
+		if (cmd->infile_path)
+			if (init_tmp(cmd->infile_path, cmd->outfile_path) == 2)
+				return (2);
+		if (cmd->bin)
+			if (child(cmd, data->env) == 2)
+				return (2);
+		if (cmd->outfile_path)
+			if (print_out(cmd) == 2)
+				return (2);
 		cmd = cmd->next;
 	}
-	return (print_out(data));
+	if (!access("tmp", F_OK))
+		unlink("tmp");
+	return (0);
 }

@@ -39,6 +39,7 @@ SRC		= 	ft_memset.c \
 			ft_putstr_fd.c \
 			ft_putendl_fd.c \
 			ft_putnbr_fd.c \
+			ft_read_write_fd.c \
 			ft_free_2d.c \
 			ft_close_fds.c \
 			ft_len_2d.c \

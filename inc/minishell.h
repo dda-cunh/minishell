@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/06 15:43:20 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/08 19:23:26 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ typedef struct s_cmd
 	char			**args;
 	char			*infile_path;
 	char			*outfile_path;
+	char			*delim;
 	bool			here_doc;
 	bool			append;
 	t_builtin		builtin;
@@ -98,11 +99,10 @@ int				redir_found(char *line, char tkn);
 
 
 /*		PIPEX		*/
-void			read_write(int from_fd, int to_fd);
 char			**get_cmd(char *s, char **envp);
+int				init_tmp(char	*inpath, char *delim);
+int				print_out(t_cmd *cmd);
 int				pipex(t_data *data);
-int				print_out(t_data *data);
-int				init_tmp(int infd, char *delim);
 int				cmd_index(int infd);
 
 /*	GRACEFUL EXIT	*/

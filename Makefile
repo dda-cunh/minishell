@@ -43,8 +43,7 @@ SRC			=	$(addprefix $(SRC_DIR),	exec_builtin.c \
 										$(addprefix $(LEX_DIR), lex_validator_utils.c \
 																lex_validator.c \
 																lexer.c) \
-										$(addprefix $(PIP_DIR), pipex_get_cmd.c \
-																pipex_io.c \
+										$(addprefix $(PIP_DIR), pipex_io.c \
 																pipex.c))
 
 OBJ_DIRS	=	$(OBJ_DIR)	$(addprefix $(OBJ_DIR), $(BIN_DIR)) \
