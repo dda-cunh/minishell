@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 15:17:11 by fmouronh          #+#    #+#             */
-/*   Updated: 2023/07/04 16:33:07 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/08 20:37:40 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,11 @@ static void	update_env(t_data *shell)
 	{
 		shlvl = ft_atoi(s_shlvl);
 		free(s_shlvl);
+	}
+	if (shlvl >= 999)
+	{
+		ft_putendl_fd(SHLVL_ERR, 2);
+		shlvl = 0;
 	}
 	s_shlvl = ft_itoa(shlvl + 1);
 	update_env_val(shell, "SHLVL", s_shlvl, true);

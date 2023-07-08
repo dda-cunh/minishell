@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/08 20:21:17 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/08 20:30:19 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ typedef struct s_data
 	struct s_cmd	*cmd;
 	int				infile;
 	int				outfile;
-	int				status;
+	unsigned char	status;
 }				t_data;
 
 /*	INIT FUNCTIONS	*/
