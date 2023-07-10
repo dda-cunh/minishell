@@ -3,7 +3,7 @@ NAME		= 	minishell
 
 CC 			= 	cc
 
-CFLAGS		= 	-Wall -Wextra -Werror -g #fsanitize=address
+CFLAGS		= 	-Wall -Wextra -Werror -g #-fsanitize=address
 
 VAL_SUPPRE	=	readline.supp
 
@@ -31,6 +31,7 @@ SRC			=	$(addprefix $(SRC_DIR),	exec_builtin.c \
 										init_shell.c \
 										minishell.c \
 										expander.c \
+										get_bin.c \
 										utils.c \
 										exit_.c \
 										main.c \

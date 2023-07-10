@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/08 20:06:31 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/10 16:46:01 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,13 @@ int	minishell(t_data *shell)
 	// char	**tokens;
 	char	*line;
 
-	shell->cmd = (t_cmd *)&(t_cmd){"ls", NULL, NULL, "ya", NULL, 0, 0, 0, NULL};
 	while (true)
 	{
 		line = prompt(shell);
 		if (!line)
 		{
-			printf("exit\n");
-			return (0);
+			ft_putendl_fd("exit", 1);
+			break ;
 		}
 		if (*line)
 			add_history(line);
@@ -58,8 +57,15 @@ int	minishell(t_data *shell)
 		//parse_tokens(shell, tokens);
 		// free_2d(tokens);
 		//	send to pipeline
-		shell->status = pipex(shell);
-		if (shell->status == 2)
+		if (*line)
+		{
+			char	**split = ft_split(line, ' ');
+			shell->cmd = (t_cmd *)&(t_cmd){get_bin(split[0], shell->env),
+				split, NULL, NULL, NULL, 0, 0, 0, NULL};
+			shell->cmd->builtin = is_builtin(shell->cmd->bin);
+			shell->status = pipex(&shell);
+		}
+		if (shell->status == errno)
 			put_strerror();
 	}
 	return (shell->status);

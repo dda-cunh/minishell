@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/08 20:30:19 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/10 16:25:47 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ t_data			*init_shell(char **envi);
 
 /*		MINISHELL	*/
 void			expander(t_data *shell, char **tokens);
+char			*get_bin(char *s, char **envp);
 int				exec_builtin(t_data **shell, t_cmd cmd);
 int				minishell(t_data *shell);
 
@@ -82,6 +83,10 @@ int				env(t_data **shell, char **args);
 int				echo(t_data **shell, char **arg);
 int				pwd(t_data **shell, char **arg);
 int				exit_bin(t_data **shell, char **arg);
+
+/*	EXEC_BUILTINS	*/
+t_builtin		is_builtin(char *bin);
+int				exec_builtin(t_data **shell, t_cmd cmd);
 
 /*	UTILS FUNCTIONS	*/
 char			*get_env_val(t_data *shell, const char *var);
@@ -103,7 +108,7 @@ int				redir_found(char *line, char tkn);
 char			**get_cmd(char *s, char **envp);
 int				init_tmp(char	*inpath, char *delim);
 int				print_out(t_cmd *cmd);
-int				pipex(t_data *data);
+int				pipex(t_data **data);
 int				cmd_index(int infd);
 
 /*	GRACEFUL EXIT	*/

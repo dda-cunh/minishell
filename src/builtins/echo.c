@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 17:36:39 by fmouronh          #+#    #+#             */
-/*   Updated: 2023/07/04 17:47:10 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/10 15:18:19 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,11 @@ int	echo(t_data **shell, char **arg)
 		i = -1;
 	while (arg[++i])
 	{
-		printf("%s", arg[i]);
+		ft_putendl_fd(arg[i], 1);
 		if (arg[i + 1])
-			printf(" ");
+			ft_putchar_fd(' ', 1);
 	}
 	if (!flag)
-		printf("\n");
+		ft_putendl_fd("", 1);
 	return (0);
 }

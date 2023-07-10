@@ -6,12 +6,11 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 15:04:01 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/06 17:49:16 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/10 15:08:45 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-#include <readline/history.h>
 
 void	put_strerror(void)
 {

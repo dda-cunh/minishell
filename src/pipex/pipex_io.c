@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 20:52:22 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/08 19:23:36 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/10 16:38:20 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ int	print_out(t_cmd *cmd)
 		return (2);
 	}
 	ft_read_write_fd(tmp, outfd);
-	close(outfd);
+	if (outfd != 1)
+		close(outfd);
 	return (0);
 }
 
@@ -73,16 +74,18 @@ int	init_tmp(char	*inpath, char *delim)
 	if (tmp == -1)
 		return (2);
 	infd = 0;
-	if (!delim)
-	{
-		infd = open(inpath, O_RDONLY, 0777);
-		if (infd == -1)
-			return (2);
-	}
-	if (infd)
-		ft_read_write_fd(infd, tmp);
-	else
+	if (delim)
 		here_doc(delim, tmp);
+	else
+	{
+		if (inpath)
+		{
+			infd = open(inpath, O_RDONLY, 0777);
+			if (infd == -1)
+				return (2);
+			ft_read_write_fd(infd, tmp);
+		}
+	}
 	close(tmp);
 	return (0);
 }

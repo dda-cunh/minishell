@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 18:15:44 by fmouronh          #+#    #+#             */
-/*   Updated: 2023/07/08 20:21:37 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/10 15:15:58 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ static char	*expand_var(t_data *shell, char *tokens, int index)
 		return (NULL);
 	ft_strlcpy(var_name, &tokens[index], i - index + 1);
 	var_val = get_env_val(shell, var_name);
-	printf("var_name = %s\nvar_val = %s\n", var_name, var_val);
 	expanded = ft_strreplace(tokens, index - 1, i - index + 1, var_val);
 	if (!expanded)
 		exit_(-1, shell);

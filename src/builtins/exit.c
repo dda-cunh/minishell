@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 21:17:46 by fmouronh          #+#    #+#             */
-/*   Updated: 2023/07/04 17:47:48 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/10 16:49:19 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,6 @@ int	exit_bin(t_data **shell, char **args)
 			return (2);
 		}
 	}
-	ft_putendl_fd("exit", 2);
+	ft_putendl_fd("exit", 1);
 	return (exit_(status, *shell));
 }

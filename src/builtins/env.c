@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 21:54:36 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/04 18:05:43 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/10 15:18:47 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,6 @@ int	env(t_data **shell, char **args)
 	if (!env_)
 		return (222);
 	while (env_[++i])
-		printf("%s\n", env_[i]);
+		ft_putendl_fd(env_[i], 1);
 	return (0);
 }

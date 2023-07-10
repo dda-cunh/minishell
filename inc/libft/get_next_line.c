@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dda-cunh <dda-cunh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 21:26:03 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/04/16 20:41:41 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/10 15:14:36 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,18 +29,3 @@ char	*get_next_line(int fd)
 	line = seek_line(buffer, line, r, fd);
 	return (line);
 }
-
-// int	main(void)
-// {
-// 	int		fd;
-// 	char	*s;
-
-// 	fd = open("foo", O_RDONLY);
-// 	while ((s = get_next_line(fd)))
-// 	{
-// 		printf("String:%s\n", s);
-// 		free(s);
-// 	}
-// 	close(fd);
-// 	return (0);
-// }
