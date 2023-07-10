@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 17:54:33 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/04 17:46:50 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/10 20:45:34 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	cd(t_data **shell, char **path)
 {
 	char	*old_pwd;
 
-	if ((path + 1))
+	if ((path + 1) != NULL)
 	{
 		ft_putendl_fd("minishell: cd: too many arguments", 2);
 		return (0);

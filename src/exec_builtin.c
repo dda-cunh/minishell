@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 16:58:13 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/10 16:36:56 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/10 20:40:20 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,5 +41,5 @@ int	exec_builtin(t_data **shell, t_cmd cmd)
 
 	if (!cmd.builtin)
 		return (1);
-	return (f[cmd.builtin](shell, cmd.args));
+	return (f[cmd.builtin](shell, cmd.args + 1));
 }

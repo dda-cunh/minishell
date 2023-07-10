@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/10 16:46:01 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/10 20:47:07 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,8 @@ int	minishell(t_data *shell)
 			shell->cmd->builtin = is_builtin(shell->cmd->bin);
 			shell->status = pipex(&shell);
 		}
-		if (shell->status == errno)
+		free(line);
+		if (errno && shell->status == errno)
 			put_strerror();
 	}
 	return (shell->status);
