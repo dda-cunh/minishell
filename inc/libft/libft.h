@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 18:16:59 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/08 20:22:36 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/11 16:07:21 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ int				ft_tolower(int c);
 char			*ft_strdup(const char *s);
 void			*ft_calloc(size_t nmemb, size_t size);
 char			*ft_substr(char const *s, unsigned int start, size_t len);
+char			*ft_strdup_tail(const char *s, int tail);
 char			*ft_strjoin(char const *s1, char const *s2);
 char			*ft_strtrim(char const *s1, char const *set);
 char			*ft_strreplace(char *str, int index, int torem, char *torepl);
@@ -77,5 +78,6 @@ t_list			*ft_lstmap(t_list *l, void *(*f)(void *), void (*d)(void *));
 void			free_2d(char **split);
 void			close_fds(int fd[], int n);
 int				len_2d(char **matrix);
+char			*ft_notdir(char *path);
 
 #endif

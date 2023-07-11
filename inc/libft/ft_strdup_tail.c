@@ -1,23 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_strdup_tail.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/11 14:26:17 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/11 14:33:17 by dda-cunh         ###   ########.fr       */
+/*   Created: 2023/07/11 16:03:26 by dda-cunh          #+#    #+#             */
+/*   Updated: 2023/07/11 16:03:46 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_strlen(const char *s)
-{
-	int	i;
+#include "libft.h"
 
-	if (!s || !*s)
-		return (0);
-	i = 0;
-	while (s[i])
-		i++;
-	return (i);
+char	*ft_strdup_tail(const char *s, int tail)
+{
+	size_t	s_len;
+	char	*dup;
+
+	s_len = ft_strlen(s) - tail;
+	dup = (char *)malloc(sizeof(char) * (s_len + 1));
+	if (!dup)
+		return (NULL);
+	ft_memcpy(dup, s, s_len);
+	dup[s_len] = '\0';
+	return (dup);
 }
