@@ -50,7 +50,7 @@ static int	child(t_data ***data, t_cmd *cmd, char **env)
 			exit(2);
 		close_fds((int []){pipefd[0], pipefd[1], tmp}, 3);
 		if (cmd->builtin)
-			exec_builtin(*data, *cmd);
+			exit(exec_builtin(*data, *cmd));
 		else
 			if (execve(cmd->bin, cmd->args, env) == -1)
 				exit(2);
