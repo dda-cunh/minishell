@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 12:25:12 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/10 16:38:52 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/11 16:36:39 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,5 +76,6 @@ int	pipex(t_data **data)
 			return (errno);
 		cmd = cmd->next;
 	}
+	unlink("tmp");
 	return (0);
 }

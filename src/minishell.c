@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/10 20:47:07 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/11 16:11:15 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,13 @@ int	minishell(t_data *shell)
 		// tokens = lex_line(shell, line);
 		// free(line);
 		// if (!tokens)
-			// continue ;
+		// 	continue ;
 		// print_tokens(tokens);
-		//expander(shell, tokens);
-		//	parse tokens with parser
-		//parse_tokens(shell, tokens);
+		// expander(shell, tokens);
+		// 	parse tokens with parser
+		// parse_tokens(shell, tokens);
 		// free_2d(tokens);
-		//	send to pipeline
+		// 	send to pipeline
 		if (*line)
 		{
 			char	**split = ft_split(line, ' ');
@@ -66,7 +66,7 @@ int	minishell(t_data *shell)
 			shell->status = pipex(&shell);
 		}
 		free(line);
-		if (errno && shell->status == errno)
+		if (errno)
 			put_strerror();
 	}
 	return (shell->status);

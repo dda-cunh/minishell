@@ -21,11 +21,11 @@ PIP_DIR		=	pipex/
 
 LEX_DIR		=	lexer/
 
-FT_DIR		=	libft/
+LFT_DIR		=	libft/
 
-FT_FULL		=	$(addprefix $(INC_DIR), $(FT_DIR))
+LFT_FULL	=	$(addprefix $(INC_DIR), $(LFT_DIR))
 
-LINKS		=	-L$(FT_FULL) -lft -lreadline
+LINKS		=	-L$(LFT_FULL) -lft -lreadline
 
 SRC			=	$(addprefix $(SRC_DIR),	exec_builtin.c \
 										init_shell.c \
@@ -71,8 +71,8 @@ $(NAME):		$(OBJ) | $(SRC)
 
 $(OBJ_DIR)%.o:	$(SRC_DIR)%.c | $(OBJ_DIRS)
 				printf '$(HAMMER)\n\t$(GREEN)Compiling $(notdir $<)$(RESET)\n'
-				make -C $(FT_FULL)
-				$(CC) $(CFLAGS) -c $< -o $@ -I $(INC_DIR) -I $(FT_FULL)
+				make -C $(LFT_FULL)
+				$(CC) $(CFLAGS) -c $< -o $@ -I $(INC_DIR) -I $(LFT_FULL)
 
 $(OBJ_DIRS):
 				mkdir -p $@
@@ -80,13 +80,13 @@ $(OBJ_DIRS):
 all: 			$(NAME)
 
 clean:
-				make clean -C $(FT_FULL)
+				make clean -C $(LFT_FULL)
 				$(RM) $(OBJ_DIR)
 				$(RM) $(VAL_SUPPRE)
 
 fclean:			clean
 				printf '$(BROOM)\n$(BROOM)\t$(GREEN)Cleaning project$(RESET)\n'
-				make fclean -C $(FT_FULL)
+				make fclean -C $(LFT_FULL)
 				$(RM) $(NAME)
 				printf '$(BROOM)\t\t\t$(SUS)\n'
 
@@ -111,5 +111,8 @@ compiled:
 valgrind:		$(NAME)
 				if ! [ -f $(VAL_SUPPRE) ]; then printf "{\n\tignore_libreadline_conditional_jump_errors\n\tMemcheck:Leak\n\t...\n\tobj:*/libreadline.so.*\n}" > $(VAL_SUPPRE); fi
 				valgrind --leak-check=full --show-leak-kinds=all --suppressions=$(VAL_SUPPRE) --track-origins=yes ./minishell
+
+run:			all
+				./minishell
 
 .PHONY: 		all clean fclean re

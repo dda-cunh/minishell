@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 15:24:37 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/10 16:22:59 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/11 16:39:14 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static char	*check_cmd_path(char *cmd, char **envp)
 		free(tmp_cmd);
 	}
 	free_2d(path);
-	return (NULL);
+	return (cmd);
 }
 
 static char	*builtin_bin(char *s)
@@ -81,21 +81,23 @@ static char	*builtin_bin(char *s)
 char	*get_bin(char *s, char **envp)
 {
 	char	**cmd;
-	char	*path;
+	char	*bin;
 
-	path = builtin_bin(s);
-	if (path)
-		return (path);
-	if (s)
+	if (s && *s)
 	{
-		if (!*s)
-			return (NULL);
+		bin = builtin_bin(s);
+		if (bin)
+			return (bin);
 		cmd = ft_split(s, ' ');
 		if (!cmd)
 			return (NULL);
-		path = check_cmd_path(cmd[0], envp);
+		if (!access(cmd[0], F_OK))
+			bin = ft_strdup(cmd[0]);
+		else
+			bin = check_cmd_path(cmd[0], envp);
 		free_2d(cmd);
-		return (path);
 	}
-	return (path);
+	else
+		return (NULL);
+	return (bin);
 }
