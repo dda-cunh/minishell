@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 17:54:33 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/12 15:47:23 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/12 15:54:21 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ static int	changedir(t_data **shell, char *path)
 	char	*new_pwd;
 	int		ret;
 
-	printf("%s\n", path);
 	old_pwd = getcwd(NULL, 0);
 	if (chdir(path) == -1)
 	{
