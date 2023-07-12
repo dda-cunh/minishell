@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/12 14:38:52 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/12 18:58:17 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ typedef struct s_data
 	struct s_cmd	*cmd;
 	int				infile;
 	int				outfile;
+	char			*tmp_path;
 	unsigned char	status;
 }				t_data;
 
@@ -106,8 +107,8 @@ int				redir_found(char *line, char tkn);
 
 /*		PIPEX		*/
 char			**get_cmd(char *s, char **envp);
-int				init_tmp(char	*inpath, char *delim);
-int				print_out(t_cmd *cmd);
+int				init_tmp(t_data *shell, char *inpath, char *delim);
+int				print_out(t_data *shell, t_cmd *cmd);
 int				pipex(t_data **data);
 int				cmd_index(int infd);
 

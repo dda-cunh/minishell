@@ -6,18 +6,18 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 20:52:22 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/10 16:38:20 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/12 18:55:20 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-int	print_out(t_cmd *cmd)
+int	print_out(t_data *shell, t_cmd *cmd)
 {
 	int		tmp;
 	int		outfd;
 
-	tmp = open("tmp", O_RDONLY);
+	tmp = open(shell->tmp_path, O_RDONLY);
 	outfd = 1;
 	if (cmd->append)
 		outfd = open(cmd->outfile_path,
@@ -65,12 +65,12 @@ static void	here_doc(char *delim, int tmp)
 	}
 }
 
-int	init_tmp(char	*inpath, char *delim)
+int	init_tmp(t_data *shell, char *inpath, char *delim)
 {
 	int		infd;
 	int		tmp;
 
-	tmp = open("tmp", O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	tmp = open(shell->tmp_path, O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (tmp == -1)
 		return (2);
 	infd = 0;

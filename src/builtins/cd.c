@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 17:54:33 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/12 15:54:21 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/12 18:35:41 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,7 @@ static int	changedir(t_data **shell, char *path)
 
 	old_pwd = getcwd(NULL, 0);
 	if (chdir(path) == -1)
-	{
 		ret = errno;
-		put_strerror();
-	}
 	else
 	{
 		update_env_val(shell, "OLDPWD", old_pwd, true);
@@ -76,7 +73,7 @@ int	cd(t_data **shell, char **path)
 	int		ret;
 
 	ret = 0;
-	if (!path)
+	if (!path || ((*path)[0] == '~' && !(*path)[1]))
 		ret = do_alt(shell, "HOME");
 	else if ((*path)[0] == '-' && !(*path)[1])
 		ret = do_alt(shell, "OLDPWD");
