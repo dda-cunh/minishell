@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/11 16:11:15 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/12 15:32:35 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,16 @@ int	minishell(t_data *shell)
 			break ;
 		}
 		if (*line)
+		{
 			add_history(line);
+			char	**split = ft_split(line, ' ');
+			shell->cmd = (t_cmd *)&(t_cmd){get_bin(split[0], shell->env),
+				split, NULL, NULL, NULL, 0, 0, 0, NULL};
+			shell->cmd->builtin = is_builtin(shell->cmd->bin);
+			shell->status = pipex(&shell);
+			free(split);
+			shell->cmd = 0;
+		}
 		// tokens = lex_line(shell, line);
 		// free(line);
 		// if (!tokens)
@@ -57,16 +66,8 @@ int	minishell(t_data *shell)
 		// parse_tokens(shell, tokens);
 		// free_2d(tokens);
 		// 	send to pipeline
-		if (*line)
-		{
-			char	**split = ft_split(line, ' ');
-			shell->cmd = (t_cmd *)&(t_cmd){get_bin(split[0], shell->env),
-				split, NULL, NULL, NULL, 0, 0, 0, NULL};
-			shell->cmd->builtin = is_builtin(shell->cmd->bin);
-			shell->status = pipex(&shell);
-		}
 		free(line);
-		if (errno)
+		if (errno && shell->status == errno)
 			put_strerror();
 	}
 	return (shell->status);

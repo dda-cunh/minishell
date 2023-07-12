@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/10 16:25:47 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/12 14:38:52 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int				exec_builtin(t_data **shell, t_cmd cmd);
 /*	UTILS FUNCTIONS	*/
 char			*get_env_val(t_data *shell, const char *var);
 int				get_env_index(t_data *shell, const char *env_var);
-int				update_env_val(t_data *shell, const char *var,
+int				update_env_val(t_data **shell, const char *var,
 					const char *new_val, bool should_create);
 /*		LEXER		*/
 char			**lex_line(t_data *shell, char *in_line);

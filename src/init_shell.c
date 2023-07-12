@@ -6,19 +6,19 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 15:17:11 by fmouronh          #+#    #+#             */
-/*   Updated: 2023/07/08 20:37:40 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/12 14:40:10 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-static void	update_env(t_data *shell)
+static void	update_env(t_data **shell)
 {
 	int		shlvl;
 	char	*s_shlvl;
 
 	//Need to see if we should add protection for int range
-	s_shlvl = get_env_val(shell, "SHLVL");
+	s_shlvl = get_env_val(*shell, "SHLVL");
 	if (!s_shlvl)
 		shlvl = 0;
 	else
@@ -70,7 +70,7 @@ t_data	*init_shell(char **envi)
 	shell->env = copy_envi(envi);
 	if (!shell->env)
 		return (NULL);
-	update_env(shell);
+	update_env(&shell);
 	shell->cmd = NULL;
 	shell->infile = -1;
 	shell->outfile = -1;

@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 15:49:36 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/08 20:03:16 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/12 14:39:08 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static int	create_on_update(t_data *shell, const char *var,
 	return (0);
 }
 
-int	update_env_val(t_data *shell, const char *var, const char *new_val,
+int	update_env_val(t_data **shell, const char *var, const char *new_val,
 	bool should_create)
 {
 	size_t	len;
@@ -71,23 +71,23 @@ int	update_env_val(t_data *shell, const char *var, const char *new_val,
 
 	len = ft_strlen(var);
 	i = -1;
-	if (!shell->env)
+	if (!(*shell)->env)
 		return (-1);
-	while (shell->env[++i])
+	while ((*shell)->env[++i])
 	{
-		if (ft_strncmp(shell->env[i], var, len) == 0)
+		if (ft_strncmp((*shell)->env[i], var, len) == 0)
 		{
-			free(shell->env[i]);
+			free((*shell)->env[i]);
 			temp = ft_strjoin(var, "=");
 			if (!temp)
 				return (-1);
-			shell->env[i] = ft_strjoin(temp, new_val);
+			(*shell)->env[i] = ft_strjoin(temp, new_val);
 			free (temp);
 			return (0);
 		}
 	}
 	if (should_create)
-		create_on_update(shell, var, new_val);
+		create_on_update((*shell), var, new_val);
 	return (0);
 }
 
