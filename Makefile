@@ -70,8 +70,8 @@ $(NAME):		$(OBJ) | $(SRC)
 				make done
 
 $(OBJ_DIR)%.o:	$(SRC_DIR)%.c | $(OBJ_DIRS)
-				printf '$(HAMMER)\n\t$(GREEN)Compiling $(notdir $<)$(RESET)\n'
 				make -C $(LFT_FULL)
+				printf '$(HAMMER)\n\t$(GREEN)Compiling $(notdir $<)$(RESET)\n'
 				$(CC) $(CFLAGS) -c $< -o $@ -I $(INC_DIR) -I $(LFT_FULL)
 
 $(OBJ_DIRS):
