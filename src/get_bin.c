@@ -43,6 +43,7 @@ static char	*check_cmd_path(char *cmd, char **envp)
 		if (!tmp_path)
 			return (NULL);
 		tmp_cmd = ft_strjoin(tmp_path, cmd);
+		free(tmp_path);
 		if (!tmp_cmd)
 			return (NULL);
 		if (!access(tmp_cmd, F_OK))
@@ -53,7 +54,7 @@ static char	*check_cmd_path(char *cmd, char **envp)
 		free(tmp_cmd);
 	}
 	free_2d(path);
-	return (cmd);
+	return (ft_strdup(cmd));
 }
 
 static char	*builtin_bin(char *s)
@@ -83,6 +84,7 @@ char	*get_bin(char *s, char **envp)
 	char	**cmd;
 	char	*bin;
 
+	bin = NULL;
 	if (s && *s)
 	{
 		bin = builtin_bin(s);
@@ -97,7 +99,5 @@ char	*get_bin(char *s, char **envp)
 			bin = check_cmd_path(cmd[0], envp);
 		free_2d(cmd);
 	}
-	else
-		return (NULL);
 	return (bin);
 }

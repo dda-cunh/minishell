@@ -53,7 +53,8 @@ int	minishell(t_data *shell)
 				split, NULL, NULL, NULL, 0, 0, 0, NULL};
 			shell->cmd->builtin = is_builtin(shell->cmd->bin);
 			shell->status = pipex(&shell);
-			free(split);
+			free(shell->cmd->bin);
+			free_2d(split);
 			shell->cmd = 0;
 		}
 		// tokens = lex_line(shell, line);
