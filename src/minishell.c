@@ -14,6 +14,7 @@
 
 static char	*prompt(t_data *shell)
 {
+	unlink(shell->tmp_path);
 	if (!shell->status)
 		return (readline(ANSI_GREEN EXIT_OK ANSI_CYAN PROMPT ANSI_RESET));
 	else
