@@ -6,30 +6,33 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 20:52:22 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/12 18:55:20 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/15 17:27:13 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-int	print_out(t_data *shell, t_cmd *cmd)
+int	print_out(t_data *shell, t_redir *redir)
 {
 	int		tmp;
 	int		outfd;
 
 	tmp = open(shell->tmp_path, O_RDONLY);
 	outfd = 1;
-	if (cmd->append)
-		outfd = open(cmd->outfile_path,
-				O_WRONLY | O_CREAT | O_APPEND, 0777);
-	else
-		if (cmd->outfile_path)
-			outfd = open(cmd->outfile_path,
-					O_WRONLY | O_CREAT | O_TRUNC, 0777);
-	if (outfd == -1)
+	if (redir)
 	{
-		close(tmp);
-		return (2);
+		if (redir->direction == 'o' && redir->dbl_tkn)
+		outfd = open(redir->name,
+					O_WRONLY | O_CREAT | O_APPEND, 0777);
+		else
+			if (redir->name)
+				outfd = open(redir->name,
+						O_WRONLY | O_CREAT | O_TRUNC, 0777);
+		if (outfd == -1)
+		{
+			close(tmp);
+			return (2);
+		}
 	}
 	ft_read_write_fd(tmp, outfd);
 	if (outfd != 1)
@@ -46,7 +49,7 @@ static void	here_doc(char *delim, int tmp)
 	a = "";
 	while (a)
 	{
-		ft_putstr_fd(">>> ", 1);
+		ft_putstr_fd("minihell>>> ", 1);
 		a = get_next_line(STDIN_FILENO);
 		if (!a)
 			break ;
@@ -65,7 +68,7 @@ static void	here_doc(char *delim, int tmp)
 	}
 }
 
-int	init_tmp(t_data *shell, char *inpath, char *delim)
+int	init_tmp(t_data *shell, t_redir *redir)
 {
 	int		infd;
 	int		tmp;
@@ -74,15 +77,18 @@ int	init_tmp(t_data *shell, char *inpath, char *delim)
 	if (tmp == -1)
 		return (2);
 	infd = 0;
-	if (delim)
-		here_doc(delim, tmp);
-	else
+	if (redir && redir->direction == 'i' && redir->dbl_tkn)
+		here_doc(redir->name, tmp);
+	else if (redir)
 	{
-		if (inpath)
+		if (redir->name)
 		{
-			infd = open(inpath, O_RDONLY, 0777);
+			infd = open(redir->name, O_RDONLY, 0777);
 			if (infd == -1)
+			{
+				close(tmp);
 				return (2);
+			}
 			ft_read_write_fd(infd, tmp);
 		}
 	}

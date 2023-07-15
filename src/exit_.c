@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 15:04:01 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/10 15:08:45 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/15 18:44:51 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	put_strerror(void)
 {
+	ft_putstr_fd("minishell: ", 2);
 	ft_putendl_fd(strerror(errno), 2);
 	return ;
 }

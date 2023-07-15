@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fmouronh <fmouronh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 21:04:30 by fmouronh          #+#    #+#             */
-/*   Updated: 2023/07/08 21:04:38 by fmouronh         ###   ########.fr       */
+/*   Updated: 2023/07/15 17:37:06 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../inc/minishell.h"
 
 /*		DEBUG		*/
 // static void	print_redir_struct(t_redir *redir)
@@ -68,7 +68,6 @@
 static bool	assign_tokens(char *tokens, t_cmd *cmd, char **envi)
 {
 	char	*trim;
-	char	*ref;
 
 	trim = ft_strdup(tokens);
 	if (!trim)
@@ -81,16 +80,11 @@ static bool	assign_tokens(char *tokens, t_cmd *cmd, char **envi)
 	if (!cmd->args)
 		return (false);
 	cmd->builtin = is_builtin(cmd->args[0]);
-	if (!cmd->builtin)
-	{
-		ref = cmd->args[0];
-		cmd->args[0] = get_bin(cmd->args[0], envi);
-		free(ref);
-	}
+	cmd->bin = get_bin(cmd->args[0], envi);
 	return (true);
 }
 
-static t_cmd	*assign_next(t_data *shell, char *tokens, t_cmd *cmd_head)
+static t_cmd	*assign_next(t_data **shell, char *tokens, t_cmd *cmd_head)
 {
 	t_cmd	*cmd;
 
@@ -100,14 +94,14 @@ static t_cmd	*assign_next(t_data *shell, char *tokens, t_cmd *cmd_head)
 		cmd = malloc(sizeof(t_cmd));
 		if (!cmd)
 		{
-			shell->cmd = cmd_head;
-			exit_(-1, shell);
+			(*shell)->cmd = cmd_head;
+			exit_(-1, (*shell));
 		}
 	}
 	return (cmd);
 }
 
-t_cmd	*parse_tokens(t_data *shell, char **tokens)
+t_cmd	*parse_tokens(t_data **shell, char **tokens)
 {
 	t_cmd	*cmd_head;
 	t_cmd	*cmd;
@@ -115,18 +109,18 @@ t_cmd	*parse_tokens(t_data *shell, char **tokens)
 
 	cmd_head = malloc(sizeof(t_cmd));
 	if (!cmd_head)
-		exit_(-1, shell);
+		exit_(-1, *shell);
 	cmd = cmd_head;
 	i = 0;
 	while (tokens[i])
 	{
 		cmd->bin = NULL;
 		cmd->redir = NULL;
-		if (!assign_tokens(tokens[i], cmd, shell->env))
+		if (!assign_tokens(tokens[i], cmd, (*shell)->env))
 		{
 			free_2d(tokens);
-			shell->cmd = cmd_head;
-			exit_(-1, shell);
+			(*shell)->cmd = cmd_head;
+			exit_(-1, (*shell));
 		}
 		i++;
 		cmd->next = assign_next(shell, tokens[i], cmd_head);

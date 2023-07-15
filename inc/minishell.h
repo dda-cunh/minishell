@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/12 18:58:17 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/15 18:19:03 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,14 +110,14 @@ int				find_next_quote(char *line, char quote);
 int				redir_found(char *line, char tkn);
 
 /*		Parser		*/
-t_cmd			*parse_tokens(t_data *shell, char **tokens);
+t_cmd			*parse_tokens(t_data **shell, char **tokens);
 char			*manage_redirects(t_cmd *cmd, char *tkns);
 
 /*		PIPEX		*/
 char			**get_cmd(char *s, char **envp);
-int				init_tmp(t_data *shell, char *inpath, char *delim);
-int				print_out(t_data *shell, t_cmd *cmd);
-int				pipex(t_data **data);
+int				init_tmp(t_data *shell, t_redir *redir);
+int				print_out(t_data *shell, t_redir *redir);
+int				pipex(t_data **data, t_cmd *cmd);
 int				cmd_index(int infd);
 
 /*	GRACEFUL EXIT	*/
