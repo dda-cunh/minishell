@@ -21,6 +21,8 @@ PIP_DIR		=	pipex/
 
 LEX_DIR		=	lexer/
 
+PAR_DIR		=	parser/
+
 LFT_DIR		=	libft/
 
 LFT_FULL	=	$(addprefix $(INC_DIR), $(LFT_DIR))
@@ -45,11 +47,14 @@ SRC			=	$(addprefix $(SRC_DIR),	exec_builtin.c \
 										$(addprefix $(LEX_DIR), lex_validator_utils.c \
 																lex_validator.c \
 																lexer.c) \
+										$(addprefix $(PAR_DIR), parser_utils.c \
+																parser.c) \
 										$(addprefix $(PIP_DIR), pipex_io.c \
 																pipex.c))
 
 OBJ_DIRS	=	$(OBJ_DIR)	$(addprefix $(OBJ_DIR), $(BIN_DIR)) \
 							$(addprefix $(OBJ_DIR), $(LEX_DIR)) \
+							$(addprefix $(OBJ_DIR), $(PAR_DIR)) \
 							$(addprefix $(OBJ_DIR), $(PIP_DIR))
 
 OBJ 		= 	$(SRC:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)

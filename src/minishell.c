@@ -35,7 +35,7 @@ static char	*prompt(t_data *shell)
 
 int	minishell(t_data *shell)
 {
-	// char	**tokens;
+	char	**tokens;
 	char	*line;
 
 	while (true)
@@ -43,33 +43,23 @@ int	minishell(t_data *shell)
 		line = prompt(shell);
 		if (!line)
 		{
-			ft_putendl_fd("exit", 1);
-			break ;
+			printf("exit\n");
+			exit_(0, shell);
 		}
 		if (*line)
-		{
 			add_history(line);
-			char	**split = ft_split(line, ' ');
-			shell->cmd = (t_cmd *)&(t_cmd){get_bin(split[0], shell->env),
-				split, NULL, NULL, NULL, 0, 0, 0, NULL};
-			shell->cmd->builtin = is_builtin(shell->cmd->bin);
-			shell->status = pipex(&shell);
-			free(shell->cmd->bin);
-			free_2d(split);
-			shell->cmd = 0;
-		}
-		// tokens = lex_line(shell, line);
-		// free(line);
-		// if (!tokens)
-		// 	continue ;
-		// print_tokens(tokens);
-		// expander(shell, tokens);
-		// 	parse tokens with parser
-		// parse_tokens(shell, tokens);
-		// free_2d(tokens);
-		// 	send to pipeline
+		tokens = lex_line(shell, line);
 		free(line);
-		if (errno && shell->status == errno)
+		if (!tokens)
+			continue ;
+		expander(shell, tokens);
+		shell->cmd = parse_tokens(shell, tokens);
+		free_2d(tokens);
+		if (!shell->cmd)
+			continue ;
+		shell->status = pipex(&shell);
+		shell->cmd = free_cmd(shell->cmd);
+        if (errno && shell->status == errno)
 			put_strerror();
 	}
 	return (shell->status);

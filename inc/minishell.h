@@ -44,16 +44,21 @@ typedef enum e_builtin
 	EXIT = 7
 }			t_builtin;
 
+
+typedef struct s_redir
+{
+	char			*name;
+	char			direction;
+	bool			dbl_tkn;
+	struct s_redir	*next;
+}				t_redir;
+
 typedef struct s_cmd
 {
 	char			*bin;
 	char			**args;
-	char			*infile_path;
-	char			*outfile_path;
-	char			*delim;
-	bool			here_doc;
-	bool			append;
 	t_builtin		builtin;
+	struct s_redir	*redir;
 	struct s_cmd	*next;
 }				t_cmd;
 
@@ -104,6 +109,9 @@ bool			valid_tkns(char *line);
 int				find_next_quote(char *line, char quote);
 int				redir_found(char *line, char tkn);
 
+/*		Parser		*/
+t_cmd			*parse_tokens(t_data *shell, char **tokens);
+char			*manage_redirects(t_cmd *cmd, char *tkns);
 
 /*		PIPEX		*/
 char			**get_cmd(char *s, char **envp);
@@ -113,6 +121,7 @@ int				pipex(t_data **data);
 int				cmd_index(int infd);
 
 /*	GRACEFUL EXIT	*/
+t_cmd			*free_cmd(t_cmd *cmd);
 void			put_strerror(void);
 int				exit_(int status, t_data *data);
 
