@@ -33,7 +33,6 @@
 # define BADCMD_ERR	": command not found"
 # define SHLVL_ERR	"minishell: shell level (1000) too high, resetting to 1\n"
 
-
 typedef enum e_builtin
 {
 	NOTBUILTIN = 0,
@@ -45,7 +44,6 @@ typedef enum e_builtin
 	ENV = 6,
 	EXIT = 7
 }			t_builtin;
-
 
 typedef struct s_redir
 {
