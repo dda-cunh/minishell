@@ -55,6 +55,21 @@
 // 	}
 // }
 
+static t_cmd	*manage_line(t_data *shell, char *line)
+{
+	char	**tokens;
+	t_cmd	*cmd;
+
+	tokens = lex_line(shell, line);
+	free(line);
+	if (!tokens)
+		return (NULL);
+	expander(shell, tokens);
+	cmd = parse_tokens(&shell, tokens);
+	free_2d(tokens);
+	return (cmd);
+}
+
 static char	*prompt(t_data *shell)
 {
 	unlink(shell->tmp_path);
@@ -64,11 +79,25 @@ static char	*prompt(t_data *shell)
 		return (readline(ANSI_RED EXIT_KO ANSI_CYAN PROMPT ANSI_RESET));
 }
 
+static void	sig_handler(int sig)
+{
+	if (sig == SIGINT)
+	{
+		ft_putendl_fd("", 1);
+		rl_on_new_line();
+		rl_redisplay();
+	}
+/*	else if (sig == SIGQUIT)
+		return ;*/
+}
+
 int	minishell(t_data *shell)
 {
-	char	**tokens;
 	char	*line;
 
+	if (signal(SIGINT, sig_handler) == SIG_ERR
+		|| signal(SIGQUIT, SIG_IGN) == SIG_ERR)
+		exit_(-3, shell);
 	while (true)
 	{
 		line = prompt(shell);
@@ -79,13 +108,7 @@ int	minishell(t_data *shell)
 		}
 		if (*line)
 			add_history(line);
-		tokens = lex_line(shell, line);
-		free(line);
-		if (!tokens)
-			continue ;
-		expander(shell, tokens);
-		shell->cmd = parse_tokens(&shell, tokens);
-		free_2d(tokens);
+		shell->cmd = manage_line(shell, line);
 		if (!shell->cmd)
 			continue ;
 		shell->status = pipex(&shell, shell->cmd);
