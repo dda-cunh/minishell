@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 12:25:12 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/15 18:42:04 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/17 19:52:43 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,11 @@ static int	parent(t_data *shell, int pipefd[2], int tmp, int child_pid)
 	return (WEXITSTATUS(status));
 }
 
-static int	child(t_data *shell, t_cmd *cmd, char **env, int not_first)
+static int	child(t_data *shell, t_cmd *cmd, char **env, bool not_first)
 {
-	int		child_pid;
-	int		pipefd[2];
-	int		tmp;
+	int	child_pid;
+	int	pipefd[2];
+	int	tmp;
 
 	if (pipe(pipefd) == -1)
 		return (2);
@@ -45,7 +45,7 @@ static int	child(t_data *shell, t_cmd *cmd, char **env, int not_first)
 		return (2);
 	if (child_pid == 0)
 	{
-		if (not_first && !cmd->redir)
+		if (not_first || (cmd->redir && cmd->redir->direction == 'i'))
 			if (dup2(tmp, STDIN_FILENO) == -1)
 				exit(2);
 		if (dup2(pipefd[1], STDOUT_FILENO) == -1)
@@ -73,11 +73,11 @@ static int	builtin_pipes(t_data *shell, int pipefd[2], int stdi, int stdo)
 	return (0);
 }
 
-static int	handle_exec(t_data **shell, t_cmd *cmd, char **env, int n_exec)
+static int	handle_exec(t_data **shell, t_cmd *cmd, char **env, bool n_exec)
 {
-	int	pipefd[2];
 	int	std_out_fd;
 	int	std_in_fd;
+	int	pipefd[2];
 	int	status;
 	int	tmp;
 
@@ -101,12 +101,13 @@ static int	handle_exec(t_data **shell, t_cmd *cmd, char **env, int n_exec)
 
 int	pipex(t_data **shell, t_cmd *cmd)
 {
+	bool	n_exec;
 	int		status;
-	int		n_exec;
 
 	if (!shell)
 		return (1);
-	n_exec = 0;
+	n_exec = false;
+	put_strerror();
 	while (cmd)
 	{
 		if (init_tmp(*shell, cmd->redir) == 2)
@@ -116,7 +117,7 @@ int	pipex(t_data **shell, t_cmd *cmd)
 			return (errno);
 		if (print_out(*shell, cmd->redir) == 2)
 			return (errno);
-		n_exec++;
+		n_exec = true;
 		cmd = cmd->next;
 	}
 	return (status);

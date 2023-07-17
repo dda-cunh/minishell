@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/15 18:19:03 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/17 17:02:01 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,9 @@
 
 # define VALID_TKNS "|> <$/\'?\"=_-."
 
+# define BADCMD_ERR	": command not found"
 # define SHLVL_ERR	"minishell: shell level (1000) too high, resetting to 1\n"
+
 
 typedef enum e_builtin
 {

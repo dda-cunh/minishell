@@ -1,3 +1,5 @@
-tmp
+edgecases
+.nfs*
 .tmp
 temp
+tmp

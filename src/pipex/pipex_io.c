@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 20:52:22 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/15 17:27:13 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/17 17:00:24 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,14 @@ int	print_out(t_data *shell, t_redir *redir)
 
 	tmp = open(shell->tmp_path, O_RDONLY);
 	outfd = 1;
-	if (redir)
+	if (redir && redir->direction == 'o')
 	{
-		if (redir->direction == 'o' && redir->dbl_tkn)
-		outfd = open(redir->name,
+		if (redir->dbl_tkn)
+			outfd = open(redir->name,
 					O_WRONLY | O_CREAT | O_APPEND, 0777);
 		else
-			if (redir->name)
-				outfd = open(redir->name,
-						O_WRONLY | O_CREAT | O_TRUNC, 0777);
+			outfd = open(redir->name,
+					O_WRONLY | O_CREAT | O_TRUNC, 0777);
 		if (outfd == -1)
 		{
 			close(tmp);
@@ -79,18 +78,15 @@ int	init_tmp(t_data *shell, t_redir *redir)
 	infd = 0;
 	if (redir && redir->direction == 'i' && redir->dbl_tkn)
 		here_doc(redir->name, tmp);
-	else if (redir)
+	else if (redir && redir->direction == 'i' && !redir->dbl_tkn)
 	{
-		if (redir->name)
+		infd = open(redir->name, O_RDONLY, 0777);
+		if (infd == -1)
 		{
-			infd = open(redir->name, O_RDONLY, 0777);
-			if (infd == -1)
-			{
-				close(tmp);
-				return (2);
-			}
-			ft_read_write_fd(infd, tmp);
+			close(tmp);
+			return (2);
 		}
+		ft_read_write_fd(infd, tmp);
 	}
 	close(tmp);
 	return (0);
