@@ -53,7 +53,7 @@ int	unset(t_data **shell, char **args)
 	int		i;
 
 	status = 0;
-	i = 1;
+	i = 0;
 	while (args[i])
 	{
 		if (ft_strchr(args[i], '='))

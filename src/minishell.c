@@ -85,10 +85,10 @@ static void	sig_handler(int sig)
 	{
 		ft_putendl_fd("", 1);
 		rl_on_new_line();
+		rl_replace_line("", 0);
 		rl_redisplay();
 	}
-/*	else if (sig == SIGQUIT)
-		return ;*/
+/*	set exit status to 130*/
 }
 
 int	minishell(t_data *shell)
