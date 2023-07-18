@@ -29,7 +29,6 @@ int	get_env_index(t_data *shell, const char *env_var)
 	{
 		if (!strncmp(var, envi[i], len))
 		{
-			printf("returning:\ni = %d\nenv[i] = %s\n", i, envi[i]);
 			free(var);
 			return (i);
 		}
@@ -46,7 +45,6 @@ static int	create_on_update(t_data *shell, const char *var,
 	char	*tempb;
 	char	**args;
 
-	printf("creating %s\n", var);
 	tempa = ft_strjoin(var, "=");
 	if (!tempa)
 		return (-1);
