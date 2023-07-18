@@ -46,7 +46,7 @@ static void	print_invalid(char *arg)
 	ft_putstr_fd(arg, 2);
 	ft_putendl_fd("': not a valid identifier", 2);
 }
-//	needs to add other valid chars such as '/'
+
 static bool	valid_chars(char *arg)
 {
 	int	i;

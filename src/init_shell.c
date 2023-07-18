@@ -40,9 +40,7 @@ static void	reset_pwd(t_data **shell)
 {
 	char	*dir;
 
-	printf("resetting pwd\n");
 	dir = getcwd(NULL, 0);
-	printf("dir = %s\n", dir);
 	if (!dir)
 		exit_(-1, *shell);
 	update_env_val(shell, "PWD", dir, true);
