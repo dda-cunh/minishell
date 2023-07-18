@@ -27,7 +27,7 @@ t_builtin	is_builtin(char *bin)
 			return (PWD);
 		else if (bin_len == 6 && !ft_strncmp(bin, "export", 7))
 			return (EXPORT);
-		else if (bin_len == 4 && !ft_strncmp(bin, "unset", 5))
+		else if (bin_len == 5 && !ft_strncmp(bin, "unset", 5))
 			return (UNSET);
 		else if (bin_len == 3 && !ft_strncmp(bin, "env", 4))
 			return (ENV);
