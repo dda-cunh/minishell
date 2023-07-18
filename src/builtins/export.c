@@ -46,7 +46,7 @@ static void	print_invalid(char *arg)
 	ft_putstr_fd(arg, 2);
 	ft_putendl_fd("': not a valid identifier", 2);
 }
-
+//	needs to add other valid chars such as '/'
 static bool	valid_chars(char *arg)
 {
 	int	i;
@@ -54,7 +54,7 @@ static bool	valid_chars(char *arg)
 	i = 1;
 	if (arg[0] == '=' || ft_isdigit(arg[0]))
 		return (false);
-	while (arg[i])
+	while (arg[i] && arg[i] != '=')
 	{
 		if ((!ft_isalnum(arg[i]) && arg[i] != '=') && arg[i])
 			return (false);

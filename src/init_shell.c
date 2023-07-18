@@ -12,12 +12,11 @@
 
 #include "../inc/minishell.h"
 
-static void	update_env(t_data **shell)
+static void	update_shlvl(t_data **shell)
 {
 	int		shlvl;
 	char	*s_shlvl;
 
-	//Need to see if we should add protection for int range
 	s_shlvl = get_env_val(*shell, "SHLVL");
 	if (!s_shlvl)
 		shlvl = 0;
@@ -34,8 +33,27 @@ static void	update_env(t_data **shell)
 	s_shlvl = ft_itoa(shlvl + 1);
 	update_env_val(shell, "SHLVL", s_shlvl, true);
 	free(s_shlvl);
-	//And what else needs to be updated when a shell is started
 	return ;
+}
+
+static void	reset_pwd(t_data **shell)
+{
+	char	*dir;
+
+	printf("resetting pwd\n");
+	dir = getcwd(NULL, 0);
+	printf("dir = %s\n", dir);
+	if (!dir)
+		exit_(-1, *shell);
+	update_env_val(shell, "PWD", dir, true);
+	free(dir);
+}
+
+static void	update_env(t_data **shell)
+{
+	update_shlvl(shell);
+	if (get_env_index(*shell, "PWD") < 0)
+		reset_pwd(shell);
 }
 
 static char	**copy_envi(char **envi)
@@ -57,6 +75,7 @@ static char	**copy_envi(char **envi)
 		}
 		i++;
 	}
+	minish_envi[i] = NULL;
 	return (minish_envi);
 }
 
