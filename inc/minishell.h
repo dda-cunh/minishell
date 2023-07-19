@@ -128,11 +128,14 @@ t_cmd			*parse_tokens(t_data **shell, char **tokens);
 char			*manage_redirects(t_cmd *cmd, char *tkns);
 
 /*		PIPEX		*/
+int				pipex(t_data **data, t_cmd *cmd);
+int				**set_pipeline(t_data *shell, t_cmd *cmd);
+/*
 char			**get_cmd(char *s, char **envp);
 int				init_tmp(t_data *shell, t_redir *redir);
 int				print_out(t_data *shell, t_redir *redir);
-int				pipex(t_data **data, t_cmd *cmd);
 int				cmd_index(int infd);
+*/
 
 /*	GRACEFUL EXIT	*/
 t_cmd			*free_cmd(t_cmd *cmd);
@@ -140,3 +143,13 @@ void			put_strerror(void);
 int				exit_(int status, t_data *data);
 
 #endif
+
+/*
+	ERROR CODES
+
+	-1: malloc error
+	-2:
+	-3:
+	-4: pipe open error
+	-5: pipe close error
+*/

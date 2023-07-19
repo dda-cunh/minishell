@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-
+/*
 static int	parent(t_data *shell, int pipefd[2], int tmp, int child_pid)
 {
 	int	status;
@@ -98,9 +98,37 @@ static int	handle_exec(t_data **shell, t_cmd *cmd, char **env, bool n_exec)
 	builtin_pipes(*shell, pipefd, std_in_fd, std_out_fd);
 	return (status);
 }
+*/
 
 int	pipex(t_data **shell, t_cmd *cmd)
 {
+	int		status;
+	int		**pipe_fd;
+	bool	first_cmd;
+
+	first_cmd = true;
+	if (cmd->next)
+	{
+		pipe_fd = set_pipeline(*shell, cmd);
+		if (!pipe_fd)
+			exit_(-1, *shell);
+	}
+	else
+		pipe_fd = NULL;
+	while (cmd)
+	{
+		//	set redirects
+		//	check for builtin
+		//	set redirects
+		//	run cmd
+		if (first_cmd)
+			first_cmd = false;
+		cmd = cmd->next;
+	}
+	if (pipe_fd)
+		free_pipeline(*shell, pipe_fd);
+	return (status);
+	/*
 	bool	n_exec;
 	int		status;
 
@@ -121,4 +149,5 @@ int	pipex(t_data **shell, t_cmd *cmd)
 		cmd = cmd->next;
 	}
 	return (status);
+	*/
 }
