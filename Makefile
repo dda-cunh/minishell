@@ -38,6 +38,7 @@ SRC			=	$(addprefix $(SRC_DIR),	exec_builtin.c \
 										exit_.c \
 										main.c \
 										$(addprefix $(BIN_DIR), export.c \
+																export_noargs.c \
 																unset.c \
 																echo.c \
 																exit.c \

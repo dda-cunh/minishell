@@ -68,6 +68,11 @@ int	export_bin(t_data **sh, char **args)
 	int	i;
 
 	i = 0;
+	if (!args[i])
+	{
+		print_sorted_env(*sh);
+		return (0);
+	}
 	while (args[i])
 	{
 		if (!valid_chars(args[i]))

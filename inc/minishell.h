@@ -83,6 +83,7 @@ int				minishell(t_data *shell);
 
 /*		BUILTINS	*/
 int				export_bin(t_data **sh, char **args);
+void			print_sorted_env(t_data *shell);
 int				unset(t_data **sh, char **args);
 int				cd(t_data **shell, char **path);
 int				env(t_data **shell, char **args);
