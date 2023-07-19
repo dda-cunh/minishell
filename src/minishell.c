@@ -79,25 +79,13 @@ static char	*prompt(t_data *shell)
 		return (readline(ANSI_RED EXIT_KO ANSI_CYAN PROMPT ANSI_RESET));
 }
 
-static void	sig_handler(int sig)
-{
-	if (sig == SIGINT)
-	{
-		ft_putendl_fd("", 2);
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-	}
-/*	set exit status to 130*/
-}
-
 int	minishell(t_data *shell)
 {
 	char	*line;
 
 	while (true)
 	{
-		if (signal(SIGINT, sig_handler) == SIG_ERR
+		if (signal(SIGINT, main_sig_handler) == SIG_ERR
 			|| signal(SIGQUIT, SIG_IGN) == SIG_ERR)
 			exit_(-3, shell);
 		line = prompt(shell);

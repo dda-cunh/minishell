@@ -39,21 +39,12 @@ int	print_out(t_data *shell, t_redir *redir)
 	return (0);
 }
 
-static void	sig_handler(int sig)
+static size_t	get_biggest(char *delim, size_t alen)
 {
-	if (sig == SIGINT)
-	{
-		ft_putendl_fd("", 2);
-		rl_replace_line("\xff", 0);
-		rl_done = 1;
-		rl_redisplay();
-		rl_on_new_line();
-	}
-}
-
-int	event(void)
-{
-	return (127);
+	if (alen >= ft_strlen(delim))
+		return (alen);
+	else
+		return (ft_strlen(delim));
 }
 
 static void	here_doc(t_data *shell, char *delim, int tmp)
@@ -65,23 +56,20 @@ static void	here_doc(t_data *shell, char *delim, int tmp)
 	a = "";
 	while (a)
 	{
-		rl_event_hook = event;
-		if (signal(SIGINT, sig_handler) == SIG_ERR)
+		rl_event_hook = rl_sig_event;
+		if (signal(SIGINT, heredoc_sig_handler) == SIG_ERR)
 			exit_(-3, shell);
 		a = readline("minishell>>> ");
 		if (!a || *a == '\xff')
 			break ;
 		alen = ft_strlen(a) - 1;
-		if (alen >= ft_strlen(delim))
-			biggest = alen;
-		else
-			biggest = ft_strlen(delim);
+		biggest = get_biggest(delim, alen);
 		if (!ft_strncmp(a, delim, biggest))
 		{
 			free(a);
 			break ;
 		}
-		ft_putstr_fd(a, tmp);
+		ft_putendl_fd(a, tmp);
 		free(a);
 	}
 }

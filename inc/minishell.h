@@ -100,6 +100,12 @@ char			*get_env_val(t_data *shell, const char *var);
 int				get_env_index(t_data *shell, const char *env_var);
 int				update_env_val(t_data **shell, const char *var,
 					const char *new_val, bool should_create);
+
+/*	SIGNAL HANDLING	*/
+void			main_sig_handler(int sig);
+void			heredoc_sig_handler(int sig);
+int				rl_sig_event(void);
+
 /*		LEXER		*/
 char			**lex_line(t_data *shell, char *in_line);
 void			print_tkn_err(char tkn);
@@ -110,7 +116,7 @@ bool			valid_tkns(char *line);
 int				find_next_quote(char *line, char quote);
 int				redir_found(char *line, char tkn);
 
-/*		Parser		*/
+/*		PARSER		*/
 t_cmd			*parse_tokens(t_data **shell, char **tokens);
 char			*manage_redirects(t_cmd *cmd, char *tkns);
 
