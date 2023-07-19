@@ -20,7 +20,7 @@ void	free_pipeline(t_data *shell, int **pipes)
 	while (pipes[i])
 	{
 		if (close(pipes[i][0]) == -1 || close(pipes[i][1]) == -1)
-			exit_(-5, shell);
+			exit_(-6, shell);
 		free(pipes[i]);
 		i++;
 	}
@@ -40,7 +40,7 @@ static bool	open_pipes(t_data *shell, int **pipes, int nr_cmds)
 		if (pipe(pipes[i]) == -1)
 		{
 			free_pipeline(shell, pipes[i]);
-			exit_(-4, shell);
+			exit_(-5, shell);
 		}
 		i++;
 	}

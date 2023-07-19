@@ -62,7 +62,7 @@ static void	here_doc(t_data *shell, char *delim, int tmp)
 	{
 		rl_event_hook = rl_sig_event;
 		if (signal(SIGINT, heredoc_sig_handler) == SIG_ERR)
-			exit_(-3, shell);
+			exit_(-2, shell);
 		a = readline("minishell>>> ");
 		if (!a || *a == '\xff')
 			break ;

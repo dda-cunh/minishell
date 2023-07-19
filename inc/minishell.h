@@ -145,11 +145,13 @@ int				exit_(int status, t_data *data);
 #endif
 
 /*
-	ERROR CODES
+	INTERNAL ERROR CODES
 
 	-1: malloc error
-	-2:
-	-3:
-	-4: pipe open error
-	-5: pipe close error
+	-2:	signal handler error
+	-3:	file open error
+	-4: file close error
+	-5: pipe open error
+	-6: pipe close error
+	-7:	exec error
 */

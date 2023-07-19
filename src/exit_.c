@@ -12,13 +12,6 @@
 
 #include "../inc/minishell.h"
 
-void	put_strerror(void)
-{
-	ft_putstr_fd("minishell: ", 2);
-	ft_putendl_fd(strerror(errno), 2);
-	return ;
-}
-
 static void	free_redir(t_redir *redir)
 {
 	if (redir->next)
@@ -55,13 +48,10 @@ int	exit_(int status, t_data *shell)
 {
 	if (shell)
 		free_all(shell);
-	if (status)
+	if (status < 0)
 	{
-		ft_putstr_fd("Minishell:", 2);
-		if (status == -1)
-			ft_putendl_fd("Error on Malloc", 2);
-		else if (status == 2)
-			put_strerror();
+		print_exit_error(status);
+		status *= -1;
 	}
 	clear_history();
 	exit(status);
