@@ -60,7 +60,7 @@ static int	count_cmds(t_cmd *cmd)
 	return (i);
 }
 
-int	**set_pipeline(t_data *shell, t_cmd *cmd)
+static int	**set_pipeline(t_data *shell, t_cmd *cmd)
 {
 	int	**pipeline;
 	int	nr_cmds;
@@ -68,11 +68,26 @@ int	**set_pipeline(t_data *shell, t_cmd *cmd)
 	nr_cmds = count_cmds(cmd);
 	pipeline = ft_calloc(nr_cmds + 1, sizeof(int*))
 	if (!pipeline)
-		exit_(-1, shell);
+		return (NULL);
 	if (!open_pipes(shell, pipeline, nr_cmds))
 	{
 		free_pipeline(shell, pipeline);
-		exit_(-1, shell);
+		return (NULL);
 	}
 	return (pipeline);
+}
+
+int	**set_pipes(t_data *shell, t_cmd *cmd)
+{
+	int	**pipe_fd;
+
+	if (cmd->next)
+	{
+		pipe_fd = set_pipeline(*shell, cmd);
+		if (!pipe_fd)
+			exit_(-1, *shell);
+	}
+	else
+		pipe_fd = NULL;	
+	return (pipe_fd);
 }

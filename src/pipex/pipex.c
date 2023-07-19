@@ -107,20 +107,13 @@ int	pipex(t_data **shell, t_cmd *cmd)
 	bool	first_cmd;
 
 	first_cmd = true;
-	if (cmd->next)
-	{
-		pipe_fd = set_pipeline(*shell, cmd);
-		if (!pipe_fd)
-			exit_(-1, *shell);
-	}
-	else
-		pipe_fd = NULL;
+	pipe_fd = set_pipes(*shell, cmd);
 	while (cmd)
 	{
-		//	set redirects
-		//	check for builtin
-		//	set redirects
-		//	run cmd
+		if (cmd->builtin)
+			run_builtin(shell, cmd, pipe_fd, first_cmd);
+		else
+			run_cmd(shell, cmd);
 		if (first_cmd)
 			first_cmd = false;
 		cmd = cmd->next;
