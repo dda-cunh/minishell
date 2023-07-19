@@ -74,6 +74,8 @@ typedef struct s_data
 
 /*	INIT FUNCTIONS	*/
 t_data			*init_shell(char **envi);
+void			update_shlvl(t_data **shell);
+void			reset_pwd(t_data **shell);
 
 /*		MINISHELL	*/
 void			expander(t_data *shell, char **tokens);

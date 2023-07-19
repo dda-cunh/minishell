@@ -12,41 +12,6 @@
 
 #include "../inc/minishell.h"
 
-static void	update_shlvl(t_data **shell)
-{
-	int		shlvl;
-	char	*s_shlvl;
-
-	s_shlvl = get_env_val(*shell, "SHLVL");
-	if (!s_shlvl)
-		shlvl = 0;
-	else
-	{
-		shlvl = ft_atoi(s_shlvl);
-		free(s_shlvl);
-	}
-	if (shlvl >= 999)
-	{
-		ft_putendl_fd(SHLVL_ERR, 2);
-		shlvl = 0;
-	}
-	s_shlvl = ft_itoa(shlvl + 1);
-	update_env_val(shell, "SHLVL", s_shlvl, true);
-	free(s_shlvl);
-	return ;
-}
-
-static void	reset_pwd(t_data **shell)
-{
-	char	*dir;
-
-	dir = getcwd(NULL, 0);
-	if (!dir)
-		exit_(-1, *shell);
-	update_env_val(shell, "PWD", dir, true);
-	free(dir);
-}
-
 static void	update_env(t_data **shell)
 {
 	update_shlvl(shell);
