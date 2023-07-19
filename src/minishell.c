@@ -83,7 +83,7 @@ static void	sig_handler(int sig)
 {
 	if (sig == SIGINT)
 	{
-		ft_putendl_fd("", 1);
+		ft_putendl_fd("", 2);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
@@ -95,11 +95,11 @@ int	minishell(t_data *shell)
 {
 	char	*line;
 
-	if (signal(SIGINT, sig_handler) == SIG_ERR
-		|| signal(SIGQUIT, SIG_IGN) == SIG_ERR)
-		exit_(-3, shell);
 	while (true)
 	{
+		if (signal(SIGINT, sig_handler) == SIG_ERR
+			|| signal(SIGQUIT, SIG_IGN) == SIG_ERR)
+			exit_(-3, shell);
 		line = prompt(shell);
 		if (!line)
 		{
