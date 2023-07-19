@@ -108,6 +108,11 @@ void			main_sig_handler(int sig);
 void			heredoc_sig_handler(int sig);
 int				rl_sig_event(void);
 
+/*	TOKEN MASKS		*/
+int				set_mask(char *str, char quote, char tkn);
+void			unset_mask(char *str, char tkn);
+void			trim_quotes(t_data *shell, char **args);
+
 /*		LEXER		*/
 char			**lex_line(t_data *shell, char *in_line);
 void			print_tkn_err(char tkn);

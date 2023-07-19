@@ -37,6 +37,7 @@ SRC			=	$(addprefix $(SRC_DIR),	exec_builtin.c \
 										expander.c \
 										get_bin.c \
 										utils.c \
+										token_masks.c \
 										exit_.c \
 										main.c \
 										$(addprefix $(BIN_DIR), export.c \
