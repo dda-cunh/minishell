@@ -37,7 +37,7 @@ static char	*expand_var(t_data *shell, char *tokens, int index)
 	i = index;
 	if (tokens[i] == '?')
 		return (get_status(shell, tokens, index));
-	while (tokens[i] && tokens[i] != ' ')
+	while (tokens[i] && ft_isalnum(tokens[i]))
 		i++;
 	var_name = ft_calloc(i - index + 1, sizeof(char));
 	if (!var_name)
