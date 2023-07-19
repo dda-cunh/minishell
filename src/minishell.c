@@ -12,49 +12,6 @@
 
 #include "../inc/minishell.h"
 
-// static void	print_redir_struct(t_redir *redir)
-// {
-// 	while (redir)
-// 	{
-// 		printf("cmd->redir->name = %s\n", redir->name);
-// 		printf("direction: %c\n", redir->direction);
-// 		printf("is double token: %d\n", redir->dbl_tkn);
-// 		redir = redir->next;
-// 	}
-// }
-
-// static void	print_args(char **args)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (args[i])
-// 	{
-// 		printf("cmd->args[%d] = %s\n", i, args[i]);
-// 		i++;
-// 	}
-// 	printf("\n");
-// }
-
-// static void	show_cmds(t_cmd *cmd)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (cmd)
-// 	{
-// 		printf("cmd nr %d\n", i++);
-// 		printf("builtin nr: %d\n", cmd->builtin);
-// 		if (cmd->bin)
-// 			printf("cmd->bin = %s\n", cmd->bin);
-// 		if (cmd->args)
-// 			print_args(cmd->args);
-// 		if (cmd->redir)
-// 			print_redir_struct(cmd->redir);
-// 		cmd = cmd->next;
-// 	}
-// }
-
 static t_cmd	*manage_line(t_data *shell, char *line)
 {
 	char	**tokens;

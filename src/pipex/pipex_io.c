@@ -47,6 +47,10 @@ static size_t	get_biggest(char *delim, size_t alen)
 		return (ft_strlen(delim));
 }
 
+/*
+	needs to display error msg in case of !a (Ctrl + D)
+	sig handler should work for all instances of running cmd, not just here_doc
+*/
 static void	here_doc(t_data *shell, char *delim, int tmp)
 {
 	char	*a;
