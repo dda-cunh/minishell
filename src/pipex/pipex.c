@@ -100,6 +100,7 @@ static int	handle_exec(t_data **shell, t_cmd *cmd, char **env, bool n_exec)
 }
 */
 
+//	implement run_builtin & run_cmd (& see if this is a good idea)
 int	pipex(t_data **shell, t_cmd *cmd)
 {
 	int		status;
@@ -113,7 +114,7 @@ int	pipex(t_data **shell, t_cmd *cmd)
 		if (cmd->builtin)
 			run_builtin(shell, cmd, pipe_fd, first_cmd);
 		else
-			run_cmd(shell, cmd);
+			run_cmd(shell, cmd, pipe_fd, first_cmd);
 		if (first_cmd)
 			first_cmd = false;
 		cmd = cmd->next;
