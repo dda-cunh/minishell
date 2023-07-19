@@ -62,6 +62,7 @@ static int	search_var_tkn(char *tokens)
 	{
 		if (tokens[i] == '\'')
 		{
+			i++;
 			while (tokens[i] != '\'')
 				i++;
 		}
