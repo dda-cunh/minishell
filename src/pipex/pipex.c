@@ -6,24 +6,28 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 12:25:12 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/17 19:52:43 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/20 18:00:13 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-static int	parent(t_data *shell, int pipefd[2], int tmp, int child_pid)
+static int	parent(t_data *shell, int pipes[2][2], int child_pid)
 {
 	int	status;
+	int	tmp;
 
-	close_fds((int []){pipefd[1], tmp}, 2);
+	close_fds((int []){pipes[0][0], pipes[0][1], pipes[1][1]}, 3);
 	waitpid(child_pid, &status, 0);
 	if (WEXITSTATUS(status) != 2)
 	{
 		tmp = open(shell->tmp_path, O_WRONLY | O_TRUNC);
 		if (tmp == -1)
+		{
+			close_fds((int []){pipes[1][0]}, 1);
 			return (2);
-		ft_read_write_fd(pipefd[0], tmp);
+		}
+		ft_read_write_fd(pipes[1][0], tmp);
 		close(tmp);
 	}
 	return (WEXITSTATUS(status));
@@ -32,29 +36,30 @@ static int	parent(t_data *shell, int pipefd[2], int tmp, int child_pid)
 static int	child(t_data *shell, t_cmd *cmd, char **env, bool not_first)
 {
 	int	child_pid;
-	int	pipefd[2];
+	int	pip[2][2];
 	int	tmp;
 
-	if (pipe(pipefd) == -1)
+	if (pipe(pip[0]) == -1 || pipe(pip[1]) == -1)
 		return (2);
 	tmp = open(shell->tmp_path, O_RDONLY);
 	if (tmp == -1)
 		return (2);
+	ft_read_write_fd(tmp, pip[0][1]);
 	child_pid = fork();
 	if (child_pid == -1)
 		return (2);
 	if (child_pid == 0)
 	{
 		if (not_first || (cmd->redir && cmd->redir->direction == 'i'))
-			if (dup2(tmp, STDIN_FILENO) == -1)
+			if (dup2(pip[0][0], STDIN_FILENO) == -1)
 				exit(2);
-		if (dup2(pipefd[1], STDOUT_FILENO) == -1)
+		if (dup2(pip[1][1], STDOUT_FILENO) == -1)
 			exit(2);
-		close_fds((int []){pipefd[0], pipefd[1], tmp}, 3);
+		close_fds((int []){pip[0][0], pip[0][1], pip[1][0], pip[1][1]}, 4);
 		execve(cmd->bin, cmd->args, env);
 		exit(2);
 	}
-	return (parent(shell, pipefd, tmp, child_pid));
+	return (parent(shell, pip, child_pid));
 }
 
 static int	builtin_pipes(t_data *shell, int pipefd[2], int stdi, int stdo)
@@ -107,15 +112,14 @@ int	pipex(t_data **shell, t_cmd *cmd)
 	if (!shell)
 		return (1);
 	n_exec = false;
-	put_strerror();
+	if (init_tmp(*shell, cmd->redir) == 2)
+		return (errno);
 	while (cmd)
 	{
-		if (init_tmp(*shell, cmd->redir) == 2)
-			return (errno);
 		status = handle_exec(shell, cmd, (*shell)->env, n_exec);
 		if (status == 2)
 			return (errno);
-		if (print_out(*shell, cmd->redir) == 2)
+		if (print_out(*shell, cmd->redir, cmd->next) == 2)
 			return (errno);
 		n_exec = true;
 		cmd = cmd->next;

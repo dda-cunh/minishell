@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 15:17:11 by fmouronh          #+#    #+#             */
-/*   Updated: 2023/07/12 18:47:27 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/20 18:15:57 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,18 +62,15 @@ static char	**copy_envi(char **envi)
 
 static int	set_tmp(t_data **shell)
 {
-	char	*cwd;
+	char	*sh_addr;
 
-	cwd = getcwd(NULL, 0);
-	if (!cwd)
-		exit_(errno, *shell);
-	(*shell)->tmp_path = ft_strjoin(cwd, "/.tmp");
-	if (!(*shell)->tmp_path)
-	{
-		free(cwd);
+	sh_addr = ft_itoa(**(int **)shell); 
+	if (!sh_addr)
 		exit_(-1, *shell);
-	}
-	free(cwd);
+	(*shell)->tmp_path = ft_strjoin("/tmp/", sh_addr);
+	free(sh_addr);
+	if (!(*shell)->tmp_path)
+		exit_(-1, *shell);
 	return (0);
 }
 

@@ -6,13 +6,13 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 20:52:22 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/17 17:00:24 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/20 17:49:01 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-int	print_out(t_data *shell, t_redir *redir)
+int	print_out(t_data *shell, t_redir *redir, t_cmd *next)
 {
 	int		tmp;
 	int		outfd;
@@ -33,7 +33,8 @@ int	print_out(t_data *shell, t_redir *redir)
 			return (2);
 		}
 	}
-	ft_read_write_fd(tmp, outfd);
+	if (!next || redir)
+		ft_read_write_fd(tmp, outfd);
 	if (outfd != 1)
 		close(outfd);
 	return (0);
