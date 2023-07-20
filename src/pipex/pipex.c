@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 12:25:12 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/20 18:00:13 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/20 19:57:32 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static int	child(t_data *shell, t_cmd *cmd, char **env, bool not_first)
 		if (not_first || (cmd->redir && cmd->redir->direction == 'i'))
 			if (dup2(pip[0][0], STDIN_FILENO) == -1)
 				exit(2);
-		if (dup2(pip[1][1], STDOUT_FILENO) == -1)
+		if (cmd->next && dup2(pip[1][1], STDOUT_FILENO) == -1)
 			exit(2);
 		close_fds((int []){pip[0][0], pip[0][1], pip[1][0], pip[1][1]}, 4);
 		execve(cmd->bin, cmd->args, env);
@@ -78,7 +78,7 @@ static int	builtin_pipes(t_data *shell, int pipefd[2], int stdi, int stdo)
 	return (0);
 }
 
-static int	handle_exec(t_data **shell, t_cmd *cmd, char **env, bool n_exec)
+static int	handle_exec(t_data **shell, t_cmd *cmd, char **env, bool not_first)
 {
 	int	std_out_fd;
 	int	std_in_fd;
@@ -87,7 +87,7 @@ static int	handle_exec(t_data **shell, t_cmd *cmd, char **env, bool n_exec)
 	int	tmp;
 
 	if (!cmd->builtin)
-		return (child(*shell, cmd, env, n_exec));
+		return (child(*shell, cmd, env, not_first));
 	if (pipe(pipefd) == -1)
 		return (2);
 	tmp = open((*shell)->tmp_path, O_RDONLY);
@@ -98,7 +98,7 @@ static int	handle_exec(t_data **shell, t_cmd *cmd, char **env, bool n_exec)
 	if (dup2(tmp, STDIN_FILENO) == -1
 		|| dup2(pipefd[1], STDOUT_FILENO) == -1)
 		return (2);
-	status = exec_builtin(shell, *cmd);
+	status = exec_builtin(shell, *cmd, not_first);
 	close(tmp);
 	builtin_pipes(*shell, pipefd, std_in_fd, std_out_fd);
 	return (status);
@@ -106,22 +106,22 @@ static int	handle_exec(t_data **shell, t_cmd *cmd, char **env, bool n_exec)
 
 int	pipex(t_data **shell, t_cmd *cmd)
 {
-	bool	n_exec;
+	bool	not_first;
 	int		status;
 
 	if (!shell)
 		return (1);
-	n_exec = false;
+	not_first = false;
 	if (init_tmp(*shell, cmd->redir) == 2)
 		return (errno);
 	while (cmd)
 	{
-		status = handle_exec(shell, cmd, (*shell)->env, n_exec);
+		status = handle_exec(shell, cmd, (*shell)->env, not_first);
 		if (status == 2)
 			return (errno);
 		if (print_out(*shell, cmd->redir, cmd->next) == 2)
 			return (errno);
-		n_exec = true;
+		not_first = true;
 		cmd = cmd->next;
 	}
 	return (status);

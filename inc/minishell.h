@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/20 17:48:03 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/20 19:51:24 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ t_data			*init_shell(char **envi);
 /*		MINISHELL	*/
 void			expander(t_data *shell, char **tokens);
 char			*get_bin(char *s, char **envp);
-int				exec_builtin(t_data **shell, t_cmd cmd);
 int				minishell(t_data *shell);
 
 /*		BUILTINS	*/
@@ -94,7 +93,7 @@ int				exit_bin(t_data **shell, char **arg);
 
 /*	EXEC_BUILTINS	*/
 t_builtin		is_builtin(char *bin);
-int				exec_builtin(t_data **shell, t_cmd cmd);
+int				exec_builtin(t_data **shell, t_cmd cmd, bool not_first);
 
 /*	UTILS FUNCTIONS	*/
 char			*get_env_val(t_data *shell, const char *var);

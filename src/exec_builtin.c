@@ -6,11 +6,14 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 16:58:13 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/15 17:44:00 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/20 19:56:50 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+#include <stdlib.h>
+#include <sys/wait.h>
+#include <unistd.h>
 
 t_builtin	is_builtin(char *bin)
 {
@@ -37,12 +40,24 @@ t_builtin	is_builtin(char *bin)
 	return (NOTBUILTIN);
 }
 
-int	exec_builtin(t_data **shell, t_cmd cmd)
+int	exec_builtin(t_data **shell, t_cmd cmd, bool not_first)
 {
 	static int	(*f[8])(t_data **, char **) = (int (*[8])(t_data **, char **))
 	{NULL, &echo, &cd, &pwd, &export_bin, &unset, &env, &exit_bin};
+	int			child_pid;
+	int			status;
 
 	if (!cmd.builtin)
 		return (1);
+	if (cmd.next || (!cmd.next && not_first))
+	{
+		child_pid = fork();
+		if (child_pid == -1)
+			exit_(-1, *shell);
+		if (child_pid == 0)
+			exit_(f[cmd.builtin](shell, cmd.args + 1), *shell);
+		waitpid(child_pid, &status, 0);
+		return (WEXITSTATUS(status));
+	}
 	return (f[cmd.builtin](shell, cmd.args + 1));
 }
