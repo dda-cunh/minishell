@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 12:25:12 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/17 19:52:43 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/20 15:21:45 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,6 @@ int	pipex(t_data **shell, t_cmd *cmd)
 	if (!shell)
 		return (1);
 	n_exec = false;
-	put_strerror();
 	while (cmd)
 	{
 		if (init_tmp(*shell, cmd->redir) == 2)
