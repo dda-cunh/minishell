@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   pipeline_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fmouronh <fmouronh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 07:27:57 by fmouronh          #+#    #+#             */
-/*   Updated: 2023/07/19 07:28:06 by fmouronh         ###   ########.fr       */
+/*   Updated: 2023/07/20 16:09:49 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../inc/minishell.h"
 
 void	free_pipeline(t_data *shell, int **pipes)
 {
@@ -39,7 +39,7 @@ static bool	open_pipes(t_data *shell, int **pipes, int nr_cmds)
 			return (false);
 		if (pipe(pipes[i]) == -1)
 		{
-			free_pipeline(shell, pipes[i]);
+			free_pipeline(shell, pipes);
 			exit_(-5, shell);
 		}
 		i++;
@@ -66,7 +66,7 @@ static int	**set_pipeline(t_data *shell, t_cmd *cmd)
 	int	nr_cmds;
 
 	nr_cmds = count_cmds(cmd);
-	pipeline = ft_calloc(nr_cmds + 1, sizeof(int*))
+	pipeline = ft_calloc(nr_cmds + 1, sizeof(int *));
 	if (!pipeline)
 		return (NULL);
 	if (!open_pipes(shell, pipeline, nr_cmds))
@@ -83,11 +83,11 @@ int	**set_pipes(t_data *shell, t_cmd *cmd)
 
 	if (cmd->next)
 	{
-		pipe_fd = set_pipeline(*shell, cmd);
+		pipe_fd = set_pipeline(shell, cmd);
 		if (!pipe_fd)
-			exit_(-1, *shell);
+			exit_(-1, shell);
 	}
 	else
-		pipe_fd = NULL;	
+		pipe_fd = NULL;
 	return (pipe_fd);
 }

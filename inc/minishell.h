@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/17 17:02:01 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/20 15:58:11 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,9 @@ char			*manage_redirects(t_cmd *cmd, char *tkns);
 
 /*		PIPEX		*/
 int				pipex(t_data **data, t_cmd *cmd);
-int				**set_pipeline(t_data *shell, t_cmd *cmd);
+void			free_pipeline(t_data *shell, int **pipes);
+int				**set_pipes(t_data *shell, t_cmd *cmd);
+
 /*
 char			**get_cmd(char *s, char **envp);
 int				init_tmp(t_data *shell, t_redir *redir);
