@@ -58,14 +58,17 @@ static void	here_doc(t_data *shell, char *delim, int tmp)
 	size_t	alen;
 
 	a = "";
+	rl_event_hook = rl_sig_event;
 	while (a)
 	{
-		rl_event_hook = rl_sig_event;
 		if (signal(SIGINT, heredoc_sig_handler) == SIG_ERR)
 			exit_(-3, shell);
 		a = readline("minishell>>> ");
 		if (!a || *a == '\xff')
+		{
+			// close here_doc if *a == \xff (SIGINT)
 			break ;
+		}
 		alen = ft_strlen(a) - 1;
 		biggest = get_biggest(delim, alen);
 		if (!ft_strncmp(a, delim, biggest))
