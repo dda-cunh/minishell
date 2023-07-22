@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 15:17:11 by fmouronh          #+#    #+#             */
-/*   Updated: 2023/07/22 20:34:38 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/22 22:18:33 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static int	set_tmp(t_data **shell)
 {
 	char	*sh_addr;
 
-	sh_addr = ft_itoa(**(int **)shell); 
+	sh_addr = ft_itoa(**(int **)shell);
 	if (!sh_addr)
 		exit_(-1, *shell);
 	(*shell)->tmp_path = ft_strjoin("/tmp/", sh_addr);
@@ -68,8 +68,6 @@ t_data	*init_shell(char **envi)
 		return (NULL);
 	update_env(&shell);
 	shell->cmd = NULL;
-	shell->infile = -1;
-	shell->outfile = -1;
 	set_tmp(&shell);
 	shell->status = 0;
 	return (shell);

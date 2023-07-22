@@ -6,19 +6,19 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 15:49:36 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/22 21:37:29 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/22 23:07:40 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-bool	redir_has_out(t_redir *redir)
+bool	redir_has_direction(t_redir *redir, char direction)
 {
 	if (!redir)
 		return (false);
 	while (redir)
 	{
-		if (redir->direction == 'o')
+		if (redir->direction == direction)
 			return (true);
 		redir = redir->next;
 	}
@@ -41,7 +41,10 @@ int	get_env_index(t_data *shell, const char *env_var)
 	while (envi[i])
 	{
 		if (!strncmp(var, envi[i], len))
+		{
+			free(var);
 			return (i);
+		}
 		i++;
 	}
 	free(var);

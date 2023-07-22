@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 20:52:22 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/22 21:36:39 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/22 23:04:58 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static int	get_input(t_data *shell, t_redir **redir, bool fake)
 			close(tmp);
 			return (2);
 		}
-		ft_read_write_fd(infd, tmp);
+		ft_read_write_fd(infd, tmp, 1, 0);
 	}
 	close(tmp);
 	return (0);
@@ -74,35 +74,36 @@ static int	tail_redirect(t_data *shell, t_redir *redir, t_cmd *next, int tmp)
 {
 	int	outfd;
 
-	outfd = 1;
-	if (redir->direction == 'i')
-		return (get_input(shell, &redir, true));
-	if (redir->dbl_tkn)
-		outfd = open(redir->name,
-				O_WRONLY | O_CREAT | O_APPEND, 0777);
-	else
-		outfd = open(redir->name,
-				O_WRONLY | O_CREAT | O_TRUNC, 0777);
-	if (outfd == -1)
+	if (redir)
 	{
-		close(tmp);
-		return (2);
+		if (redir->direction == 'i')
+			return (get_input(shell, &redir,
+					redir_has_direction(redir->next, 'i')));
+		if (redir->dbl_tkn)
+			outfd = open(redir->name, O_WRONLY | O_CREAT | O_APPEND, 0777);
+		else
+			outfd = open(redir->name, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+		if (outfd == -1)
+		{
+			close(tmp);
+			return (2);
+		}
+		if ((!redir->next && !next) || !redir_has_direction(redir->next, 'o'))
+			ft_read_write_fd(tmp, outfd, 1, 1);
 	}
-	if ((!next && !redir->next) || !redir_has_out(redir->next))
-		ft_read_write_fd(tmp, outfd);
-	else
-		close(tmp);
-	if (outfd != 1)
-		close(outfd);
+	else if (!redir && !next)
+		ft_read_write_fd(tmp, 1, 1, 0);
 	return (0);
 }
 
 int	print_out(t_data *shell, t_redir *redir, t_cmd *next)
 {
-	int	status;
-	int	tmp;
+	bool	first;
+	int		status;
+	int		tmp;
 
-	while (redir)
+	first = true;
+	while (redir || first)
 	{
 		tmp = open(shell->tmp_path, O_RDONLY);
 		if (!tmp)
@@ -110,7 +111,9 @@ int	print_out(t_data *shell, t_redir *redir, t_cmd *next)
 		status = tail_redirect(shell, redir, next, tmp);
 		if (status)
 			return (status);
-		redir = redir->next;
+		if (redir)
+			redir = redir->next;
+		first = false;
 	}
 	return (0);
 }
@@ -126,7 +129,7 @@ int	init_tmp(t_data *shell, t_cmd **cmd, t_redir **redir, bool not_first)
 	{
 		while (redir && *redir && (*redir)->direction == 'i')
 		{
-			status = get_input(shell, redir, false);
+			status = get_input(shell, redir, !redir_has_direction(*redir, 'i'));
 			ref = *redir;
 			*redir = (*redir)->next;
 			free(ref);

@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 12:25:12 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/22 20:10:50 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/22 23:05:46 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,7 @@ static int	parent(t_data *shell, int pipes[2][2], int child_pid)
 			close_fds((int []){pipes[1][0]}, 1);
 			return (2);
 		}
-		ft_read_write_fd(pipes[1][0], tmp);
-		close(tmp);
+		ft_read_write_fd(pipes[1][0], tmp, 1, 1);
 	}
 	return (WEXITSTATUS(status));
 }
@@ -44,7 +43,7 @@ static int	child(t_data *shell, t_cmd *cmd, char **env, bool not_first)
 	tmp = open(shell->tmp_path, O_RDONLY);
 	if (tmp == -1)
 		return (2);
-	ft_read_write_fd(tmp, pip[0][1]);
+	ft_read_write_fd(tmp, pip[0][1], 1, 0);
 	child_pid = fork();
 	if (child_pid == -1)
 		return (2);
@@ -72,8 +71,7 @@ static int	builtin_pipes(t_data *shell, int pipefd[2], int stdi, int stdo)
 	tmp = open(shell->tmp_path, O_WRONLY | O_TRUNC);
 	if (tmp == -1)
 		return (2);
-	ft_read_write_fd(pipefd[0], tmp);
-	close(tmp);
+	ft_read_write_fd(pipefd[0], tmp, 1, 1);
 	return (0);
 }
 

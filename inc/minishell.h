@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/22 21:34:39 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/22 22:18:21 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,6 @@ typedef struct s_data
 {
 	char			**env;
 	struct s_cmd	*cmd;
-	int				infile;
-	int				outfile;
 	char			*tmp_path;
 	unsigned char	status;
 }				t_data;
@@ -109,7 +107,7 @@ char			*get_env_val(t_data *shell, const char *var);
 int				get_env_index(t_data *shell, const char *env_var);
 int				update_env_val(t_data **shell, const char *var,
 					const char *new_val, bool should_create);
-bool			redir_has_out(t_redir *redir);				
+bool			redir_has_direction(t_redir *redir, char direction);				
 
 /*	TOKEN MASKS		*/
 int				set_mask(char *str, char quote, char tkn);

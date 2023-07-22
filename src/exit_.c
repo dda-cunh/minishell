@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 15:04:01 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/20 16:44:29 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/22 22:20:22 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,20 +44,24 @@ t_cmd	*free_cmd(t_cmd *cmd)
 
 static void	free_all(t_data *shell)
 {
-	if (shell->env)
-		free_2d(shell->env);
-	if (shell->cmd)
-		free_cmd(shell->cmd);
-	free(shell);
+	if (shell)
+	{
+		if (shell->env)
+			free_2d(shell->env);
+		if (shell->cmd)
+			free_cmd(shell->cmd);
+		if (shell->tmp_path)
+			free(shell->tmp_path);
+		free(shell);
+	}
 }
 
 int	exit_(int status, t_data *shell)
 {
-	if (shell)
-		free_all(shell);
+	free_all(shell);
 	if (status)
 	{
-		ft_putstr_fd("Minishell:", 2);
+		ft_putstr_fd("minishell:", 2);
 		if (status == -1)
 			ft_putendl_fd("Error on Malloc", 2);
 	}
