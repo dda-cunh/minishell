@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/22 19:52:37 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/22 21:34:39 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ char			*get_env_val(t_data *shell, const char *var);
 int				get_env_index(t_data *shell, const char *env_var);
 int				update_env_val(t_data **shell, const char *var,
 					const char *new_val, bool should_create);
+bool			redir_has_out(t_redir *redir);				
 
 /*	TOKEN MASKS		*/
 int				set_mask(char *str, char quote, char tkn);

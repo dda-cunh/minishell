@@ -6,11 +6,24 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 15:49:36 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/12 14:39:08 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/22 21:37:29 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+bool	redir_has_out(t_redir *redir)
+{
+	if (!redir)
+		return (false);
+	while (redir)
+	{
+		if (redir->direction == 'o')
+			return (true);
+		redir = redir->next;
+	}
+	return (false);
+}
 
 int	get_env_index(t_data *shell, const char *env_var)
 {
