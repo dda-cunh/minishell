@@ -31,6 +31,9 @@ LINKS		=	-L$(LFT_FULL) -lft -lreadline
 
 SRC			=	$(addprefix $(SRC_DIR),	exec_builtin.c \
 										init_shell.c \
+										init_shell_env.c \
+										signals.c \
+										token_masks.c \
 										minishell.c \
 										expander.c \
 										get_bin.c \
@@ -38,6 +41,7 @@ SRC			=	$(addprefix $(SRC_DIR),	exec_builtin.c \
 										exit_.c \
 										main.c \
 										$(addprefix $(BIN_DIR), export.c \
+																export_noargs.c \
 																unset.c \
 																echo.c \
 																exit.c \

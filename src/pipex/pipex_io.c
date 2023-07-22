@@ -40,18 +40,20 @@ int	print_out(t_data *shell, t_redir *redir, t_cmd *next)
 	return (0);
 }
 
-static void	here_doc(char *delim, int tmp)
+static void	here_doc(t_data *shell, char *delim, int tmp)
 {
 	char	*a;
 	size_t	biggest;
 	size_t	alen;
 
 	a = "";
+	rl_event_hook = rl_sig_event;
 	while (a)
 	{
-		ft_putstr_fd("minihell>>> ", 1);
-		a = get_next_line(STDIN_FILENO);
-		if (!a)
+		if (signal(SIGINT, heredoc_sig_handler) == SIG_ERR)
+			exit_(-3, shell);
+		a = readline("minihell>>> ");
+		if (!a || *a == '\xff')
 			break ;
 		alen = ft_strlen(a) - 1;
 		if (alen >= ft_strlen(delim))
@@ -78,7 +80,7 @@ int	init_tmp(t_data *shell, t_redir *redir)
 		return (2);
 	infd = 0;
 	if (redir && redir->direction == 'i' && redir->dbl_tkn)
-		here_doc(redir->name, tmp);
+		here_doc(shell, redir->name, tmp);
 	else if (redir && redir->direction == 'i' && !redir->dbl_tkn)
 	{
 		infd = open(redir->name, O_RDONLY, 0777);

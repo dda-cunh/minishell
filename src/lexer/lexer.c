@@ -19,13 +19,31 @@ void	print_tkn_err(char tkn)
 	ft_putendl_fd("\'", 2);
 }
 
-/*
-	handle the following errors:
-		- invalid chars (ex '\', ';', '#'...)
-		- unclosed quotes
-		- line starting/ending with pipe - DONE
-		- redirects with no file
-*/
+static void	unmask_quoted_pipes(char **tokens)
+{
+	int	i;
+
+	i = 0;
+	while (tokens[i])
+	{
+		unset_mask(tokens[i], '|');
+		i++;
+	}
+}
+
+static void	mask_quoted_pipes(char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i])
+	{
+		if (line[i] != '\'' && line[i] != '\"')
+			i++;
+		else
+			i += set_mask(&line[i], line[i], '|');
+	}
+}
 
 static bool	valid_lex(char *line)
 {
@@ -41,15 +59,6 @@ static bool	valid_lex(char *line)
 	return (true);
 }
 
-/*
-	example command:
-	 0  3            16
-	"   ls -l | wc -w      "
-		^			 ^
-		start		 end
-	size = end - start + 1
-*/
-
 char	**lex_line(t_data *shell, char *in_line)
 {
 	char	**tokens;
@@ -63,9 +72,11 @@ char	**lex_line(t_data *shell, char *in_line)
 		free(line);
 		return (NULL);
 	}
+	mask_quoted_pipes(line);
 	tokens = ft_split(line, '|');
 	free(line);
 	if (!tokens)
 		return (NULL);
+	unmask_quoted_pipes(tokens);
 	return (tokens);
 }

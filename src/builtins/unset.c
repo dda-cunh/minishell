@@ -21,12 +21,14 @@ static char	**unset_var(t_data *shell, int index)
 	new_env = ft_calloc(len_2d(shell->env), sizeof(char *));
 	if (!new_env)
 		exit_(-1, shell);
-	i = 0;
+	i = -1;
 	j = 0;
-	while (shell->env[i])
+	while (shell->env[++i])
 	{
 		if (i == index)
 			i++;
+		if (!shell->env[i])
+			break ;
 		new_env[j] = ft_strdup(shell->env[i]);
 		if (!new_env[j])
 		{
@@ -34,8 +36,8 @@ static char	**unset_var(t_data *shell, int index)
 			exit_(-1, shell);
 		}
 		j++;
-		i++;
 	}
+	free_2d(shell->env);
 	return (new_env);
 }
 
@@ -53,7 +55,7 @@ int	unset(t_data **shell, char **args)
 	int		i;
 
 	status = 0;
-	i = 1;
+	i = 0;
 	while (args[i])
 	{
 		if (ft_strchr(args[i], '='))

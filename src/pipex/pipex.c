@@ -114,6 +114,7 @@ int	pipex(t_data **shell, t_cmd *cmd)
 	not_first = false;
 	if (init_tmp(*shell, cmd->redir) == 2)
 		return (errno);
+	//	set sig handlers for SIGINT & SIGQUIT in cmd here
 	while (cmd)
 	{
 		status = handle_exec(shell, cmd, (*shell)->env, not_first);

@@ -35,18 +35,18 @@ int	exit_bin(t_data **shell, char **args)
 	int		status;
 
 	status = 0;
-	if (args[2])
+	if (args[0] && args[1])
 	{
 		ft_putendl_fd("minishell: exit: too many arguments", 2);
 		return (1);
 	}
-	if (args[1])
+	if (args[0])
 	{
-		if (str_is_num(args[1]))
-			status = ft_atoi(args[1]) & 0xff;
+		if (str_is_num(args[0]))
+			status = ft_atoi(args[0]) & 0xff;
 		else
 		{
-			print_error(args[1]);
+			print_error(args[0]);
 			return (2);
 		}
 	}

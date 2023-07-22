@@ -54,7 +54,7 @@ static bool	valid_chars(char *arg)
 	i = 1;
 	if (arg[0] == '=' || ft_isdigit(arg[0]))
 		return (false);
-	while (arg[i])
+	while (arg[i] && arg[i] != '=')
 	{
 		if ((!ft_isalnum(arg[i]) && arg[i] != '=') && arg[i])
 			return (false);
@@ -68,6 +68,11 @@ int	export_bin(t_data **sh, char **args)
 	int	i;
 
 	i = 0;
+	if (!args[i])
+	{
+		print_sorted_env(*sh);
+		return (0);
+	}
 	while (args[i])
 	{
 		if (!valid_chars(args[i]))

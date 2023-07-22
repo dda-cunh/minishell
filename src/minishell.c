@@ -71,6 +71,9 @@ int	minishell(t_data *shell)
 
 	while (true)
 	{
+		if (signal(SIGINT, main_sig_handler) == SIG_ERR
+			|| signal(SIGQUIT, SIG_IGN) == SIG_ERR)
+			exit_(-3, shell);
 		line = prompt(shell);
 		if (!line)
 		{

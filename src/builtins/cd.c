@@ -73,7 +73,7 @@ int	cd(t_data **shell, char **path)
 	int		ret;
 
 	ret = 0;
-	if (!path || ((*path)[0] == '~' && !(*path)[1]))
+	if (!path[0])
 		ret = do_alt(shell, "HOME");
 	else if ((*path)[0] == '-' && !(*path)[1])
 		ret = do_alt(shell, "OLDPWD");
