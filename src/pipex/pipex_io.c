@@ -6,16 +6,17 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 20:52:22 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/20 17:49:01 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/22 20:08:23 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+#include <stdbool.h>
 
 int	print_out(t_data *shell, t_redir *redir, t_cmd *next)
 {
-	int		tmp;
 	int		outfd;
+	int		tmp;
 
 	tmp = open(shell->tmp_path, O_RDONLY);
 	outfd = 1;
@@ -42,9 +43,9 @@ int	print_out(t_data *shell, t_redir *redir, t_cmd *next)
 
 static void	here_doc(t_data *shell, char *delim, int tmp)
 {
-	char	*a;
 	size_t	biggest;
 	size_t	alen;
+	char	*a;
 
 	a = "";
 	rl_event_hook = rl_sig_event;
@@ -52,25 +53,25 @@ static void	here_doc(t_data *shell, char *delim, int tmp)
 	{
 		if (signal(SIGINT, heredoc_sig_handler) == SIG_ERR)
 			exit_(-3, shell);
-		a = readline("minihell>>> ");
+		a = readline(HD_PROMPT);
 		if (!a || *a == '\xff')
 			break ;
-		alen = ft_strlen(a) - 1;
-		if (alen >= ft_strlen(delim))
+		biggest = ft_strlen(delim);
+		alen = ft_strlen(a);
+		if (alen > biggest)
 			biggest = alen;
-		else
-			biggest = ft_strlen(delim);
 		if (!ft_strncmp(a, delim, biggest))
 		{
 			free(a);
 			break ;
 		}
 		ft_putstr_fd(a, tmp);
+		ft_putchar_fd('\n', tmp);
 		free(a);
 	}
 }
 
-int	init_tmp(t_data *shell, t_redir *redir)
+static int	get_input(t_data *shell, t_redir **redir)
 {
 	int		infd;
 	int		tmp;
@@ -79,11 +80,11 @@ int	init_tmp(t_data *shell, t_redir *redir)
 	if (tmp == -1)
 		return (2);
 	infd = 0;
-	if (redir && redir->direction == 'i' && redir->dbl_tkn)
-		here_doc(shell, redir->name, tmp);
-	else if (redir && redir->direction == 'i' && !redir->dbl_tkn)
+	if ((*redir)->dbl_tkn)
+		here_doc(shell, (*redir)->name, tmp);
+	else
 	{
-		infd = open(redir->name, O_RDONLY, 0777);
+		infd = open((*redir)->name, O_RDONLY, 0777);
 		if (infd == -1)
 		{
 			close(tmp);
@@ -92,5 +93,29 @@ int	init_tmp(t_data *shell, t_redir *redir)
 		ft_read_write_fd(infd, tmp);
 	}
 	close(tmp);
+	return (0);
+}
+
+int	init_tmp(t_data *shell, t_cmd **cmd, t_redir **redir, bool not_first)
+{
+	t_redir	*ref;
+	bool	read_tmp;
+	int		status;
+
+	read_tmp = false;
+	if (!not_first || (not_first && (*redir)))
+	{
+		while (redir && *redir && (*redir)->direction == 'i')
+		{
+			status = get_input(shell, redir);
+			ref = *redir;
+			*redir = (*redir)->next;
+			free(ref);
+			if (status)
+				return (status);
+			read_tmp = true;
+		}
+	}
+	(*cmd)->read_tmp = read_tmp;
 	return (0);
 }

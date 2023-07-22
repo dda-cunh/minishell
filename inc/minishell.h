@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/20 19:51:24 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/22 19:52:37 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,12 @@
 # define EXIT_KO	"\u2718"
 # define PROMPT		" minishell \u2192  "
 
+# define HD_PROMPT	"\x1b[36mmini\x1b[31mhell\x1b[0m<>> "
+
 # define VALID_TKNS "|> <$/\'?\"=_-."
 
 # define BADCMD_ERR	": command not found"
 # define SHLVL_ERR	"minishell: shell level (1000) too high, resetting to 1\n"
-
 
 typedef enum e_builtin
 {
@@ -45,7 +46,6 @@ typedef enum e_builtin
 	ENV = 6,
 	EXIT = 7
 }			t_builtin;
-
 
 typedef struct s_redir
 {
@@ -60,6 +60,7 @@ typedef struct s_cmd
 	char			*bin;
 	char			**args;
 	t_builtin		builtin;
+	bool			read_tmp;
 	struct s_redir	*redir;
 	struct s_cmd	*next;
 }				t_cmd;
@@ -130,7 +131,8 @@ char			*manage_redirects(t_cmd *cmd, char *tkns);
 
 /*		PIPEX		*/
 char			**get_cmd(char *s, char **envp);
-int				init_tmp(t_data *shell, t_redir *redir);
+int				init_tmp(t_data *shell, t_cmd **cmd, t_redir **redir,
+					bool not_first);
 int				print_out(t_data *shell, t_redir *redir, t_cmd *next);
 int				pipex(t_data **data, t_cmd *cmd);
 int				cmd_index(int infd);

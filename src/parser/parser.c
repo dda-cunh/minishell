@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 21:04:30 by fmouronh          #+#    #+#             */
-/*   Updated: 2023/07/15 17:37:06 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/22 20:04:12 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ static bool	assign_tokens(char *tokens, t_cmd *cmd, char **envi)
 		return (false);
 	cmd->builtin = is_builtin(cmd->args[0]);
 	cmd->bin = get_bin(cmd->args[0], envi);
+	cmd->read_tmp = 0;
 	return (true);
 }
 
