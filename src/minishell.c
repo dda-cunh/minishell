@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/15 18:18:53 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/22 20:43:54 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,24 @@
 // 	}
 // }
 
-static char	*prompt(t_data *shell)
+static char	*prompt(t_data **shell)
 {
-	unlink(shell->tmp_path);
-	if (!shell->status)
-		return (readline(ANSI_GREEN EXIT_OK ANSI_CYAN PROMPT ANSI_RESET));
+	char	*line;
+
+	if (!access((*shell)->tmp_path, F_OK))
+		unlink((*shell)->tmp_path);
+	if (!(*shell)->status)
+		line = readline(ANSI_GREEN EXIT_OK ANSI_CYAN PROMPT ANSI_RESET);
 	else
-		return (readline(ANSI_RED EXIT_KO ANSI_CYAN PROMPT ANSI_RESET));
+		line = readline(ANSI_RED EXIT_KO ANSI_CYAN PROMPT ANSI_RESET);
+	if (!line)
+	{
+		printf("exit\n");
+		exit_(0, (*shell));
+	}
+	if (*line)
+		add_history(line);
+	return (line);
 }
 
 int	minishell(t_data *shell)
@@ -74,14 +85,7 @@ int	minishell(t_data *shell)
 		if (signal(SIGINT, main_sig_handler) == SIG_ERR
 			|| signal(SIGQUIT, SIG_IGN) == SIG_ERR)
 			exit_(-3, shell);
-		line = prompt(shell);
-		if (!line)
-		{
-			printf("exit\n");
-			exit_(0, shell);
-		}
-		if (*line)
-			add_history(line);
+		line = prompt(&shell);
 		tokens = lex_line(shell, line);
 		free(line);
 		if (!tokens)

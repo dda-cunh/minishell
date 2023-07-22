@@ -6,12 +6,11 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 20:52:22 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/22 20:08:23 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/22 20:32:13 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-#include <stdbool.h>
 
 int	print_out(t_data *shell, t_redir *redir, t_cmd *next)
 {
@@ -34,8 +33,10 @@ int	print_out(t_data *shell, t_redir *redir, t_cmd *next)
 			return (2);
 		}
 	}
-	if (!next || redir)
+	if (!next || !redir->next)
 		ft_read_write_fd(tmp, outfd);
+	else
+		close(tmp);
 	if (outfd != 1)
 		close(outfd);
 	return (0);
