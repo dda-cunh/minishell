@@ -12,6 +12,22 @@
 
 #include "../inc/minishell.h"
 
+static char	*get_status(t_data *shell, char *tokens, int index)
+{
+	char	*status_str;
+	char	*expanded;
+
+	status_str = ft_itoa((int)shell->status);
+	if (!status_str)
+		exit_(-1, shell);
+	expanded = ft_strreplace(tokens, index - 1, 2, status_str);
+	free(status_str);
+	free(tokens);
+	if (!expanded)
+		exit_(-1, shell);
+	return (expanded);
+}
+
 static char	*expand_var(t_data *shell, char *tokens, int index)
 {
 	char	*var_name;
@@ -20,7 +36,9 @@ static char	*expand_var(t_data *shell, char *tokens, int index)
 	int		i;
 
 	i = index;
-	while (tokens[i] && tokens[i] != ' ')
+	if (tokens[i] == '?')
+		return (get_status(shell, tokens, index));
+	while (tokens[i] && ft_isalnum(tokens[i]))
 		i++;
 	var_name = ft_calloc(i - index + 1, sizeof(char));
 	if (!var_name)
@@ -28,11 +46,11 @@ static char	*expand_var(t_data *shell, char *tokens, int index)
 	ft_strlcpy(var_name, &tokens[index], i - index + 1);
 	var_val = get_env_val(shell, var_name);
 	expanded = ft_strreplace(tokens, index - 1, i - index + 1, var_val);
-	if (!expanded)
-		exit_(-1, shell);
 	free(var_name);
 	free(var_val);
 	free(tokens);
+	if (!expanded)
+		exit_(-1, shell);
 	return (expanded);
 }
 
@@ -45,6 +63,7 @@ static int	search_var_tkn(char *tokens)
 	{
 		if (tokens[i] == '\'')
 		{
+			i++;
 			while (tokens[i] != '\'')
 				i++;
 		}
