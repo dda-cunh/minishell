@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 20:52:22 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/22 23:04:58 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/23 16:43:58 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,7 @@ int	init_tmp(t_data *shell, t_cmd **cmd, t_redir **redir, bool not_first)
 			status = get_input(shell, redir, !redir_has_direction(*redir, 'i'));
 			ref = *redir;
 			*redir = (*redir)->next;
+			free(ref->name);
 			free(ref);
 			if (status)
 				return (status);
