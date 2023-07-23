@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 15:04:01 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/22 22:20:22 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/23 12:52:02 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ void	put_strerror(void)
 
 static void	free_redir(t_redir *redir)
 {
-	if (redir->next)
-		free_redir(redir->next);
 	if (redir->name)
 		free(redir->name);
+	if (redir->next)
+		free_redir(redir->next);
 	free(redir);
 }
 
