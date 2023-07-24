@@ -76,6 +76,7 @@ static bool	assign_tokens(char *tokens, t_cmd *cmd, char **envi)
 	if (!trim)
 		return (false);
 	cmd->args = ft_split(trim, ' ');
+//	printf("%p\n", trim);
 	free(trim);
 	if (!cmd->args)
 		return (false);

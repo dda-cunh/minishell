@@ -107,7 +107,7 @@ char			*get_env_val(t_data *shell, const char *var);
 int				get_env_index(t_data *shell, const char *env_var);
 int				update_env_val(t_data **shell, const char *var,
 					const char *new_val, bool should_create);
-bool			redir_has_direction(t_redir *redir, char direction);				
+bool			redir_has_direction(t_redir *redir, char direction);
 
 /*	TOKEN MASKS		*/
 int				set_mask(char *str, char quote, char tkn);

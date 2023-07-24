@@ -16,7 +16,6 @@ static bool	n_flag(char **arg)
 {
 	int	i;
 
-
 	if (arg && arg[0] && arg[0][0] == '-')
 	{
 		i = 1;
