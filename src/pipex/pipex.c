@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 12:25:12 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/22 23:05:46 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/24 20:10:25 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,9 +120,11 @@ int	pipex(t_data **shell, t_cmd *cmd)
 		if (init_tmp(*shell, &cmd, &(cmd->redir), not_first) == 2)
 			return (errno);
 		status = handle_exec(shell, cmd, (*shell)->env, not_first);
+		if (status && !cmd->bin)
+			status = 0;
 		if (status)
 			return (errno);
-		if (print_out(*shell, cmd->redir, cmd->next) == 2)
+		if (print_out(*shell, cmd->redir, cmd) == 2)
 			return (errno);
 		not_first = true;
 		cmd = cmd->next;

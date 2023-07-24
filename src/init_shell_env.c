@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   init_shell_env.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fmouronh <fmouronh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 05:05:45 by fmouronh          #+#    #+#             */
-/*   Updated: 2023/07/19 05:05:53 by fmouronh         ###   ########.fr       */
+/*   Updated: 2023/07/24 19:43:37 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../inc/minishell.h"
 
 void	update_shlvl(t_data **shell)
 {

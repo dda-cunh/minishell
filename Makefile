@@ -91,7 +91,7 @@ all: 			$(NAME)
 clean:
 				make clean -C $(LFT_FULL)
 				$(RM) $(OBJ_DIR)
-				$(RM) $(VAL_SUPPRE)
+				if [ -f $(VAL_SUPPRE) ]; then rm $(VAL_SUPPRE) valgrind.txt; fi
 
 fclean:			clean
 				printf '$(BROOM)\n$(BROOM)\t$(GREEN)Cleaning project$(RESET)\n'
@@ -119,7 +119,7 @@ compiled:
 
 valgrind:		$(NAME)
 				if ! [ -f $(VAL_SUPPRE) ]; then printf "{\n\tignore_libreadline_conditional_jump_errors\n\tMemcheck:Leak\n\t...\n\tobj:*/libreadline.so.*\n}" > $(VAL_SUPPRE); fi
-				valgrind --leak-check=full --show-leak-kinds=all --suppressions=$(VAL_SUPPRE) --track-origins=yes ./minishell
+				valgrind --leak-check=full --show-leak-kinds=all --suppressions=$(VAL_SUPPRE) --track-origins=yes --log-file="valgrind.txt" ./minishell
 
 run:			all
 				./minishell

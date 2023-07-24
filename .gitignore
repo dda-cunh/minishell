@@ -1,3 +1,5 @@
+readline.supp
+valgrind.txt
 edgecases
 minishell
 .nfs*

@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 20:52:22 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/23 16:43:58 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/24 20:14:46 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static int	get_input(t_data *shell, t_redir **redir, bool fake)
 	int		tmp;
 
 	if (fake)
-		tmp = open("/dev/null", O_WRONLY | O_CREAT | O_TRUNC, 0777);
+		tmp = open("/dev/null", O_WRONLY);
 	else
 		tmp = open(shell->tmp_path, O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (tmp == -1)
@@ -70,7 +70,7 @@ static int	get_input(t_data *shell, t_redir **redir, bool fake)
 	return (0);
 }
 
-static int	tail_redirect(t_data *shell, t_redir *redir, t_cmd *next, int tmp)
+static int	tail_redirect(t_data *shell, t_redir *redir, t_cmd *cmd, int tmp)
 {
 	int	outfd;
 
@@ -88,15 +88,18 @@ static int	tail_redirect(t_data *shell, t_redir *redir, t_cmd *next, int tmp)
 			close(tmp);
 			return (2);
 		}
-		if ((!redir->next && !next) || !redir_has_direction(redir->next, 'o'))
-			ft_read_write_fd(tmp, outfd, 1, 1);
+		if (cmd->bin && ((!redir->next && !cmd->next) || 
+				!redir_has_direction(redir->next, 'o')))
+			ft_read_write_fd(tmp, outfd, 0, 0);
+		close(outfd);
 	}
-	else if (!redir && !next)
-		ft_read_write_fd(tmp, 1, 1, 0);
+	else if (!cmd->next)
+		ft_read_write_fd(tmp, 1, 0, 0);
+	close(tmp);
 	return (0);
 }
 
-int	print_out(t_data *shell, t_redir *redir, t_cmd *next)
+int	print_out(t_data *shell, t_redir *redir, t_cmd *cmd)
 {
 	bool	first;
 	int		status;
@@ -108,7 +111,7 @@ int	print_out(t_data *shell, t_redir *redir, t_cmd *next)
 		tmp = open(shell->tmp_path, O_RDONLY);
 		if (!tmp)
 			return (2);
-		status = tail_redirect(shell, redir, next, tmp);
+		status = tail_redirect(shell, redir, cmd, tmp);
 		if (status)
 			return (status);
 		if (redir)
