@@ -20,7 +20,7 @@ char	*ft_strreplace(char *str, int index, int torem, char *torepl)
 
 	len = ft_strlen(str) + ft_strlen(torepl) - torem + 1;
 	tail = ft_strlen(&str[index + torem]) + 1;
-	result = ft_calloc(len, sizeof(char)) + 1;
+	result = ft_calloc(len, sizeof(char));
 	if (!result)
 		return (NULL);
 	if (index)
