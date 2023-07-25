@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 12:25:12 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/25 02:58:14 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/25 17:33:56 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,17 +25,15 @@ static int	parent(t_data *shell, int pipes[2][2], int child_pid, t_cmd *cmd)
 		tmp = open(shell->tmp_path, O_WRONLY | O_TRUNC);
 		if (tmp == -1)
 			return (2);
-		ft_read_write_fd(pipes[1][0], tmp, 0, 1);
+		ft_read_write_fd(pipes[1][0], tmp, 1, 1);
 	}
-	else
+	else if (WEXITSTATUS(status) == 255)
 	{
-		if (cmd->bin)
-		{
-			error = ft_strjoin(cmd->bin, BADCMD_ERR);
-			put_strerror(error, 0);
-			free(error);
-			status = 127;
-		}
+		close_fds((int []){pipes[1][0]}, 1);
+		error = ft_strjoin(cmd->bin, BADCMD_ERR);
+		put_strerror(error, 0);
+		free(error);
+		return (127);
 	}
 	close_fds((int []){pipes[1][0]}, 1);
 	return (WEXITSTATUS(status));
@@ -130,8 +128,6 @@ int	pipex(t_data **shell, t_cmd *cmd)
 		if (init_tmp(*shell, &cmd, &(cmd->redir), not_first) == 2)
 			return (errno);
 		status = handle_exec(shell, cmd, (*shell)->env, not_first);
-		if (status && !cmd->bin)
-			status = 0;
 		if (status)
 			return (status);
 		if (print_out(*shell, cmd->redir, cmd) == 2)

@@ -94,13 +94,12 @@ $(OBJ_DIRS):
 all: 			$(NAME)
 
 clean:
-				make clean -C $(LFT_FULL)
+				make fclean -C $(LFT_FULL)
 				if [ -d $(OBJ_DIR) ]; then $(RM) $(OBJ_DIR); fi
 				if [ -d $(DEBUG_DIR) ]; then $(RM) $(DEBUG_DIR); fi
 
 fclean:			clean
 				printf '$(BROOM)\n$(BROOM)\t$(GREEN)Cleaning project$(RESET)\n'
-				make fclean -C $(LFT_FULL)
 				$(RM) $(NAME)
 				printf '$(BROOM)\t\t\t$(SUS)\n'
 
