@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 18:15:44 by fmouronh          #+#    #+#             */
-/*   Updated: 2023/07/10 15:15:58 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/25 15:25:35 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static char	*get_status(t_data *shell, char *tokens, int index)
 	status_str = ft_itoa((int)shell->status);
 	if (!status_str)
 		exit_(-1, shell);
-	expanded = ft_strreplace(tokens, index - 1, 2, status_str);
+	expanded = ft_strreplace(tokens, index, 1, status_str);
 	free(status_str);
 	free(tokens);
 	if (!expanded)
@@ -45,7 +45,7 @@ static char	*expand_var(t_data *shell, char *tokens, int index)
 		return (NULL);
 	ft_strlcpy(var_name, &tokens[index], i - index + 1);
 	var_val = get_env_val(shell, var_name);
-	expanded = ft_strreplace(tokens, index - 1, i - index + 1, var_val);
+	expanded = ft_strreplace(tokens, index, i - index, var_val);
 	free(var_name);
 	free(var_val);
 	free(tokens);
