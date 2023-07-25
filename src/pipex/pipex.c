@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 12:25:12 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/24 20:10:25 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/25 00:30:14 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static int	child(t_data *shell, t_cmd *cmd, char **env, bool not_first)
 		if ((cmd->next || cmd->redir) && dup2(pip[1][1], STDOUT_FILENO) == -1)
 			exit(2);
 		close_fds((int []){pip[0][0], pip[0][1], pip[1][0], pip[1][1]}, 4);
-		exit(execve(cmd->bin, cmd->args, env));
+		exit_(execve(cmd->bin, cmd->args, env), shell);
 	}
 	return (parent(shell, pip, child_pid));
 }

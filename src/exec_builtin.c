@@ -6,14 +6,11 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 16:58:13 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/20 19:56:50 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/25 00:21:59 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-#include <stdlib.h>
-#include <sys/wait.h>
-#include <unistd.h>
 
 t_builtin	is_builtin(char *bin)
 {

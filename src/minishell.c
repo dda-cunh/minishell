@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/24 19:16:49 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/25 00:40:34 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,7 @@ static char	*prompt(t_data **shell)
 	else
 		line = readline(ANSI_RED EXIT_KO ANSI_CYAN PROMPT ANSI_RESET);
 	if (!line)
-	{
-		printf("exit\n");
-		exit_(0, (*shell));
-	}
+		exit_(0 * printf("exit\n"), *shell);
 	if (*line)
 		add_history(line);
 	return (line);
@@ -97,8 +94,6 @@ int	minishell(t_data *shell)
 			continue ;
 		shell->status = pipex(&shell, shell->cmd);
 		shell->cmd = free_cmd(shell->cmd);
-		if (errno && shell->status == errno)
-			put_strerror();
 	}
 	return (shell->status);
 }

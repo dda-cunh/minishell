@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 15:04:01 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/23 16:42:57 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/25 00:33:05 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,14 @@ int	exit_(int status, t_data *shell)
 	free_all(shell);
 	if (status)
 	{
-		ft_putstr_fd("minishell:", 2);
-		if (status == -1)
-			ft_putendl_fd("Error on Malloc", 2);
+		if (errno)
+			put_strerror();
+		else
+		{
+			ft_putstr_fd("minishell: ", 2);
+			if (status == -1)
+				ft_putendl_fd("Error on Malloc", 2);
+		}
 	}
 	clear_history();
 	exit(status);

@@ -5,9 +5,11 @@ CC 			= 	cc
 
 CFLAGS		= 	-Wall -Wextra -Werror -g
 
+RM 			= 	rm -rf
+
 VAL_SUPPRE	=	readline.supp
 
-RM 			= 	rm -rf
+DEBUG_DIR	= 	debug/
 
 INC_DIR		=	inc/
 
@@ -91,7 +93,7 @@ all: 			$(NAME)
 clean:
 				make clean -C $(LFT_FULL)
 				$(RM) $(OBJ_DIR)
-				if [ -f $(VAL_SUPPRE) ]; then rm $(VAL_SUPPRE) valgrind.txt; fi
+				if [ -d $(DEBUG_DIR) ]; then $(RM) $(DEBUG_DIR); fi
 
 fclean:			clean
 				printf '$(BROOM)\n$(BROOM)\t$(GREEN)Cleaning project$(RESET)\n'
@@ -117,9 +119,12 @@ compiled:
 				printf "$(GREEN)                     |_|                        $(RESET)\n"
 				printf "																\n"
 
-valgrind:		$(NAME)
-				if ! [ -f $(VAL_SUPPRE) ]; then printf "{\n\tignore_libreadline_conditional_jump_errors\n\tMemcheck:Leak\n\t...\n\tobj:*/libreadline.so.*\n}" > $(VAL_SUPPRE); fi
-				valgrind --leak-check=full --show-leak-kinds=all --suppressions=$(VAL_SUPPRE) --track-origins=yes --log-file="valgrind.txt" ./minishell
+valgrind:		$(NAME) | $(DEBUG_DIR)
+				if ! [ -f $(VAL_SUPPRE) ]; then printf "{\n\tignore_libreadline_conditional_jump_errors\n\tMemcheck:Leak\n\t...\n\tobj:*/libreadline.so.*\n}" > $(addprefix $(DEBUG_DIR), $(VAL_SUPPRE)); fi
+				valgrind --leak-check=full --show-leak-kinds=all --suppressions=$(addprefix $(DEBUG_DIR), $(VAL_SUPPRE)) --track-origins=yes --log-file=$(addprefix $(DEBUG_DIR), "valgrind.txt") ./minishell
+
+$(DEBUG_DIR):
+				mkdir -p $@
 
 run:			all
 				./minishell
