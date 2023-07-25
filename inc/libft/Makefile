@@ -82,7 +82,8 @@ $(NAME):	$(OBJ)
 			$(AR) $(NAME) $(OBJ)
 
 $(OBJ): 	$(SRC)
-			printf '$(HAMMER)\n\t$(GREEN)Compiling $(NAME)$(RESET)\n'
+			printf '$(HAMMER)\t'
+			printf "$(GREEN)Compiling $(NAME)\n"
 			$(CC) $(CFLAGS) $(SRC)
 
 $(OBJB): 	$(SRCB)

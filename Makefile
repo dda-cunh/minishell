@@ -67,6 +67,8 @@ OBJ 		= 	$(SRC:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)
 
 GREEN		= 	\033[0;32m
 
+RED			=	\033[0;31m
+
 RESET		=	\033[0m
 
 SUS			=	\U00000D9E
@@ -76,14 +78,15 @@ HAMMER		=	\U0001F528
 BROOM		=	\U0001F9F9
 
 $(NAME):		$(OBJ) | $(SRC)
-				printf '$(HAMMER)\n\t$(GREEN)Compiling $(NAME)$(RESET)\n'
+				printf '$(HAMMER)\t$(GREEN)Compiling $(NAME)$(RESET)\n'
 				$(CC) $(CFLAGS) $^ -o $@ -I $(INC_DIR) $(LINKS)
-				make done
+				make compiled
 
 $(OBJ_DIR)%.o:	$(SRC_DIR)%.c | $(OBJ_DIRS)
 				make -C $(LFT_FULL)
-				printf '$(HAMMER)\n\t$(GREEN)Compiling $(notdir $<)$(RESET)\n'
-				$(CC) $(CFLAGS) -c $< -o $@ -I $(INC_DIR) -I $(LFT_FULL)
+				printf '$(HAMMER)\t'
+				printf "$(GREEN)Compiling $(NAME) objects... $(RED)%-33.33s\r" $(notdir $<)
+				$(CC) $(CFLAGS) -c $< -o $@ -I $(INC_DIR)
 
 $(OBJ_DIRS):
 				mkdir -p $@
@@ -92,7 +95,7 @@ all: 			$(NAME)
 
 clean:
 				make clean -C $(LFT_FULL)
-				$(RM) $(OBJ_DIR)
+				if [ -d $(OBJ_DIR) ]; then $(RM) $(OBJ_DIR); fi
 				if [ -d $(DEBUG_DIR) ]; then $(RM) $(DEBUG_DIR); fi
 
 fclean:			clean
@@ -102,10 +105,6 @@ fclean:			clean
 				printf '$(BROOM)\t\t\t$(SUS)\n'
 
 re:				fclean all
-
-done:
-				clear
-				make compiled
 
 compiled:
 				printf "															 	\n"
