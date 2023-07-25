@@ -85,7 +85,7 @@ $(NAME):		$(OBJ) | $(SRC)
 $(OBJ_DIR)%.o:	$(SRC_DIR)%.c | $(OBJ_DIRS)
 				make -C $(LFT_FULL)
 				printf '$(HAMMER)\t'
-				printf "$(GREEN)Compiling $(NAME) objects... $(RED)%-33.33s\r" $(notdir $<)
+				printf "$(GREEN)Compiling $(NAME) objects... $(RED)%-33.33s\r" $(notdir $@)
 				$(CC) $(CFLAGS) -c $< -o $@ -I $(INC_DIR)
 
 $(OBJ_DIRS):

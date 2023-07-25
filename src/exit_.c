@@ -6,16 +6,19 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 15:04:01 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/25 00:33:05 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/25 02:34:46 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-void	put_strerror(void)
+void	put_strerror(char *arg, bool print_strerror)
 {
-	ft_putstr_fd("minishell: ", 2);
-	ft_putendl_fd(strerror(errno), 2);
+	ft_putstr_fd(ANSI_RED, 2);
+	ft_putstr_fd(arg, 2);
+	if (print_strerror)
+		ft_putstr_fd(strerror(errno), 2);
+	ft_putendl_fd(ANSI_RESET, 2);
 	return ;
 }
 
@@ -59,17 +62,6 @@ static void	free_all(t_data *shell)
 int	exit_(int status, t_data *shell)
 {
 	free_all(shell);
-	if (status)
-	{
-		if (errno)
-			put_strerror();
-		else
-		{
-			ft_putstr_fd("minishell: ", 2);
-			if (status == -1)
-				ft_putendl_fd("Error on Malloc", 2);
-		}
-	}
 	clear_history();
 	exit(status);
 }

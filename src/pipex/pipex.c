@@ -6,16 +6,17 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 12:25:12 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/25 00:30:14 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/25 02:58:14 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-static int	parent(t_data *shell, int pipes[2][2], int child_pid)
+static int	parent(t_data *shell, int pipes[2][2], int child_pid, t_cmd *cmd)
 {
-	int	status;
-	int	tmp;
+	char	*error;
+	int		status;
+	int		tmp;
 
 	close_fds((int []){pipes[0][0], pipes[0][1], pipes[1][1]}, 3);
 	waitpid(child_pid, &status, 0);
@@ -23,16 +24,24 @@ static int	parent(t_data *shell, int pipes[2][2], int child_pid)
 	{
 		tmp = open(shell->tmp_path, O_WRONLY | O_TRUNC);
 		if (tmp == -1)
-		{
-			close_fds((int []){pipes[1][0]}, 1);
 			return (2);
-		}
-		ft_read_write_fd(pipes[1][0], tmp, 1, 1);
+		ft_read_write_fd(pipes[1][0], tmp, 0, 1);
 	}
+	else
+	{
+		if (cmd->bin)
+		{
+			error = ft_strjoin(cmd->bin, BADCMD_ERR);
+			put_strerror(error, 0);
+			free(error);
+			status = 127;
+		}
+	}
+	close_fds((int []){pipes[1][0]}, 1);
 	return (WEXITSTATUS(status));
 }
 
-static int	child(t_data *shell, t_cmd *cmd, char **env, bool not_first)
+static int	child(t_data *shell, t_cmd *cmd, char **env, bool n_first)
 {
 	int	child_pid;
 	int	pip[2][2];
@@ -49,15 +58,16 @@ static int	child(t_data *shell, t_cmd *cmd, char **env, bool not_first)
 		return (2);
 	if (child_pid == 0)
 	{
-		if (not_first || cmd->read_tmp)
-			if (dup2(pip[0][0], STDIN_FILENO) == -1)
-				exit(2);
+		if ((n_first || cmd->read_tmp) && (dup2(pip[0][0], STDIN_FILENO) == -1))
+			exit_(2, shell);
 		if ((cmd->next || cmd->redir) && dup2(pip[1][1], STDOUT_FILENO) == -1)
-			exit(2);
+			exit_(2, shell);
 		close_fds((int []){pip[0][0], pip[0][1], pip[1][0], pip[1][1]}, 4);
+		if (!cmd->bin)
+			exit_(0, shell);
 		exit_(execve(cmd->bin, cmd->args, env), shell);
 	}
-	return (parent(shell, pip, child_pid));
+	return (parent(shell, pip, child_pid, cmd));
 }
 
 static int	builtin_pipes(t_data *shell, int pipefd[2], int stdi, int stdo)
@@ -123,7 +133,7 @@ int	pipex(t_data **shell, t_cmd *cmd)
 		if (status && !cmd->bin)
 			status = 0;
 		if (status)
-			return (errno);
+			return (status);
 		if (print_out(*shell, cmd->redir, cmd) == 2)
 			return (errno);
 		not_first = true;

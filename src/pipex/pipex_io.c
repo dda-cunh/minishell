@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 20:52:22 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/24 20:14:46 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/25 02:52:56 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,12 +88,12 @@ static int	tail_redirect(t_data *shell, t_redir *redir, t_cmd *cmd, int tmp)
 			close(tmp);
 			return (2);
 		}
-		if (cmd->bin && ((!redir->next && !cmd->next) || 
-				!redir_has_direction(redir->next, 'o')))
+		if (cmd->bin && ((!redir->next && !cmd->next)
+				|| !redir_has_direction(redir->next, 'o')))
 			ft_read_write_fd(tmp, outfd, 0, 0);
 		close(outfd);
 	}
-	else if (!cmd->next)
+	else if (cmd->bin && !cmd->next)
 		ft_read_write_fd(tmp, 1, 0, 0);
 	close(tmp);
 	return (0);

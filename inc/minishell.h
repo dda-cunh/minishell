@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/24 20:10:32 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/25 02:27:27 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ int				cmd_index(int infd);
 
 /*	GRACEFUL EXIT	*/
 t_cmd			*free_cmd(t_cmd *cmd);
-void			put_strerror(void);
+void			put_strerror(char *arg, bool print_strerror);
 int				exit_(int status, t_data *data);
 
 #endif
