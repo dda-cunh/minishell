@@ -43,7 +43,10 @@ static void	here_doc(t_data *shell, char *delim, int tmp)
 			free(a);
 		}
 		else
+		{
+			shell->sigint = true;
 			ft_putendl_fd("warning: here-doc delimited by end-of-file", 2);
+		}
 	}
 }
 

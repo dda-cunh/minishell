@@ -56,7 +56,7 @@ int	exit_(int status, t_data *shell)
 		print_fatal_error(status);
 		status *= -1;
 	}
-	else if (errno)
+	else if (errno && !shell->sigint)
 		put_strerror();
 	clear_history();
 	exit(status);

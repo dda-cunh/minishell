@@ -57,7 +57,8 @@ static int	child(t_data *shell, t_cmd *cmd, char **env, bool not_first)
 		if ((cmd->next || cmd->redir) && dup2(pip[1][1], STDOUT_FILENO) == -1)
 			exit(2);
 		close_fds((int []){pip[0][0], pip[0][1], pip[1][0], pip[1][1]}, 4);
-		exit_(execve(cmd->bin, cmd->args, env), shell); // gotta fix it here
+		if (execve(cmd->bin, cmd->args, env))
+			exit_(errno, shell);
 	}
 	return (parent(shell, pip, child_pid));
 }
@@ -114,13 +115,13 @@ int	pipex(t_data **shell, t_cmd *cmd)
 		return (2);
 	close(tmp);
 	not_first = false;
-	(*shell)->sigint = false;
 	while (cmd)
 	{
+		(*shell)->sigint = false;
 		if (init_tmp(*shell, &cmd, &(cmd->redir), not_first) == 2)
 			return (errno);
 		if ((*shell)->sigint)
-			return (130);
+			return ((*shell)->status);
 		if (signal(SIGINT, exec_sig_handler) == SIG_ERR
 			|| signal(SIGQUIT, exec_sig_handler) == SIG_ERR)
 			exit_(-2, *shell);
