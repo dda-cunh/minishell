@@ -29,6 +29,8 @@ static int	parent(t_data *shell, int pipes[2][2], int child_pid)
 		}
 		ft_read_write_fd(pipes[1][0], tmp, 1, 1);
 	}
+	if (!shell->sigint)
+		shell->status = status;
 	return (shell->status);
 }
 

@@ -42,6 +42,8 @@ static void	here_doc(t_data *shell, char *delim, int tmp)
 			ft_putchar_fd('\n', tmp);
 			free(a);
 		}
+		else
+			ft_putendl_fd("warning: here-doc delimited by end-of-file", 2);
 	}
 }
 
