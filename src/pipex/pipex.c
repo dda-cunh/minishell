@@ -121,6 +121,9 @@ int	pipex(t_data **shell, t_cmd *cmd)
 			return (errno);
 		if ((*shell)->sigint)
 			return (130);
+		if (signal(SIGINT, exec_sig_handler) == SIG_ERR
+			|| signal(SIGQUIT, exec_sig_handler) == SIG_ERR)
+			exit_(-2, *shell);
 		status = handle_exec(shell, cmd, (*shell)->env, not_first);
 		if (status && !cmd->bin)
 			status = 0;

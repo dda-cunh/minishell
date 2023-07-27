@@ -83,6 +83,7 @@ void			reset_pwd(t_data **shell);
 /*		SIGNALS		*/
 void			main_sig_handler(int sig);
 void			heredoc_sig_handler(int sig);
+void			exec_sig_handler(int sig);
 int				rl_sig_event(void);
 
 /*		MINISHELL	*/

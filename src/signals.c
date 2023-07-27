@@ -38,6 +38,23 @@ void	heredoc_sig_handler(int sig)
 	get_shell()->sigint = true;
 }
 
+void	exec_sig_handler(int sig)
+{
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	if (sig == SIGINT)
+	{
+		ft_putendl_fd("", 2);
+		get_shell()->status = 130;
+	}
+	else if (sig == SIGQUIT)
+	{
+		ft_putendl_fd("Quit (core dumped)", 2);
+		get_shell()->status = 131;
+	}
+
+}
+
 int	rl_sig_event(void)
 {
 	return (130);

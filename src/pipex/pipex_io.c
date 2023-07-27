@@ -25,20 +25,23 @@ static void	here_doc(t_data *shell, char *delim, int tmp)
 		if (signal(SIGINT, heredoc_sig_handler) == SIG_ERR)
 			exit_(-3, shell);
 		a = readline(HD_PROMPT);
-		if (!a || *a == '\xff')
+		if (a && *a == '\xff')
 			break ;
-		biggest = ft_strlen(delim);
-		alen = ft_strlen(a);
-		if (alen > biggest)
-			biggest = alen;
-		if (!ft_strncmp(a, delim, biggest))
+		if (a)
 		{
+			biggest = ft_strlen(delim);
+			alen = ft_strlen(a);
+			if (alen > biggest)
+				biggest = alen;
+			if (!ft_strncmp(a, delim, biggest))
+			{
+				free(a);
+				break ;
+			}
+			ft_putstr_fd(a, tmp);
+			ft_putchar_fd('\n', tmp);
 			free(a);
-			break ;
 		}
-		ft_putstr_fd(a, tmp);
-		ft_putchar_fd('\n', tmp);
-		free(a);
 	}
 }
 
