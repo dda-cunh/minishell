@@ -45,7 +45,7 @@ static char	*expand_var(t_data *shell, char *tokens, int index)
 		return (NULL);
 	ft_strlcpy(var_name, &tokens[index], i - index + 1);
 	var_val = get_env_val(shell, var_name);
-	expanded = ft_strreplace(tokens, index - 1, i - index + 1, var_val);
+	expanded = ft_strreplace(tokens, index, i - index + 1, var_val);
 	free(var_name);
 	free(var_val);
 	free(tokens);

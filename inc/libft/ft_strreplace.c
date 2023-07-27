@@ -19,7 +19,7 @@ char	*ft_strreplace(char *str, int index, int torem, char *torepl)
 	int		tail;
 
 	len = ft_strlen(str) + ft_strlen(torepl) - torem + 1;
-	tail = ft_strlen(&str[index + torem]) + 1;
+	tail = ft_strlen(&str[index + torem - 1]) + 1;
 	result = ft_calloc(len, sizeof(char));
 	if (!result)
 		return (NULL);
@@ -27,6 +27,6 @@ char	*ft_strreplace(char *str, int index, int torem, char *torepl)
 		ft_strlcpy(result, str, index);
 	if (*torepl)
 		ft_strlcat(result, torepl, ft_strlen(result) + ft_strlen(torepl) + 1);
-	ft_strlcat(result, &str[index + torem], ft_strlen(result) + tail);
+	ft_strlcat(result, &str[index + torem - 1], ft_strlen(result) + tail);
 	return (result);
 }
