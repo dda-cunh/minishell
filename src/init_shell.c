@@ -12,6 +12,13 @@
 
 #include "../inc/minishell.h"
 
+t_data	*get_shell(void)
+{
+	static t_data	shell;
+
+	return (&shell);
+}
+
 static void	update_env(t_data **shell)
 {
 	update_shlvl(shell);
@@ -60,13 +67,14 @@ t_data	*init_shell(char **envi)
 {
 	t_data	*shell;
 
-	shell = malloc(sizeof(t_data));
+	shell = get_shell();
 	if (!shell)
 		return (NULL);
 	shell->env = copy_envi(envi);
 	if (!shell->env)
 		return (NULL);
 	update_env(&shell);
+	shell->sigint = false;
 	shell->cmd = NULL;
 	set_tmp(&shell);
 	shell->status = 0;

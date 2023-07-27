@@ -20,7 +20,7 @@ static char	*get_status(t_data *shell, char *tokens, int index)
 	status_str = ft_itoa((int)shell->status);
 	if (!status_str)
 		exit_(-1, shell);
-	expanded = ft_strreplace(tokens, index - 1, 2, status_str);
+	expanded = ft_strreplace(tokens, index, 2, status_str);
 	free(status_str);
 	free(tokens);
 	if (!expanded)

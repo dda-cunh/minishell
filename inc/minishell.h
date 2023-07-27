@@ -70,10 +70,12 @@ typedef struct s_data
 	char			**env;
 	struct s_cmd	*cmd;
 	char			*tmp_path;
+	bool			sigint;
 	unsigned char	status;
 }				t_data;
 
 /*	INIT FUNCTIONS	*/
+t_data			*get_shell(void);
 t_data			*init_shell(char **envi);
 void			update_shlvl(t_data **shell);
 void			reset_pwd(t_data **shell);

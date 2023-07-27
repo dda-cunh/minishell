@@ -52,7 +52,6 @@ static void	free_all(t_data *shell)
 			free_cmd(shell->cmd);
 		if (shell->tmp_path)
 			free(shell->tmp_path);
-		free(shell);
 	}
 }
 

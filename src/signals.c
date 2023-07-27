@@ -21,7 +21,7 @@ void	main_sig_handler(int sig)
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
-/*	set exit status to 130*/
+	get_shell()->status = 130;
 }
 
 void	heredoc_sig_handler(int sig)
@@ -34,9 +34,11 @@ void	heredoc_sig_handler(int sig)
 		rl_redisplay();
 		rl_on_new_line();
 	}
+	get_shell()->status = 130;
+	get_shell()->sigint = true;
 }
 
 int	rl_sig_event(void)
 {
-	return (127);
+	return (130);
 }
