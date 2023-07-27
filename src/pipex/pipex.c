@@ -41,14 +41,14 @@ static int	child(t_data *shell, t_cmd *cmd, char **env, bool not_first)
 	int	tmp;
 
 	if (pipe(pip[0]) == -1 || pipe(pip[1]) == -1)
-		return (2);
+		exit_(-5, shell);
 	tmp = open(shell->tmp_path, O_RDONLY);
 	if (tmp == -1)
-		return (2);
+		exit_(-3, shell);
 	ft_read_write_fd(tmp, pip[0][1], 1, 0);
 	child_pid = fork();
 	if (child_pid == -1)
-		return (2);
+		exit_(-8, shell);
 	if (child_pid == 0)
 	{
 		if (not_first || cmd->read_tmp)
@@ -57,7 +57,7 @@ static int	child(t_data *shell, t_cmd *cmd, char **env, bool not_first)
 		if ((cmd->next || cmd->redir) && dup2(pip[1][1], STDOUT_FILENO) == -1)
 			exit(2);
 		close_fds((int []){pip[0][0], pip[0][1], pip[1][0], pip[1][1]}, 4);
-		exit_(execve(cmd->bin, cmd->args, env), shell);
+		exit_(execve(cmd->bin, cmd->args, env), shell); // gotta fix it here
 	}
 	return (parent(shell, pip, child_pid));
 }
@@ -68,7 +68,7 @@ static int	builtin_pipes(t_data *shell, int pipefd[2], int stdi, int stdo)
 
 	if (dup2(stdi, STDIN_FILENO) == -1
 		|| dup2(stdo, STDOUT_FILENO) == -1)
-		return (2);
+		exit_(-9, shell);
 	close_fds((int []){pipefd[1], stdo, stdi}, 3);
 	tmp = open(shell->tmp_path, O_WRONLY | O_TRUNC);
 	if (tmp == -1)

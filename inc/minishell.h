@@ -141,7 +141,22 @@ int				cmd_index(int infd);
 
 /*	GRACEFUL EXIT	*/
 t_cmd			*free_cmd(t_cmd *cmd);
+void			print_fatal_error(int status);
 void			put_strerror(void);
 int				exit_(int status, t_data *data);
 
 #endif
+
+/*
+	FATAL ERROR CODES
+
+	-1: malloc error
+	-2:	signal handler error
+	-3:	file open error
+	-4: file close error
+	-5: pipe open error
+	-6: pipe close error
+	-7:	exec error
+	-8: fork error
+	-9:	dup error
+*/

@@ -50,7 +50,7 @@ int	exec_builtin(t_data **shell, t_cmd cmd, bool not_first)
 	{
 		child_pid = fork();
 		if (child_pid == -1)
-			exit_(-1, *shell);
+			exit_(-8, *shell);
 		if (child_pid == 0)
 			exit_(f[cmd.builtin](shell, cmd.args + 1), *shell);
 		waitpid(child_pid, &status, 0);

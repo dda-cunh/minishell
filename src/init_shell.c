@@ -68,8 +68,6 @@ t_data	*init_shell(char **envi)
 	t_data	*shell;
 
 	shell = get_shell();
-	if (!shell)
-		return (NULL);
 	shell->env = copy_envi(envi);
 	if (!shell->env)
 		return (NULL);

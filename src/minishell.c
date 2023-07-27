@@ -81,7 +81,7 @@ int	minishell(t_data *shell)
 	{
 		if (signal(SIGINT, main_sig_handler) == SIG_ERR
 			|| signal(SIGQUIT, SIG_IGN) == SIG_ERR)
-			exit_(-3, shell);
+			exit_(-2, shell);
 		line = prompt(&shell);
 		tokens = lex_line(shell, line);
 		free(line);

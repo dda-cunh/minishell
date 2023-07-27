@@ -23,7 +23,7 @@ static void	here_doc(t_data *shell, char *delim, int tmp)
 	while (a)
 	{
 		if (signal(SIGINT, heredoc_sig_handler) == SIG_ERR)
-			exit_(-3, shell);
+			exit_(-2, shell);
 		a = readline(HD_PROMPT);
 		if (a && *a == '\xff')
 			break ;
