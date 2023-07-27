@@ -23,7 +23,7 @@ static void	update_env(t_data **shell)
 {
 	update_shlvl(shell);
 	if (get_env_index(*shell, "PWD") < 0)
-		reset_pwd(shell);
+		reset_pwd(shell); // this is not working...
 }
 
 static char	**copy_envi(char **envi)

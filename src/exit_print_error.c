@@ -39,5 +39,5 @@ void	print_fatal_error(int status)
 	else if (status == -8)
 		ft_putendl_fd("fork error", 2);
 	else if (status == -9)
-		ft_putendl_fd("up error", 2);
+		ft_putendl_fd("dup error", 2);
 }

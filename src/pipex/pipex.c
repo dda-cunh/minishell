@@ -88,17 +88,18 @@ static int	handle_exec(t_data **shell, t_cmd *cmd, char **env, bool not_first)
 	if (!cmd->builtin)
 		return (child(*shell, cmd, env, not_first));
 	if (pipe(pipefd) == -1)
-		return (2);
+		exit_(-5, *shell);
 	tmp = open((*shell)->tmp_path, O_RDONLY);
 	if (tmp == -1)
-		return (2);
+		exit_(-3, *shell);
 	std_out_fd = dup(STDOUT_FILENO);
 	std_in_fd = dup(STDIN_FILENO);
 	if (dup2(tmp, STDIN_FILENO) == -1
 		|| dup2(pipefd[1], STDOUT_FILENO) == -1)
-		return (2);
+		exit_(-9, *shell);
 	(*shell)->status = exec_builtin(shell, *cmd, not_first);
-	close(tmp);
+	if (close(tmp) == -1)
+		exit_(-4, *shell);
 	builtin_pipes(*shell, pipefd, std_in_fd, std_out_fd);
 	return ((*shell)->status);
 }
