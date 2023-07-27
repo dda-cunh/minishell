@@ -29,7 +29,7 @@ static int	parent(t_data *shell, int pipes[2][2], int child_pid)
 		}
 		ft_read_write_fd(pipes[1][0], tmp, 1, 1);
 	}
-	return (WEXITSTATUS(status));
+	return (shell->status);
 }
 
 static int	child(t_data *shell, t_cmd *cmd, char **env, bool not_first)
@@ -80,7 +80,6 @@ static int	handle_exec(t_data **shell, t_cmd *cmd, char **env, bool not_first)
 	int	std_out_fd;
 	int	std_in_fd;
 	int	pipefd[2];
-	int	status;
 	int	tmp;
 
 	if (!cmd->builtin)
@@ -95,16 +94,15 @@ static int	handle_exec(t_data **shell, t_cmd *cmd, char **env, bool not_first)
 	if (dup2(tmp, STDIN_FILENO) == -1
 		|| dup2(pipefd[1], STDOUT_FILENO) == -1)
 		return (2);
-	status = exec_builtin(shell, *cmd, not_first);
+	(*shell)->status = exec_builtin(shell, *cmd, not_first);
 	close(tmp);
 	builtin_pipes(*shell, pipefd, std_in_fd, std_out_fd);
-	return (status);
+	return ((*shell)->status);
 }
 
 int	pipex(t_data **shell, t_cmd *cmd)
 {
 	bool	not_first;
-	int		status;
 	int		tmp;
 
 	if (!shell)
@@ -124,15 +122,15 @@ int	pipex(t_data **shell, t_cmd *cmd)
 		if (signal(SIGINT, exec_sig_handler) == SIG_ERR
 			|| signal(SIGQUIT, exec_sig_handler) == SIG_ERR)
 			exit_(-2, *shell);
-		status = handle_exec(shell, cmd, (*shell)->env, not_first);
-		if (status && !cmd->bin)
-			status = 0;
-		if (status)
-			return (errno);
+		(*shell)->status = handle_exec(shell, cmd, (*shell)->env, not_first);
+		if ((*shell)->status && !cmd->bin)
+			(*shell)->status = 0;
+		if ((*shell)->status)
+			return ((*shell)->status);
 		if (print_out(*shell, cmd->redir, cmd) == 2)
 			return (errno);
 		not_first = true;
 		cmd = cmd->next;
 	}
-	return (status);
+	return ((*shell)->status);
 }
