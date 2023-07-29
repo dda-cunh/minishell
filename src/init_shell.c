@@ -80,6 +80,7 @@ t_data	*init_shell(char **envi)
 		exit_(-9, shell);
 	shell->infile = -1;
 	shell->outfile = -1;
+	shell->file_err = false;
 	set_tmp(&shell);
 	shell->status = 0;
 	return (shell);

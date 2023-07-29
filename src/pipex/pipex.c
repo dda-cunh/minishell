@@ -125,10 +125,10 @@ static void	close_files(t_data *shell)
 
 static void	handle_exec(t_cmd *cmd, int i)
 {
-		if (cmd->builtin)
-			run_builtin(cmd, i);
-		else
-			run_cmd(cmd);
+	if (cmd->builtin)
+		run_builtin(cmd, i);
+	else
+		run_cmd(cmd);
 }
 
 int	pipex(t_data *shell, t_cmd *cmd)
@@ -140,16 +140,14 @@ int	pipex(t_data *shell, t_cmd *cmd)
 	i = 0;
 	while (cmd)
 	{
-		if (pipe_fd)
-			dup_pipes(cmd, pipe_fd, i);
-		if (cmd->redir)
-			dup_redirects(shell, cmd->redir);
+		dup_io(cmd, pipe_fd, i);
 		if (shell->sigint)
 		{
 			close_files(shell);
 			break ;
 		}
-		handle_exec(cmd, i);
+		if (!shell->file_err)
+			handle_exec(cmd, i);
 		close_files(shell);
 		cmd = cmd->next;
 		i++;

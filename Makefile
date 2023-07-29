@@ -57,7 +57,9 @@ SRC			=	$(addprefix $(SRC_DIR),	exec_builtin.c \
 																pipex_io.c \
 																pipex_pipeline.c \
 																pipeline_utils.c \
-																pipex_redirect.c))
+																pipex_redirect.c \
+																redirect_utils.c \
+																pipex_errors.c))
 
 OBJ_DIRS	=	$(OBJ_DIR)	$(addprefix $(OBJ_DIR), $(BIN_DIR)) \
 							$(addprefix $(OBJ_DIR), $(LEX_DIR)) \
