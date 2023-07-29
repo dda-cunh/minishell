@@ -60,6 +60,8 @@ SRC			=	$(addprefix $(SRC_DIR),	exec_builtin.c \
 																pipex_redirect.c \
 																redirect_utils.c \
 																pipex_heredoc.c \
+																pipex_exec_builtin.c \
+																pipex_exec_cmd.c \
 																pipex_errors.c))
 
 OBJ_DIRS	=	$(OBJ_DIR)	$(addprefix $(OBJ_DIR), $(BIN_DIR)) \

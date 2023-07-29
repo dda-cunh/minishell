@@ -155,7 +155,7 @@ int	pipex(t_data *shell, t_cmd *cmd)
 			close_files(shell);
 			break ;
 		}
-		if (!shell->file_err)
+		if (!shell->file_err && cmd->args && cmd->args[0])
 			handle_exec(cmd, i);
 		close_files(shell);
 		cmd = cmd->next;

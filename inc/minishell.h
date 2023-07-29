@@ -146,7 +146,9 @@ bool			open_infile(t_data *shell, t_redir *redir);
 void			here_doc(t_data *shell, char *delim);
 bool			open_outfile(t_data *shell, t_data *redir);
 void			run_builtin(t_cmd *cmd, int i);
+//	get_builtin_func
 void			run_cmd(t_cmd *cmd);
+char			*get_cmd_bin(char **env, char *bin);
 void			free_pipeline(t_data *shell, int **pipes);
 void			print_file_error(char *filename, int err);
 
