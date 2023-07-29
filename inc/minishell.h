@@ -66,13 +66,17 @@ typedef struct s_data
 {
 	char			**env;
 	struct s_cmd	*cmd;
+	char			*tmp_path;
+	int				stdin_reset;
+	int				stdout_reset;
 	int				infile;
 	int				outfile;
-	char			*tmp_path;
+	bool			sigint;
 	unsigned char	status;
 }				t_data;
 
 /*	INIT FUNCTIONS	*/
+t_data			*get_shell(void);
 t_data			*init_shell(char **envi);
 void			update_shlvl(t_data **shell);
 void			reset_pwd(t_data **shell);
@@ -129,8 +133,13 @@ char			*manage_redirects(t_cmd *cmd, char *tkns);
 
 /*		PIPEX		*/
 int				pipex(t_data **data, t_cmd *cmd);
-void			free_pipeline(t_data *shell, int **pipes);
 int				**set_pipes(t_data *shell, t_cmd *cmd);
+int				**set_pipeline(t_data *shell, t_cmd *cmd);
+void			dup_pipes(t_cmd *cmd, int **pipe_fd, int i);
+void			free_pipeline(t_data *shell, int **pipes);
+void			dup_redirects(t_data *shell, t_redir *redir);
+void			run_builtin(t_cmd *cmd, int i);
+void			run_cmd(t_cmd *cmd);
 
 /*
 char			**get_cmd(char *s, char **envp);
@@ -147,7 +156,7 @@ int				exit_(int status, t_data *data);
 #endif
 
 /*
-	INTERNAL ERROR CODES
+	FATAL ERROR CODES
 
 	-1: malloc error
 	-2:	signal handler error
@@ -156,4 +165,6 @@ int				exit_(int status, t_data *data);
 	-5: pipe open error
 	-6: pipe close error
 	-7:	exec error
+	-8: fork error
+	-9:	dup error
 */

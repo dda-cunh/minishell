@@ -100,48 +100,62 @@ static int	handle_exec(t_data **shell, t_cmd *cmd, char **env, bool n_exec)
 }
 */
 
-//	implement run_builtin & run_cmd (& see if this is a good idea)
-int	pipex(t_data **shell, t_cmd *cmd)
+static void	reset_io(t_data *shell)
 {
-	int		status;
-	int		**pipe_fd;
-	bool	first_cmd;
+	if (dup2(STDIN_FILENO, shell->stdin_reset) == -1
+		|| dup2(STDOUT_FILENO, shell->stdout_reset) == -1)
+		exit_(-9, shell);
+}
 
-	first_cmd = true;
-	pipe_fd = set_pipes(*shell, cmd);
+static void	close_files(t_data *shell)
+{
+	if (shell->infile != -1)
+	{
+		if (close(shell->infile) == -1)
+			exit_(-4, shell);
+		shell->infile = -1;
+	}
+	if (shell->outfile != -1)
+	{
+		if (close(shell->outfile) == -1)
+			exit_(-4, shell);
+		shell->outfile = -1;
+	}
+}
+
+static void	handle_exec(t_cmd *cmd, int i)
+{
+		if (cmd->builtin)
+			run_builtin(cmd, i);
+		else
+			run_cmd(cmd);
+}
+
+int	pipex(t_data *shell, t_cmd *cmd)
+{
+	int		**pipe_fd;
+	int		i;
+
+	pipe_fd = set_pipes(shell, cmd);
+	i = 0;
 	while (cmd)
 	{
-		if (cmd->builtin)
-			run_builtin(shell, cmd, pipe_fd, first_cmd);
-		else
-			run_cmd(shell, cmd, pipe_fd, first_cmd);
-		if (first_cmd)
-			first_cmd = false;
+		if (pipe_fd)
+			dup_pipes(cmd, pipe_fd, i);
+		if (cmd->redir)
+			dup_redirects(shell, cmd->redir);
+		if (shell->sigint)
+		{
+			close_files(shell);
+			break ;
+		}
+		handle_exec(cmd, i);
+		close_files(shell);
 		cmd = cmd->next;
+		i++;
 	}
 	if (pipe_fd)
-		free_pipeline(*shell, pipe_fd);
-	return (status);
-	/*
-	bool	n_exec;
-	int		status;
-
-	if (!shell)
-		return (1);
-	n_exec = false;
-	put_strerror();
-	while (cmd)
-	{
-		if (init_tmp(*shell, cmd->redir) == 2)
-			return (errno);
-		status = handle_exec(shell, cmd, (*shell)->env, n_exec);
-		if (status == 2)
-			return (errno);
-		if (print_out(*shell, cmd->redir) == 2)
-			return (errno);
-		n_exec = true;
-		cmd = cmd->next;
-	}
-	return (status);
-	*/
+		free_pipeline(shell, pipe_fd);
+	reset_io(shell);
+	return (shell->status);
 }

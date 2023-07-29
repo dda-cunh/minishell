@@ -41,7 +41,8 @@ static void	free_all(t_data *shell)
 		free_2d(shell->env);
 	if (shell->cmd)
 		free_cmd(shell->cmd);
-	free(shell);
+	if (shell->tmp_path)
+		free(shell->tmp_path);
 }
 
 int	exit_(int status, t_data *shell)

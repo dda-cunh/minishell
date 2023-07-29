@@ -58,6 +58,7 @@ int	minishell(t_data *shell)
 			continue ;
 		shell->status = pipex(&shell, shell->cmd);
 		shell->cmd = free_cmd(shell->cmd);
+		shell->sigint = false;
 		if (errno && shell->status == errno)
 			put_strerror();
 	}

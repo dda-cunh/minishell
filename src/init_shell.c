@@ -6,17 +6,24 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 15:17:11 by fmouronh          #+#    #+#             */
-/*   Updated: 2023/07/12 18:47:27 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/07/24 19:09:20 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
+t_data	*get_shell(void)
+{
+	static t_data	shell;
+
+	return (&shell);
+}
+
 static void	update_env(t_data **shell)
 {
 	update_shlvl(shell);
 	if (get_env_index(*shell, "PWD") < 0)
-		reset_pwd(shell);
+		reset_pwd(shell); // this is not working...
 }
 
 static char	**copy_envi(char **envi)
@@ -44,18 +51,15 @@ static char	**copy_envi(char **envi)
 
 static int	set_tmp(t_data **shell)
 {
-	char	*cwd;
+	char	*sh_addr;
 
-	cwd = getcwd(NULL, 0);
-	if (!cwd)
-		exit_(errno, *shell);
-	(*shell)->tmp_path = ft_strjoin(cwd, "/.tmp");
-	if (!(*shell)->tmp_path)
-	{
-		free(cwd);
+	sh_addr = ft_itoa(**(int **)shell);
+	if (!sh_addr)
 		exit_(-1, *shell);
-	}
-	free(cwd);
+	(*shell)->tmp_path = ft_strjoin("/tmp/", sh_addr);
+	free(sh_addr);
+	if (!(*shell)->tmp_path)
+		exit_(-1, *shell);
 	return (0);
 }
 
@@ -63,14 +67,17 @@ t_data	*init_shell(char **envi)
 {
 	t_data	*shell;
 
-	shell = malloc(sizeof(t_data));
-	if (!shell)
-		return (NULL);
+	shell = get_shell();
 	shell->env = copy_envi(envi);
 	if (!shell->env)
 		return (NULL);
 	update_env(&shell);
+	shell->sigint = false;
 	shell->cmd = NULL;
+	shell->stdin_reset = dup(STDIN_FILENO);
+	shell->stdout_reset = dup(STDOUT_FILENO);
+	if (shell->stdin_reset == -1 || shell->stdout_reset == -1)
+		exit_(-9, shell);
 	shell->infile = -1;
 	shell->outfile = -1;
 	set_tmp(&shell);

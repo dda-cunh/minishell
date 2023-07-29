@@ -12,21 +12,6 @@
 
 #include "../../inc/minishell.h"
 
-void	free_pipeline(t_data *shell, int **pipes)
-{
-	int	i;
-
-	i = 0;
-	while (pipes[i])
-	{
-		if (close(pipes[i][0]) == -1 || close(pipes[i][1]) == -1)
-			exit_(-6, shell);
-		free(pipes[i]);
-		i++;
-	}
-	free(pipes);
-}
-
 static bool	open_pipes(t_data *shell, int **pipes, int nr_cmds)
 {
 	int	i;
@@ -60,7 +45,7 @@ static int	count_cmds(t_cmd *cmd)
 	return (i);
 }
 
-static int	**set_pipeline(t_data *shell, t_cmd *cmd)
+int	**set_pipeline(t_data *shell, t_cmd *cmd)
 {
 	int	**pipeline;
 	int	nr_cmds;
@@ -75,19 +60,4 @@ static int	**set_pipeline(t_data *shell, t_cmd *cmd)
 		return (NULL);
 	}
 	return (pipeline);
-}
-
-int	**set_pipes(t_data *shell, t_cmd *cmd)
-{
-	int	**pipe_fd;
-
-	if (cmd->next)
-	{
-		pipe_fd = set_pipeline(shell, cmd);
-		if (!pipe_fd)
-			exit_(-1, shell);
-	}
-	else
-		pipe_fd = NULL;
-	return (pipe_fd);
 }
