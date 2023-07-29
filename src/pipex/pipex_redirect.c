@@ -25,7 +25,6 @@ static void	open_redir_file(t_data *shell, t_redir *redir, bool *fd_open)
 			fd_open[1] = true;
 		else
 			shell->file_err = true;
-
 	}
 }
 
