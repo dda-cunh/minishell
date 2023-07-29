@@ -33,9 +33,9 @@
 
 # define SHLVL_ERR	"minishell: shell level (1000) too high, resetting to 1\n"
 
-# define FILE_NOT_FOUND 1
-# define FILE_NO_PERM 2
-# define CMD_NOT_FOUND 3
+# define FILE_NOT_FOUND "No such file or directory"
+# define FILE_NO_PERM "Permission denied"
+# define CMD_NOT_FOUND "command not found"
 
 typedef enum e_builtin
 {

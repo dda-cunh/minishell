@@ -1,11 +1,11 @@
 #include "minishell.h"
 
-static size_t	get_biggest(char *delim, size_t alen)
+static size_t	biggest(size_t delim_len, size_t a_len)
 {
-	if (alen >= ft_strlen(delim))
-		return (alen);
+	if (a_len >= delim_len)
+		return (a_len);
 	else
-		return (ft_strlen(delim));
+		return (delim_len);
 }
 
 static void	read_input(t_data *shell, char *delim)
@@ -23,7 +23,7 @@ static void	read_input(t_data *shell, char *delim)
 		}
 		if (a)
 		{
-			if (!ft_strncmp(a, delim, get_biggest(delim, ft_strlen(a))))
+			if (!ft_strncmp(a, delim, biggest(ft_strlen(delim), ft_strlen(a))))
 			{
 				free(a);
 				break ;
