@@ -140,10 +140,10 @@ char			*manage_redirects(t_cmd *cmd, char *tkns);
 int				pipex(t_data **data, t_cmd *cmd);
 int				**set_pipes(t_data *shell, t_cmd *cmd);
 int				**set_pipeline(t_data *shell, t_cmd *cmd);
-void			dup_io(t_cmd *cmd, int **pipe_fd, int i)
 void			dup_pipes(t_cmd *cmd, int **pipe_fd, int i);
 void			dup_redirects(t_data *shell, t_redir *redir);
 bool			open_infile(t_data *shell, t_redir *redir);
+void			here_doc(t_data *shell, char *delim);
 bool			open_outfile(t_data *shell, t_data *redir);
 void			run_builtin(t_cmd *cmd, int i);
 void			run_cmd(t_cmd *cmd);

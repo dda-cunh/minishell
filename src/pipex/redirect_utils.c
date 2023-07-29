@@ -29,12 +29,12 @@ bool	open_infile(t_data *shell, t_redir *redir)
 	file_ok = file_check(redir);
 	if (!redir->dbl_tkn && file_ok)
 	{
-		shell->infile = open(redir->name, O_RDONLY)
+		shell->infile = open(redir->name, O_RDONLY);
 		if (shell->infile == -1)
 			exit_(-3, shell);
 	}
 	else if (redir->dbl_tkn)
-		here_doc(shell, redir);
+		here_doc(shell, redir->name);
 	if (file_ok || redir->dbl_tkn)
 		return (true);
 	else

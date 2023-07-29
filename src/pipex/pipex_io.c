@@ -102,16 +102,3 @@ int	init_tmp(t_data *shell, t_redir *redir)
 	close(tmp);
 	return (0);
 }
-
-
-
-/*	START HERE	*/
-
-void	dup_io(t_cmd *cmd, int **pipe_fd, int i)
-{
-	get_shell()->file_err = false;	
-	if (pipe_fd)
-		dup_pipes(cmd, pipe_fd, i);
-	if (cmd->redir)
-		dup_redirects(shell, cmd->redir);	
-}

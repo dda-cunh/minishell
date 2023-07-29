@@ -131,6 +131,15 @@ static void	handle_exec(t_cmd *cmd, int i)
 		run_cmd(cmd);
 }
 
+static void	dup_io(t_cmd *cmd, int **pipe_fd, int i)
+{
+	get_shell()->file_err = false;
+	if (pipe_fd)
+		dup_pipes(cmd, pipe_fd, i);
+	if (cmd->redir)
+		dup_redirects(get_shell(), cmd->redir);
+}
+
 int	pipex(t_data *shell, t_cmd *cmd)
 {
 	int		**pipe_fd;
