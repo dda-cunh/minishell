@@ -27,10 +27,10 @@
 # define EXIT_OK	"\u2714"
 # define EXIT_KO	"\u2718"
 # define PROMPT		" minishell \u2192  "
+# define HD_PROMPT	"\x1b[36mmini\x1b[31mhell\x1b[0m<>> "
 
 # define VALID_TKNS "|> <$/\'?\"=_-."
 
-# define BADCMD_ERR	": command not found"
 # define SHLVL_ERR	"minishell: shell level (1000) too high, resetting to 1\n"
 
 # define FILE_NOT_FOUND 1
