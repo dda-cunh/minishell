@@ -161,11 +161,11 @@ int	pipex(t_data *shell, t_cmd *cmd)
 		if (!shell->file_err && cmd->args && cmd->args[0])
 			handle_exec(cmd, i);
 		close_files(shell);
+		reset_io(shell);
 		cmd = cmd->next;
 		i++;
 	}
 	if (pipe_fd)
 		free_pipeline(shell, pipe_fd);
-	reset_io(shell);
 	return (shell->status);
 }

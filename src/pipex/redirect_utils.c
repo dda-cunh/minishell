@@ -2,7 +2,7 @@
 
 static bool	file_check(t_redir *redir)
 {
-	if (!(redir->direction == 'i' && redir->dbl_tkn)
+	if ((redir->direction == 'i' && !redir->dbl_tkn)
 		&& access(redir->name, F_OK) == -1)
 	{
 		print_file_error(redir->name, FILE_NOT_FOUND);
@@ -14,7 +14,8 @@ static bool	file_check(t_redir *redir)
 		print_file_error(redir->name, FILE_NO_PERM);
 		return (false);
 	}
-	if (redir->direction == 'o' && access(redir->name, W_OK) == -1)
+	if (redir->direction == 'o' 
+		&& access(redir->name, F_OK) == 0 && access(redir->name, W_OK) == -1)
 	{
 		print_file_error(redir->name, FILE_NO_PERM);
 		return (false);
