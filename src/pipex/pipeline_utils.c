@@ -51,7 +51,7 @@ int	**set_pipeline(t_data *shell, t_cmd *cmd)
 	int	nr_cmds;
 
 	nr_cmds = count_cmds(cmd);
-	pipeline = ft_calloc(nr_cmds + 1, sizeof(int *));
+	pipeline = ft_calloc(nr_cmds, sizeof(int *));
 	if (!pipeline)
 		return (NULL);
 	if (!open_pipes(shell, pipeline, nr_cmds))

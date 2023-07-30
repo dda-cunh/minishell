@@ -15,6 +15,7 @@ void	free_pipeline(t_data *shell, int **pipes)
 	free(pipes);
 }
 
+//	maybe this needs to be done in the chd process?
 void	dup_pipes(t_cmd *cmd, int **pipe_fd, int i)
 {
 	if (i != 0)
@@ -27,7 +28,7 @@ void	dup_pipes(t_cmd *cmd, int **pipe_fd, int i)
 		if (dup2(pipe_fd[i][1], STDOUT_FILENO) == -1)
 			exit_(-9, get_shell());
 	}
-	else
+	else if (!cmd->next && i != 0)
 	{
 		if (dup2(get_shell()->stdout_reset, STDOUT_FILENO) == -1)
 			exit_(-9, get_shell());
