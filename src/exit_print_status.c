@@ -17,4 +17,10 @@ void	print_exit_error(int status)
 		ft_putendl_fd("pipe close error", 2);
 	else if (status == -7)
 		ft_putendl_fd("exec error", 2);
+	else if (status == -8)
+		ft_putendl_fd("fork error", 2);
+	else if (status == -9)
+		ft_putendl_fd("dup error", 2);
+	else if (status == -10)
+		ft_putendl_fd("waitpid error", 2);
 }

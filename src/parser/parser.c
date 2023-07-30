@@ -38,7 +38,7 @@ static void	mask_quoted_spaces(char *trim)
 	}
 }
 
-static bool	assign_tokens(char *tokens, t_cmd *cmd, char **envi)
+static bool	assign_tokens(char *tokens, t_cmd *cmd)
 {
 	char	*trim;
 
@@ -55,7 +55,7 @@ static bool	assign_tokens(char *tokens, t_cmd *cmd, char **envi)
 		return (false);
 	unmask_quoted_spaces(cmd->args);
 	cmd->builtin = is_builtin(cmd->args[0]);
-	cmd->bin = get_bin(cmd->args[0], envi);
+	cmd->bin = NULL;
 	return (true);
 }
 
@@ -91,7 +91,7 @@ t_cmd	*parse_tokens(t_data **shell, char **tokens)
 	{
 		cmd->bin = NULL;
 		cmd->redir = NULL;
-		if (!assign_tokens(tokens[i], cmd, (*shell)->env))
+		if (!assign_tokens(tokens[i], cmd))
 		{
 			free_2d(tokens);
 			(*shell)->cmd = cmd_head;

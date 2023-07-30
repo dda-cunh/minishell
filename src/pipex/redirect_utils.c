@@ -41,7 +41,7 @@ bool	open_infile(t_data *shell, t_redir *redir)
 		return (false);
 }
 
-bool	open_outfile(t_data *shell, t_data *redir)
+bool	open_outfile(t_data *shell, t_redir *redir)
 {
 	int		flags;
 	int		mode;

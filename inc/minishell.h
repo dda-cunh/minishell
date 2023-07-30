@@ -115,6 +115,7 @@ int				update_env_val(t_data **shell, const char *var,
 /*	SIGNAL HANDLING	*/
 void			main_sig_handler(int sig);
 void			heredoc_sig_handler(int sig);
+void			exec_sig_handler(int sig);
 int				rl_sig_event(void);
 
 /*	TOKEN MASKS		*/
@@ -137,20 +138,20 @@ t_cmd			*parse_tokens(t_data **shell, char **tokens);
 char			*manage_redirects(t_cmd *cmd, char *tkns);
 
 /*		PIPEX		*/
-int				pipex(t_data **data, t_cmd *cmd);
+int				pipex(t_data *shell, t_cmd *cmd);
 int				**set_pipes(t_data *shell, t_cmd *cmd);
 int				**set_pipeline(t_data *shell, t_cmd *cmd);
 void			dup_pipes(t_cmd *cmd, int **pipe_fd, int i);
 void			dup_redirects(t_data *shell, t_redir *redir);
 bool			open_infile(t_data *shell, t_redir *redir);
 void			here_doc(t_data *shell, char *delim);
-bool			open_outfile(t_data *shell, t_data *redir);
+bool			open_outfile(t_data *shell, t_redir *redir);
 void			run_builtin(t_cmd *cmd, int i);
 //	get_builtin_func
 void			run_cmd(t_cmd *cmd);
 char			*get_cmd_bin(char **env, char *bin);
 void			free_pipeline(t_data *shell, int **pipes);
-void			print_file_error(char *filename, int err);
+void			print_file_error(char *filename, char *err);
 
 /*
 char			**get_cmd(char *s, char **envp);
@@ -160,6 +161,7 @@ int				cmd_index(int infd);
 */
 
 /*	GRACEFUL EXIT	*/
+void			print_exit_error(int status);
 t_cmd			*free_cmd(t_cmd *cmd);
 void			put_strerror(void);
 int				exit_(int status, t_data *data);
@@ -169,13 +171,14 @@ int				exit_(int status, t_data *data);
 /*
 	FATAL ERROR CODES
 
-	-1: malloc error
-	-2:	signal handler error
-	-3:	file open error
-	-4: file close error
-	-5: pipe open error
-	-6: pipe close error
-	-7:	exec error
-	-8: fork error
-	-9:	dup error
+	-1: 	malloc error
+	-2:		signal handler error
+	-3:		file open error
+	-4: 	file close error
+	-5: 	pipe open error
+	-6: 	pipe close error
+	-7:		exec error
+	-8: 	fork error
+	-9:		dup error
+	-10:	waitpid error
 */

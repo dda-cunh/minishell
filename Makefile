@@ -35,10 +35,10 @@ SRC			=	$(addprefix $(SRC_DIR),	exec_builtin.c \
 										minishell.c \
 										signals.c \
 										expander.c \
-										get_bin.c \
 										utils.c \
 										token_masks.c \
 										exit_.c \
+										exit_print_status.c \
 										main.c \
 										$(addprefix $(BIN_DIR), export.c \
 																export_noargs.c \
@@ -54,7 +54,6 @@ SRC			=	$(addprefix $(SRC_DIR),	exec_builtin.c \
 										$(addprefix $(PAR_DIR), parser_utils.c \
 																parser.c) \
 										$(addprefix $(PIP_DIR), pipex.c \
-																pipex_io.c \
 																pipex_pipeline.c \
 																pipeline_utils.c \
 																pipex_redirect.c \
@@ -62,6 +61,7 @@ SRC			=	$(addprefix $(SRC_DIR),	exec_builtin.c \
 																pipex_heredoc.c \
 																pipex_exec_builtin.c \
 																pipex_exec_cmd.c \
+																pipex_get_bin.c \
 																pipex_errors.c))
 
 OBJ_DIRS	=	$(OBJ_DIR)	$(addprefix $(OBJ_DIR), $(BIN_DIR)) \

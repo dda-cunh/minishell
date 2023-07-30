@@ -47,7 +47,7 @@ void	here_doc(t_data *shell, char *delim)
 	read_input(shell, delim);
 	if (close(shell->infile) == -1)
 		exit_(-4, shell);
-		shell->infile = open(shell->tmp_path, O_RDONLY);
-		if (shell->infile == -1)
-			exit_(-3, shell);
+	shell->infile = open(shell->tmp_path, O_RDONLY);
+	if (shell->infile == -1)
+		exit_(-3, shell);
 }

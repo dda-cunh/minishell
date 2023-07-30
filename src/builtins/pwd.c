@@ -21,8 +21,7 @@ int	pwd(t_data **shell, char **args)
 	pwd_val = getcwd(NULL, 0);
 	if (!pwd_val)
 	{
-		put_strerror();
-		return (0);
+		exit_(-1, *shell);
 	}
 	ft_putendl_fd(pwd_val, 1);
 	free(pwd_val);

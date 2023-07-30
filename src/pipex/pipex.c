@@ -127,7 +127,7 @@ static void	handle_exec(t_cmd *cmd, int i)
 {
 	if (signal(SIGINT, exec_sig_handler) == SIG_ERR
 		|| signal(SIGQUIT, exec_sig_handler) == SIG_ERR)
-		exit_(-2, *shell);
+		exit_(-2, get_shell());
 	if (cmd->builtin)
 		run_builtin(cmd, i);
 	else
