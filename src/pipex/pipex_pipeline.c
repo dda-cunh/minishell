@@ -19,12 +19,12 @@ void	dup_pipes(t_cmd *cmd, int **pipe_fd, int i)
 {
 	if (i != 0)
 	{
-		if (dup2(pipe_fd[i - 1][0], STDIN_FILENO) == -1)
+		if (dup2(STDIN_FILENO, pipe_fd[i - 1][0]) == -1)
 			exit_(-9, get_shell());
 	}
 	if (cmd->next)
 	{
-		if (dup2(pipe_fd[i][1], STDOUT_FILENO) == -1)
+		if (dup2(STDOUT_FILENO, pipe_fd[i][1]) == -1)
 			exit_(-9, get_shell());
 	}
 	else

@@ -102,8 +102,8 @@ static int	handle_exec(t_data **shell, t_cmd *cmd, char **env, bool n_exec)
 
 static void	reset_io(t_data *shell)
 {
-	if (dup2(STDIN_FILENO, shell->stdin_reset) == -1
-		|| dup2(STDOUT_FILENO, shell->stdout_reset) == -1)
+	if (dup2(shell->stdin_reset, STDIN_FILENO) == -1
+		|| dup2(shell->stdout_reset, STDOUT_FILENO) == -1)
 		exit_(-9, shell);
 }
 
