@@ -18,17 +18,17 @@ void	free_pipeline(t_data *shell, int **pipes)
 //	maybe this needs to be done in the chd process?
 void	dup_pipes(t_cmd *cmd, int **pipe_fd, int i)
 {
-	if (i != 0)
+	if (i != 0 && get_shell()->infile == -1)
 	{
 		if (dup2(pipe_fd[i - 1][0], STDIN_FILENO) == -1)
 			exit_(-9, get_shell());
 	}
-	if (cmd->next)
+	if (cmd->next && get_shell()->outfile == -1)
 	{
 		if (dup2(pipe_fd[i][1], STDOUT_FILENO) == -1)
 			exit_(-9, get_shell());
 	}
-	else if (!cmd->next && i != 0)
+	else if (!cmd->next && i != 0 && get_shell()->outfile == -1)
 	{
 		if (dup2(get_shell()->stdout_reset, STDOUT_FILENO) == -1)
 			exit_(-9, get_shell());

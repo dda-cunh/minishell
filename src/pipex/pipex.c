@@ -100,11 +100,26 @@ static int	handle_exec(t_data **shell, t_cmd *cmd, char **env, bool n_exec)
 }
 */
 
-static void	reset_io(t_data *shell)
+static void	dup_io(t_cmd *cmd, int **pipe_fd, int i)
 {
-	if (dup2(shell->stdin_reset, STDIN_FILENO) == -1
-		|| dup2(shell->stdout_reset, STDOUT_FILENO) == -1)
-		exit_(-9, shell);
+	if (cmd->redir)
+		dup_redirects(get_shell(), cmd->redir);
+	if (pipe_fd)
+		dup_pipes(cmd, pipe_fd, i);
+}
+
+static void	reset_io(t_data *shell, t_cmd *cmd, int i)
+{
+	if (i != 0 || shell->infile != -1)
+	{
+		if (dup2(shell->stdin_reset, STDIN_FILENO) == -1)
+			exit_(-9, shell);
+	}
+	if (shell->outfile != -1 || cmd->next)
+	{
+		if (dup2(shell->stdout_reset, STDOUT_FILENO) == -1)
+			exit_(-9, shell);
+	}
 	shell->file_err = false;
 	shell->sigint = false;
 }
@@ -136,14 +151,6 @@ static void	handle_exec(t_cmd *cmd, int i)
 		run_cmd(cmd);
 }
 
-static void	dup_io(t_cmd *cmd, int **pipe_fd, int i)
-{
-	if (pipe_fd)
-		dup_pipes(cmd, pipe_fd, i);
-	if (cmd->redir)
-		dup_redirects(get_shell(), cmd->redir);
-}
-
 int	pipex(t_data *shell, t_cmd *cmd)
 {
 	int		**pipe_fd;
@@ -151,21 +158,22 @@ int	pipex(t_data *shell, t_cmd *cmd)
 
 	pipe_fd = set_pipes(shell, cmd);
 	i = 0;
-	while (cmd)
+	while (cmd && !shell->sigint)
 	{
 		dup_io(cmd, pipe_fd, i);
 		if (shell->sigint)
 		{
+			reset_io(shell, cmd, i);
 			close_files(shell);
 			break ;
 		}
 		if (!shell->file_err && cmd->args && cmd->args[0])
 			handle_exec(cmd, i);
+		reset_io(shell, cmd, i);
 		close_files(shell);
 		cmd = cmd->next;
 		i++;
 	}
-	reset_io(shell);
 	if (pipe_fd)
 		free_pipeline(shell, pipe_fd);
 	return (shell->status);
