@@ -105,6 +105,8 @@ static void	reset_io(t_data *shell)
 	if (dup2(shell->stdin_reset, STDIN_FILENO) == -1
 		|| dup2(shell->stdout_reset, STDOUT_FILENO) == -1)
 		exit_(-9, shell);
+	shell->file_err = false;
+	shell->sigint = false;
 }
 
 static void	close_files(t_data *shell)
@@ -161,10 +163,10 @@ int	pipex(t_data *shell, t_cmd *cmd)
 		if (!shell->file_err && cmd->args && cmd->args[0])
 			handle_exec(cmd, i);
 		close_files(shell);
-		reset_io(shell);
 		cmd = cmd->next;
 		i++;
 	}
+	reset_io(shell);
 	if (pipe_fd)
 		free_pipeline(shell, pipe_fd);
 	return (shell->status);
