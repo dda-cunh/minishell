@@ -7,14 +7,14 @@ static void	exec_cmd(t_cmd *cmd)
 	pid = fork();
 	if (pid == -1)
 		exit_(-8, get_shell());
-	else if (pid == 0)
+	if (pid == 0)
 	{
 		if (execve(cmd->bin, cmd->args, get_shell()->env) == -1)
 			exit_(-7, get_shell());
 	}
 	else
 	{
-		if (waitpid(pid, (int *)&(get_shell()->status), 0) == -1)
+		if (waitpid(pid, NULL, 0) == -1)
 			exit_(-10, get_shell());
 	}
 }
