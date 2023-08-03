@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/25 02:27:27 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/03 19:11:29 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <readline/history.h>
 # include <dirent.h>
 # include <signal.h>
+#include <time.h>
 # include "libft/libft.h"
 
 # define ANSI_CYAN	"\x1b[36m"
@@ -60,8 +61,11 @@ typedef struct s_cmd
 	char			*bin;
 	char			**args;
 	t_builtin		builtin;
-	bool			read_tmp;
+	int				infd;
+	int				outfd;
+	int				pipe[2];
 	struct s_redir	*redir;
+	struct s_cmd	*prev;
 	struct s_cmd	*next;
 }				t_cmd;
 
@@ -130,15 +134,16 @@ char			*manage_redirects(t_cmd *cmd, char *tkns);
 
 /*		PIPEX		*/
 char			**get_cmd(char *s, char **envp);
-int				init_tmp(t_data *shell, t_cmd **cmd, t_redir **redir,
-					bool not_first);
-int				print_out(t_data *shell, t_redir *redir, t_cmd *cmd);
-int				pipex(t_data **data, t_cmd *cmd);
+void			do_close(t_cmd *cmd);
+int				get_cmd_in(t_data *shell, t_redir *redir);
+int				get_cmd_out(t_redir *redir, t_cmd *cmd);
+int				pipeline(t_data *shell, t_cmd *cmd);
+int				pipex(t_data **shell, t_cmd *cmd);
 int				cmd_index(int infd);
-
+int				dupper(t_cmd *cmd);
 /*	GRACEFUL EXIT	*/
 t_cmd			*free_cmd(t_cmd *cmd);
 void			put_strerror(char *arg, bool print_strerror);
-int				exit_(int status, t_data *data);
+int				exit_(int status, t_data *shell);
 
 #endif

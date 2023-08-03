@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/25 17:31:16 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/03 19:00:15 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,20 +55,20 @@
 // 	}
 // }
 
-static char	*prompt(t_data **shell)
+static char	*prompt(t_data *shell)
 {
 	char	*line;
 
-	if (!access((*shell)->tmp_path, F_OK))
-		unlink((*shell)->tmp_path);
-	if (!(*shell)->status)
+	if (!access(shell->tmp_path, F_OK))
+		unlink(shell->tmp_path);
+	if (!shell->status)
 		line = readline(ANSI_GREEN EXIT_OK ANSI_CYAN PROMPT ANSI_RESET);
 	else
 		line = readline(ANSI_RED EXIT_KO ANSI_CYAN PROMPT ANSI_RESET);
 	if (!line)
 	{
 		printf("exit\n");
-		exit_((*shell)->status, *shell);
+		exit_(shell->status, shell);
 	}
 	if (*line)
 		add_history(line);
@@ -85,7 +85,7 @@ int	minishell(t_data *shell)
 		if (signal(SIGINT, main_sig_handler) == SIG_ERR
 			|| signal(SIGQUIT, SIG_IGN) == SIG_ERR)
 			exit_(-3, shell);
-		line = prompt(&shell);
+		line = prompt(shell);
 		tokens = lex_line(shell, line);
 		free(line);
 		if (!tokens)

@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 15:04:01 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/25 02:34:46 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/03 18:38:22 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,23 +45,23 @@ t_cmd	*free_cmd(t_cmd *cmd)
 	return (NULL);
 }
 
-static void	free_all(t_data *shell)
+static void	free_all(t_data **shell)
 {
-	if (shell)
+	if (shell && *shell)
 	{
-		if (shell->env)
-			free_2d(shell->env);
-		if (shell->cmd)
-			free_cmd(shell->cmd);
-		if (shell->tmp_path)
-			free(shell->tmp_path);
-		free(shell);
+		if ((*shell)->env)
+			free_2d((*shell)->env);
+		if ((*shell)->cmd)
+			free_cmd((*shell)->cmd);
+		if ((*shell)->tmp_path)
+			free((*shell)->tmp_path);
+		free(*shell);
 	}
 }
 
 int	exit_(int status, t_data *shell)
 {
-	free_all(shell);
+	free_all(&shell);
 	clear_history();
 	exit(status);
 }
