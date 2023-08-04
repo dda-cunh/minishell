@@ -57,6 +57,7 @@ SRC			=	$(addprefix $(SRC_DIR),	exec_builtin.c \
 										$(addprefix $(PAR_DIR), parser_utils.c \
 																parser.c) \
 										$(addprefix $(PIP_DIR), pipex_io.c \
+																pipeline.c \
 																pipex.c))
 
 OBJ_DIRS	=	$(OBJ_DIR)	$(addprefix $(OBJ_DIR), $(BIN_DIR)) \
@@ -86,7 +87,7 @@ $(NAME):		$(OBJ) | $(SRC)
 $(OBJ_DIR)%.o:	$(SRC_DIR)%.c | $(OBJ_DIRS)
 				make -C $(LFT_FULL)
 				printf '$(HAMMER)\t'
-				printf "$(GREEN)Compiling $(NAME) objects... $(RED)%-33.33s\r" $(notdir $<)
+				printf "$(GREEN)Compiling $(NAME) objects... $(RED)%-33.33s\r" $(notdir $@)
 				$(CC) $(CFLAGS) -c $< -o $@ -I $(INC_DIR)
 
 $(OBJ_DIRS):
@@ -95,13 +96,12 @@ $(OBJ_DIRS):
 all: 			$(NAME)
 
 clean:
-				make clean -C $(LFT_FULL)
+				make fclean -C $(LFT_FULL)
 				if [ -d $(OBJ_DIR) ]; then $(RM) $(OBJ_DIR); fi
 				if [ -d $(DEBUG_DIR) ]; then $(RM) $(DEBUG_DIR); fi
 
 fclean:			clean
 				printf '$(BROOM)\n$(BROOM)\t$(GREEN)Cleaning project$(RESET)\n'
-				make fclean -C $(LFT_FULL)
 				$(RM) $(NAME)
 				printf '$(BROOM)\t\t\t$(SUS)\n'
 

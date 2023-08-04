@@ -6,135 +6,102 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 12:25:12 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/25 00:30:14 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/04 12:42:58 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-static int	parent(t_data *shell, int pipes[2][2], int child_pid)
+static int	parent(t_cmd *cmd, int child_pid)
+{
+	char	*error;
+	int		status;
+
+	if (cmd->next)
+		waitpid(child_pid, &status, WNOHANG);
+	else
+		waitpid(child_pid, &status, 0);
+	if (WIFEXITED(status))
+			status = WEXITSTATUS(status);
+	if (status == 255)
+	{
+		error = ft_strjoin(cmd->bin, BADCMD_ERR);
+		put_strerror(error, 0);
+		free(error);
+		return (127);
+	}
+	return (status);
+}
+
+static void	child(t_data *shell, t_cmd **cmd, char **env)
 {
 	int	status;
-	int	tmp;
 
-	close_fds((int []){pipes[0][0], pipes[0][1], pipes[1][1]}, 3);
-	waitpid(child_pid, &status, 0);
-	if (!WEXITSTATUS(status))
-	{
-		tmp = open(shell->tmp_path, O_WRONLY | O_TRUNC);
-		if (tmp == -1)
-		{
-			close_fds((int []){pipes[1][0]}, 1);
-			return (2);
-		}
-		ft_read_write_fd(pipes[1][0], tmp, 1, 1);
-	}
-	if (!shell->sigint)
-		shell->status = status;
-	return (shell->status);
+	status = 2;
+	if (!(*cmd)->bin)
+		exit_(0, shell);
+	status = dupper((*cmd));
+	if (status)
+		exit_(2, shell);
+	status = execve((*cmd)->bin, (*cmd)->args, env);
+	do_close(*cmd);
+	exit_(status, shell);
 }
 
-static int	child(t_data *shell, t_cmd *cmd, char **env, bool not_first)
-{
-	int	child_pid;
-	int	pip[2][2];
-	int	tmp;
-
-	if (pipe(pip[0]) == -1 || pipe(pip[1]) == -1)
-		exit_(-5, shell);
-	tmp = open(shell->tmp_path, O_RDONLY);
-	if (tmp == -1)
-		exit_(-3, shell);
-	ft_read_write_fd(tmp, pip[0][1], 1, 0);
-	child_pid = fork();
-	if (child_pid == -1)
-		exit_(-8, shell);
-	if (child_pid == 0)
-	{
-		if (not_first || cmd->read_tmp)
-			if (dup2(pip[0][0], STDIN_FILENO) == -1)
-				exit(2);
-		if ((cmd->next || cmd->redir) && dup2(pip[1][1], STDOUT_FILENO) == -1)
-			exit(2);
-		close_fds((int []){pip[0][0], pip[0][1], pip[1][0], pip[1][1]}, 4);
-		if (execve(cmd->bin, cmd->args, env))
-			exit_(errno, shell);
-	}
-	return (parent(shell, pip, child_pid));
-}
-
-static int	builtin_pipes(t_data *shell, int pipefd[2], int stdi, int stdo)
-{
-	int	tmp;
-
-	if (dup2(stdi, STDIN_FILENO) == -1
-		|| dup2(stdo, STDOUT_FILENO) == -1)
-		exit_(-9, shell);
-	close_fds((int []){pipefd[1], stdo, stdi}, 3);
-	tmp = open(shell->tmp_path, O_WRONLY | O_TRUNC);
-	if (tmp == -1)
-		return (2);
-	ft_read_write_fd(pipefd[0], tmp, 1, 1);
-	return (0);
-}
-
-static int	handle_exec(t_data **shell, t_cmd *cmd, char **env, bool not_first)
+static int	handle_builtin_exec(t_data **shell, t_cmd **cmd, int i_cmd)
 {
 	int	std_out_fd;
 	int	std_in_fd;
-	int	pipefd[2];
-	int	tmp;
+	int	status;
 
-	if (!cmd->builtin)
-		return (child(*shell, cmd, env, not_first));
-	if (pipe(pipefd) == -1)
-		exit_(-5, *shell);
-	tmp = open((*shell)->tmp_path, O_RDONLY);
-	if (tmp == -1)
-		exit_(-3, *shell);
+	status = 2;
 	std_out_fd = dup(STDOUT_FILENO);
 	std_in_fd = dup(STDIN_FILENO);
-	if (dup2(tmp, STDIN_FILENO) == -1
-		|| dup2(pipefd[1], STDOUT_FILENO) == -1)
-		exit_(-9, *shell);
-	(*shell)->status = exec_builtin(shell, *cmd, not_first);
-	if (close(tmp) == -1)
-		exit_(-4, *shell);
-	builtin_pipes(*shell, pipefd, std_in_fd, std_out_fd);
-	return ((*shell)->status);
+	status = dupper(*cmd);
+	if (status)
+		return (2);
+	status = exec_builtin(shell, **cmd, i_cmd);
+	if (dup2(std_in_fd, STDIN_FILENO) == -1
+		|| dup2(std_out_fd, STDOUT_FILENO) == -1)
+		return (2);
+	return (status);
 }
 
 int	pipex(t_data **shell, t_cmd *cmd)
 {
-	bool	not_first;
-	int		tmp;
+	pid_t	curr;
+	int		status;
+	int		i_cmd;
 
-	if (!shell)
-		return (1);
-	tmp = open((*shell)->tmp_path, O_WRONLY | O_CREAT | O_TRUNC, 0777);
-	if (tmp == -1)
-		return (2);
-	close(tmp);
-	not_first = false;
+	i_cmd = 0;
 	while (cmd)
 	{
-		(*shell)->sigint = false;
-		if (init_tmp(*shell, &cmd, &(cmd->redir), not_first) == 2)
-			return (errno);
-		if ((*shell)->sigint)
-			return ((*shell)->status);
-		if (signal(SIGINT, exec_sig_handler) == SIG_ERR
-			|| signal(SIGQUIT, exec_sig_handler) == SIG_ERR)
-			exit_(-2, *shell);
-		(*shell)->status = handle_exec(shell, cmd, (*shell)->env, not_first);
-		if ((*shell)->status && !cmd->bin)
-			(*shell)->status = 0;
-		if ((*shell)->status)
-			return ((*shell)->status);
-		if (print_out(*shell, cmd->redir, cmd) == 2)
-			return (errno);
-		not_first = true;
+		if (!pipeline(*shell, cmd))
+		{
+			(*shell)->sigint = false;
+			if ((*shell)->sigint)
+				return ((*shell)->status);
+			if (signal(SIGINT, exec_sig_handler) == SIG_ERR
+				|| signal(SIGQUIT, exec_sig_handler) == SIG_ERR)
+				exit_(-2, *shell);
+			if (!cmd->builtin)
+			{
+				curr = fork();
+				if (curr == -1)
+					return (2);
+				if (!curr)
+					child(*shell, &cmd, (*shell)->env);
+				else
+					status = parent(cmd, curr);
+			}
+			else
+				status = handle_builtin_exec(shell, &cmd, i_cmd);
+		}
+		else
+			put_strerror(NULL, true);
+		do_close(cmd);
 		cmd = cmd->next;
+		++i_cmd;
 	}
 	return ((*shell)->status);
 }

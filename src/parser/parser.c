@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 21:04:30 by fmouronh          #+#    #+#             */
-/*   Updated: 2023/07/22 20:04:12 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/03 17:46:37 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,13 +76,11 @@ static bool	assign_tokens(char *tokens, t_cmd *cmd, char **envi)
 	if (!trim)
 		return (false);
 	cmd->args = ft_split(trim, ' ');
-//	printf("%p\n", trim);
 	free(trim);
 	if (!cmd->args)
 		return (false);
 	cmd->builtin = is_builtin(cmd->args[0]);
 	cmd->bin = get_bin(cmd->args[0], envi);
-	cmd->read_tmp = 0;
 	return (true);
 }
 
@@ -106,6 +104,7 @@ static t_cmd	*assign_next(t_data **shell, char *tokens, t_cmd *cmd_head)
 t_cmd	*parse_tokens(t_data **shell, char **tokens)
 {
 	t_cmd	*cmd_head;
+	t_cmd	*prev;
 	t_cmd	*cmd;
 	int		i;
 
@@ -114,10 +113,12 @@ t_cmd	*parse_tokens(t_data **shell, char **tokens)
 		exit_(-1, *shell);
 	cmd = cmd_head;
 	i = 0;
+	prev = NULL;
 	while (tokens[i])
 	{
 		cmd->bin = NULL;
 		cmd->redir = NULL;
+		cmd->prev = prev;
 		if (!assign_tokens(tokens[i], cmd, (*shell)->env))
 		{
 			free_2d(tokens);
@@ -125,6 +126,7 @@ t_cmd	*parse_tokens(t_data **shell, char **tokens)
 			exit_(-1, (*shell));
 		}
 		i++;
+		prev = cmd;
 		cmd->next = assign_next(shell, tokens[i], cmd_head);
 		cmd = cmd->next;
 	}

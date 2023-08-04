@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 20:52:22 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/24 20:14:46 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/03 19:26:34 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,106 +50,103 @@ static void	here_doc(t_data *shell, char *delim, int tmp)
 	}
 }
 
-static int	get_input(t_data *shell, t_redir **redir, bool fake)
-{
-	int		infd;
-	int		tmp;
-
-	if (fake)
-		tmp = open("/dev/null", O_WRONLY);
-	else
-		tmp = open(shell->tmp_path, O_WRONLY | O_CREAT | O_TRUNC, 0777);
-	if (tmp == -1)
-		return (2);
-	infd = 0;
-	if ((*redir)->dbl_tkn)
-		here_doc(shell, (*redir)->name, tmp);
-	else
-	{
-		infd = open((*redir)->name, O_RDONLY, 0777);
-		if (infd == -1)
-		{
-			close(tmp);
-			return (2);
-		}
-		ft_read_write_fd(infd, tmp, 1, 0);
-	}
-	close(tmp);
-	return (0);
-}
-
-static int	tail_redirect(t_data *shell, t_redir *redir, t_cmd *cmd, int tmp)
+static int	get_output(t_redir *redir, t_cmd *cmd)
 {
 	int	outfd;
 
 	if (redir)
 	{
-		if (redir->direction == 'i')
-			return (get_input(shell, &redir,
-					redir_has_direction(redir->next, 'i')));
 		if (redir->dbl_tkn)
 			outfd = open(redir->name, O_WRONLY | O_CREAT | O_APPEND, 0777);
 		else
 			outfd = open(redir->name, O_WRONLY | O_CREAT | O_TRUNC, 0777);
 		if (outfd == -1)
-		{
-			close(tmp);
 			return (2);
-		}
-		if (cmd->bin && ((!redir->next && !cmd->next) || 
-				!redir_has_direction(redir->next, 'o')))
-			ft_read_write_fd(tmp, outfd, 0, 0);
+		if (cmd->bin && ((!redir->next && !cmd->next)
+				|| !redir_has_direction(redir->next, 'o')))
+			return (outfd);
 		close(outfd);
 	}
-	else if (!cmd->next)
-		ft_read_write_fd(tmp, 1, 0, 0);
-	close(tmp);
-	return (0);
+	return (1);
 }
 
-int	print_out(t_data *shell, t_redir *redir, t_cmd *cmd)
+int	get_cmd_out(t_redir *redir, t_cmd *cmd)
 {
-	bool	first;
-	int		status;
+	bool	is_last;
+	int		outfd;
+
+	if (!redir && cmd->next)
+		return (-69);
+	outfd = 1;
+	if (redir && !redir->next && redir->direction == 'o')
+		return (get_output(redir, cmd));
+	while (redir)
+	{
+		if (redir->direction == 'o')
+		{
+			is_last = !redir_has_direction(redir->next, 'o');
+			outfd = get_output(redir, cmd);
+			if (outfd == 2)
+				return (2);
+			if (is_last)
+				break ;
+		}
+		redir = redir->next;
+	}
+	return (outfd);
+}
+
+static int	get_input(t_data *shell, t_redir *redir, bool fake)
+{
+	int		infd;
 	int		tmp;
 
-	first = true;
-	while (redir || first)
+	infd = 0;
+	if (redir->dbl_tkn)
 	{
-		tmp = open(shell->tmp_path, O_RDONLY);
-		if (!tmp)
+		if (fake)
+			tmp = open("/dev/null", O_WRONLY, 0777);
+		else
+			tmp = open(shell->tmp_path, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+		if (tmp == -1)
 			return (2);
-		status = tail_redirect(shell, redir, cmd, tmp);
-		if (status)
-			return (status);
-		if (redir)
-			redir = redir->next;
-		first = false;
+		here_doc(shell, redir->name, tmp);
+		close(tmp);
+		if (!fake)
+			infd = open(shell->tmp_path, O_RDONLY, 0777);
 	}
-	return (0);
+	else
+		infd = open(redir->name, O_RDONLY, 0777);
+	if (infd == -1)
+		return (2);
+	if (fake && infd)
+		close(infd);
+	return (infd);
 }
 
-int	init_tmp(t_data *shell, t_cmd **cmd, t_redir **redir, bool not_first)
+int	get_cmd_in(t_data *shell, t_redir *redir)
 {
-	t_redir	*ref;
-	bool	read_tmp;
-	int		status;
+	bool	is_last;
+	int		infd;
 
-	read_tmp = false;
-	if (!not_first || (not_first && (*redir)))
+	infd = 0;
+	if (redir && redir_has_direction(redir, 'i'))
 	{
-		while (redir && *redir && (*redir)->direction == 'i')
+		if (redir && !redir->next && redir->direction == 'i')
+			return (get_input(shell, redir, false));
+		while (redir)
 		{
-			status = get_input(shell, redir, !redir_has_direction(*redir, 'i'));
-			ref = *redir;
-			*redir = (*redir)->next;
-			free(ref->name);
-			free(ref);
-			if (status)
-				return (status);
-			read_tmp = true;
+			if (redir->direction == 'i')
+			{
+				is_last = !redir_has_direction(redir->next, 'i');
+				infd = get_input(shell, redir, !is_last);
+				if (infd == 2)
+					return (2);
+				if (is_last)
+					break ;
+			}
+			redir = redir->next;
 		}
 	}
-	(*cmd)->read_tmp = read_tmp;
-	return (0);
+	return (infd);
 }

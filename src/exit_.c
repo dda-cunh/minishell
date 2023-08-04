@@ -6,11 +6,21 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 15:04:01 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/25 00:33:05 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/04 12:47:19 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+void	put_strerror(char *arg, bool print_strerror)
+{
+	ft_putstr_fd(ANSI_RED, 2);
+	ft_putstr_fd(arg, 2);
+	if (print_strerror)
+		ft_putstr_fd(strerror(errno), 2);
+	ft_putendl_fd(ANSI_RESET, 2);
+	return ;
+}
 
 void	free_redir(t_redir *redir)
 {
@@ -35,29 +45,23 @@ t_cmd	*free_cmd(t_cmd *cmd)
 	return (NULL);
 }
 
-static void	free_all(t_data *shell)
+static void	free_all(t_data **shell)
 {
-	if (shell)
+	if (shell && *shell)
 	{
-		if (shell->env)
-			free_2d(shell->env);
-		if (shell->cmd)
-			free_cmd(shell->cmd);
-		if (shell->tmp_path)
-			free(shell->tmp_path);
+		if ((*shell)->env)
+			free_2d((*shell)->env);
+		if ((*shell)->cmd)
+			free_cmd((*shell)->cmd);
+		if ((*shell)->tmp_path)
+			free((*shell)->tmp_path);
+		free(*shell);
 	}
 }
 
 int	exit_(int status, t_data *shell)
 {
-	free_all(shell);
-	if (status < 0)
-	{
-		print_fatal_error(status);
-		status *= -1;
-	}
-	else if (errno && !shell->sigint)
-		put_strerror();
+	free_all(&shell);
 	clear_history();
 	exit(status);
 }

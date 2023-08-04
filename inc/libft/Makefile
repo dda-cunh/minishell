@@ -69,6 +69,8 @@ RM 		= 	rm -f
 
 GREEN		= 	\033[0;32m
 
+RED			=	\033[0;31m
+
 RESET		=	\033[0m
 
 SUS			=	\U00000D9E
@@ -83,7 +85,7 @@ $(NAME):	$(OBJ)
 
 $(OBJ): 	$(SRC)
 			printf '$(HAMMER)\t'
-			printf "$(GREEN)Compiling $(NAME)\n"
+			printf "$(GREEN)Compiling $(RED)$(NAME)$(RESET)\n"
 			$(CC) $(CFLAGS) $(SRC)
 
 $(OBJB): 	$(SRCB)
