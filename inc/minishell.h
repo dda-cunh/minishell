@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/03 19:11:29 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/06 00:55:08 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <readline/history.h>
 # include <dirent.h>
 # include <signal.h>
-#include <time.h>
+# include <time.h>
 # include "libft/libft.h"
 
 # define ANSI_CYAN	"\x1b[36m"
@@ -74,10 +74,12 @@ typedef struct s_data
 	char			**env;
 	struct s_cmd	*cmd;
 	char			*tmp_path;
+	bool			sigint;
 	unsigned char	status;
 }				t_data;
 
 /*	INIT FUNCTIONS	*/
+t_data			*get_shell(void);
 t_data			*init_shell(char **envi);
 void			update_shlvl(t_data **shell);
 void			reset_pwd(t_data **shell);
@@ -85,6 +87,7 @@ void			reset_pwd(t_data **shell);
 /*		SIGNALS		*/
 void			main_sig_handler(int sig);
 void			heredoc_sig_handler(int sig);
+void			exec_sig_handler(int sig);
 int				rl_sig_event(void);
 
 /*		MINISHELL	*/
@@ -104,7 +107,7 @@ int				exit_bin(t_data **shell, char **arg);
 
 /*	EXEC_BUILTINS	*/
 t_builtin		is_builtin(char *bin);
-int				exec_builtin(t_data **shell, t_cmd cmd, bool not_first);
+int				exec_builtin(t_data **shell, t_cmd cmd);
 
 /*	UTILS FUNCTIONS	*/
 char			*get_env_val(t_data *shell, const char *var);

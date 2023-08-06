@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 18:25:14 by fmouronh          #+#    #+#             */
-/*   Updated: 2023/07/08 19:59:55 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/06 02:18:57 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,28 @@ static bool	valid_chars(char *arg)
 	return (true);
 }
 
+static int	do_export(t_data **sh, char *export_val)
+{
+	char	**split;
+
+	split = ft_split(export_val, '=');
+	if (!split)
+		return (-1);
+	if (get_env_index(*sh, split[0]) >= 0)
+		update_env_val(sh, split[0], split[1], false);
+	else
+	{
+		(*sh)->env = export_var(export_val, (*sh)->env);
+		if (!(*sh)->env)
+		{
+			free_2d(split);
+			exit_(-1, *sh);
+		}
+	}
+	free_2d(split);
+	return (0);
+}
+
 int	export_bin(t_data **sh, char **args)
 {
 	int	i;
@@ -81,11 +103,7 @@ int	export_bin(t_data **sh, char **args)
 			return (1);
 		}
 		else if (ft_strchr(args[i] + 1, '='))
-		{
-			(*sh)->env = export_var(args[i], (*sh)->env);
-			if (!(*sh)->env)
-				exit_(-1, *sh);
-		}
+			do_export(sh, args[i]);
 		i++;
 	}
 	return (0);

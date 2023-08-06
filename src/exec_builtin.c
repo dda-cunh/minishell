@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 16:58:13 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/03 17:45:49 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/06 00:27:27 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,24 +37,12 @@ t_builtin	is_builtin(char *bin)
 	return (NOTBUILTIN);
 }
 
-int	exec_builtin(t_data **shell, t_cmd cmd, bool not_first)
+int	exec_builtin(t_data **shell, t_cmd cmd)
 {
 	static int	(*f[8])(t_data **, char **) = (int (*[8])(t_data **, char **))
 	{NULL, &echo, &cd, &pwd, &export_bin, &unset, &env, &exit_bin};
-	int			child_pid;
-	int			status;
 
 	if (!cmd.builtin)
 		return (1);
-	if (cmd.next || (!cmd.next && not_first))
-	{
-		child_pid = fork();
-		if (child_pid == -1)
-			exit_(-1, *shell);
-		if (child_pid == 0)
-			exit_(f[cmd.builtin](shell, cmd.args + 1), *shell);
-		waitpid(child_pid, &status, 0);
-		return (WEXITSTATUS(status));
-	}
 	return (f[cmd.builtin](shell, cmd.args + 1));
 }

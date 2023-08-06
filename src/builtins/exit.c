@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 21:17:46 by fmouronh          #+#    #+#             */
-/*   Updated: 2023/07/10 16:49:19 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/06 02:32:49 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,15 @@
 
 static void	print_error(char *arg)
 {
-	ft_putstr_fd("exit\nminishell: exit: ", 2);
+	ft_putstr_fd("minishell: exit: ", 2);
 	ft_putstr_fd(arg, 2);
 	ft_putendl_fd(": numeric argument required", 2);
 }
 
 static bool	str_is_num(char *arg)
 {
+	if (*arg == '-')
+		arg++;
 	while (*arg)
 	{
 		if (!ft_isdigit(*arg))
@@ -42,14 +44,14 @@ int	exit_bin(t_data **shell, char **args)
 	}
 	if (args[0])
 	{
+		ft_putendl_fd("exit", 1);
 		if (str_is_num(args[0]))
 			status = ft_atoi(args[0]) & 0xff;
 		else
 		{
 			print_error(args[0]);
-			return (2);
+			status = 2;
 		}
 	}
-	ft_putendl_fd("exit", 1);
 	return (exit_(status, *shell));
 }

@@ -6,11 +6,18 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 15:17:11 by fmouronh          #+#    #+#             */
-/*   Updated: 2023/08/03 18:39:24 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/06 00:30:01 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+t_data	*get_shell(void)
+{
+	static t_data	shell;
+
+	return (&shell);
+}
 
 static void	update_env(t_data **shell)
 {
