@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 00:34:40 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/06 04:48:19 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/06 06:11:24 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	do_close(t_cmd *cmd)
 
 int	dupper(t_cmd *cmd)
 {
-	if (cmd->infd > 2)
+	if (cmd->infd > 2 && redir_has_direction(cmd->redir, 'i'))
 	{
 		if (dup2(cmd->infd, STDIN_FILENO) == -1)
 			return (2);
@@ -34,7 +34,7 @@ int	dupper(t_cmd *cmd)
 	else
 		if (cmd->prev && dup2(cmd->prev->pipe[0], STDIN_FILENO) == -1)
 			return (2);
-	if (cmd->outfd > 2)
+	if (cmd->outfd > 2 && redir_has_direction(cmd->redir, 'o'))
 	{
 		if (dup2(cmd->outfd, STDOUT_FILENO) == -1)
 			return (2);
@@ -45,22 +45,22 @@ int	dupper(t_cmd *cmd)
 	return (0);
 }
 
-int	pipeline(t_data *shell, t_cmd **cmd)
+int	pipeline(t_data *shell, t_cmd *cmd)
 {
-	t_cmd	*curr;
-
-	curr = *cmd;
-	while (curr)
+	if (pipe(cmd->pipe) == -1)
+		exit_(-5, shell);
+	cmd->infd = get_cmd_in(shell, cmd->redir);
+	if (cmd->infd == 2)
 	{
-		if (pipe(curr->pipe) == -1)
-			exit_(-5, shell);
-		curr->infd = get_cmd_in(shell, curr->redir);
-		if (curr->infd == 2)
-			return (2);
-		curr->outfd = get_cmd_out(curr->redir, curr);
-		if (curr->outfd == 2)
-			return (2);
-		curr = curr->next;
+		close (cmd->pipe[1]);
+		return (2);
 	}
+	cmd->outfd = get_cmd_out(cmd->redir, cmd);
+	if (cmd->outfd == 2)
+	{
+		close (cmd->pipe[1]);
+		return (2);
+	}
+	cmd = cmd->next;
 	return (0);
 }

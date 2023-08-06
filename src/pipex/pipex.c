@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 12:25:12 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/06 04:49:03 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/06 06:07:23 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,13 +101,16 @@ int	pipex(t_data **shell, t_cmd *cmd)
 	int	i_cmd;
 
 	i_cmd = 0;
-	if (pipeline(*shell, &cmd))
-		put_strerror(NULL, true);
 	status = 0;
 	while (cmd)
 	{
-		status = do_cmd(shell, cmd, i_cmd);
-		do_close(cmd);
+		if (pipeline(*shell, cmd))
+			put_strerror(NULL, true);
+		else
+		{
+			status = do_cmd(shell, cmd, i_cmd);
+			do_close(cmd);
+		}
 		cmd = cmd->next;
 		++i_cmd;
 	}
