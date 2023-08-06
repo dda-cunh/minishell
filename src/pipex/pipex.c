@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 12:25:12 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/06 02:39:53 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/06 04:49:03 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,12 @@ static int	parent(t_cmd *cmd, int child_pid)
 	char	*error;
 	int		status;
 
-	if (cmd->next)
-		waitpid(child_pid, &status, WNOHANG);
-	else
+	status = 0;
+	if (!cmd->next)
 		waitpid(child_pid, &status, 0);
-	if (WIFEXITED(status))
-		status = WEXITSTATUS(status);
+	else
+		waitpid(child_pid, &status, WNOHANG);
+	status = WEXITSTATUS(status);
 	if (cmd->bin && cmd->builtin == NOTBUILTIN && !ft_strchr(cmd->bin, '/'))
 	{
 		error = ft_strjoin(cmd->bin, BADCMD_ERR);
@@ -37,11 +37,9 @@ static void	child(t_data *shell, t_cmd **cmd, char **env)
 {
 	int	status;
 
-	status = 2;
 	if (!(*cmd)->bin)
 		exit_(0, shell);
-	status = dupper((*cmd));
-	if (status)
+	if (dupper((*cmd)))
 		exit_(2, shell);
 	if ((*cmd)->builtin == NOTBUILTIN)
 		status = execve((*cmd)->bin, (*cmd)->args, env);
@@ -103,15 +101,13 @@ int	pipex(t_data **shell, t_cmd *cmd)
 	int	i_cmd;
 
 	i_cmd = 0;
+	if (pipeline(*shell, &cmd))
+		put_strerror(NULL, true);
+	status = 0;
 	while (cmd)
 	{
-		if (!pipeline(*shell, cmd))
-		{
-			status = do_cmd(shell, cmd, i_cmd);
-			do_close(cmd);
-		}
-		else
-			put_strerror(NULL, true);
+		status = do_cmd(shell, cmd, i_cmd);
+		do_close(cmd);
 		cmd = cmd->next;
 		++i_cmd;
 	}

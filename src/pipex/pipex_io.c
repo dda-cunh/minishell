@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 20:52:22 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/03 19:26:34 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/06 03:15:01 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,31 +14,27 @@
 
 static void	here_doc(t_data *shell, char *delim, int tmp)
 {
-	size_t	biggest;
-	size_t	alen;
-	char	*a;
+	size_t	d_len;
+	char	*line;
 
-	a = "";
-	rl_event_hook = rl_sig_event;
-	while (a)
+	d_len = ft_strlen(delim);
+	line = "";
+	while (line)
 	{
+		rl_event_hook = rl_sig_event;
 		if (signal(SIGINT, heredoc_sig_handler) == SIG_ERR)
-			exit_(-3, shell);
-		a = readline(HD_PROMPT);
-		if (!a || *a == '\xff')
+			exit_(-2, shell);
+		line = readline(HD_PROMPT);
+		if (!line || *line == '\xff')
 			break ;
-		biggest = ft_strlen(delim);
-		alen = ft_strlen(a);
-		if (alen > biggest)
-			biggest = alen;
-		if (!ft_strncmp(a, delim, biggest))
+		if (ft_strncmp(delim, line, d_len) == 0
+			&& (ft_strlen(line) == d_len))
 		{
-			free(a);
+			free(line);
 			break ;
 		}
-		ft_putstr_fd(a, tmp);
-		ft_putchar_fd('\n', tmp);
-		free(a);
+		ft_putendl_fd(line, tmp);
+		free(line);
 	}
 }
 

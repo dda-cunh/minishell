@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 15:17:11 by fmouronh          #+#    #+#             */
-/*   Updated: 2023/08/06 00:30:01 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/06 04:24:33 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static int	set_tmp(t_data **shell)
 	sh_addr = ft_itoa(**(int **)shell);
 	if (!sh_addr)
 		exit_(-1, *shell);
-	(*shell)->tmp_path = ft_strjoin("/tmp/", sh_addr);
+	(*shell)->tmp_path = ft_strjoin("/tmp/minihell_tmp", sh_addr);
 	free(sh_addr);
 	if (!(*shell)->tmp_path)
 		exit_(-1, *shell);

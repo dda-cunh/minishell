@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/06 00:55:08 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/06 03:39:07 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,10 +140,11 @@ char			**get_cmd(char *s, char **envp);
 void			do_close(t_cmd *cmd);
 int				get_cmd_in(t_data *shell, t_redir *redir);
 int				get_cmd_out(t_redir *redir, t_cmd *cmd);
-int				pipeline(t_data *shell, t_cmd *cmd);
+int				pipeline(t_data *shell, t_cmd **cmd);
 int				pipex(t_data **shell, t_cmd *cmd);
 int				cmd_index(int infd);
 int				dupper(t_cmd *cmd);
+
 /*	GRACEFUL EXIT	*/
 t_cmd			*free_cmd(t_cmd *cmd);
 void			put_strerror(char *arg, bool print_strerror);
