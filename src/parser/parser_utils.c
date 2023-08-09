@@ -60,7 +60,7 @@ static char	*set_redir(t_cmd *cmd, char *tkns, int index, char tkn)
 	if (!redir->name)
 		return (NULL);
 	ft_strlcpy(redir->name, &tkns[i], (j - i) + 1);
-	trim = ft_strreplace(tkns, index, (j - index + 1), " ");
+	trim = ft_strreplace(tkns, index, (j - index), " ");
 	if (!trim)
 		return (NULL);
 	free(tkns);
