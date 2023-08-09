@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 21:17:46 by fmouronh          #+#    #+#             */
-/*   Updated: 2023/08/09 17:38:33 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/09 17:59:01 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ int	exit_bin(t_data **shell, char **args)
 	bool	is_num;
 
 	status = 0;
-	is_num = str_is_num(args[0]);
 	if (args[0])
 	{
+		is_num = str_is_num(args[0]);
 		ft_putendl_fd("exit", 1);
 		if (!is_num)
 		{

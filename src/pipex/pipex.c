@@ -6,17 +6,18 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 12:25:12 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/09 17:41:17 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/09 18:11:20 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-static int	parent(t_cmd *cmd, int child_pid)
+static int	parent(t_cmd *cmd)
 {
 	char	*error;
 	int		status;
 
+	do_close(cmd);
 	if (cmd->bin && cmd->builtin == NOTBUILTIN && !ft_strchr(cmd->bin, '/'))
 	{
 		error = ft_strjoin(cmd->bin, BADCMD_ERR);
@@ -26,10 +27,7 @@ static int	parent(t_cmd *cmd, int child_pid)
 	}
 	status = 0;
 	if (!cmd->next)
-		waitpid(child_pid, &status, 0);
-	else
-		waitpid(child_pid, &status, WUNTRACED);
-	status = WEXITSTATUS(status);
+		status = do_wait(cmd);
 	return (status);
 }
 
@@ -70,8 +68,6 @@ static int	handle_builtin_exec(t_data **shell, t_cmd **cmd)
 
 static int	do_cmd(t_data **shell, t_cmd *cmd, int i_cmd)
 {
-	pid_t	curr;
-
 	(*shell)->sigint = false;
 	if ((*shell)->sigint)
 		return ((*shell)->status);
@@ -82,13 +78,13 @@ static int	do_cmd(t_data **shell, t_cmd *cmd, int i_cmd)
 				&& (cmd->builtin == CD || cmd->builtin == EXPORT
 					|| cmd->builtin == UNSET || cmd->builtin == EXIT))))
 	{
-		curr = fork();
-		if (curr == -1)
+		cmd->id = fork();
+		if (cmd->id == -1)
 			return (2);
-		if (!curr)
+		if (!cmd->id)
 			child(*shell, &cmd, (*shell)->env);
 		else
-			return (parent(cmd, curr));
+			return (parent(cmd));
 	}
 	else
 		return (handle_builtin_exec(shell, &cmd));
@@ -107,10 +103,7 @@ int	pipex(t_data **shell, t_cmd *cmd)
 		if (pipeline(*shell, cmd))
 			put_strerror(NULL, true);
 		else
-		{
 			status = do_cmd(shell, cmd, i_cmd);
-			do_close(cmd);
-		}
 		cmd = cmd->next;
 		++i_cmd;
 	}

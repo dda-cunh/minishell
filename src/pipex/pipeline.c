@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 00:34:40 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/06 06:11:24 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/09 18:06:53 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,40 @@
 
 void	do_close(t_cmd *cmd)
 {
+	t_cmd	*ref;
+
+	ref = cmd;
 	if (!cmd->next)
-		close(cmd->pipe[0]);
+	{
+		while (cmd)
+		{
+			close(cmd->pipe[0]);
+			cmd = cmd->prev;
+		}
+	}
+	cmd = ref;
 	close(cmd->pipe[1]);
 	if (cmd->infd > 2 && redir_has_direction(cmd->redir, 'i'))
 		close(cmd->infd);
 	if (cmd->outfd > 2 && redir_has_direction(cmd->redir, 'o'))
 		close(cmd->outfd);
 	return ;
+}
+
+int	do_wait(t_cmd *tail)
+{
+	int	status;
+	int	exit;
+
+	status = 0;
+	while (tail)
+	{
+		waitpid(tail->id, &exit, 0);
+		if (!tail->next)
+			status = WEXITSTATUS(exit);
+		tail = tail->prev;
+	}
+	return (status);
 }
 
 int	dupper(t_cmd *cmd)
