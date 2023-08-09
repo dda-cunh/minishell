@@ -39,9 +39,10 @@ int	exit_bin(t_data **shell, char **args)
 	bool	is_num;
 
 	status = 0;
-	is_num = str_is_num(args[0]);
+//	is_num = false;
 	if (args[0])
 	{
+		is_num = str_is_num(args[0]);
 		ft_putendl_fd("exit", 1);
 		if (!is_num)
 		{
