@@ -6,11 +6,12 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 21:17:46 by fmouronh          #+#    #+#             */
-/*   Updated: 2023/08/06 02:32:49 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/09 17:38:33 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+#include <stdbool.h>
 
 static void	print_error(char *arg)
 {
@@ -35,22 +36,24 @@ static bool	str_is_num(char *arg)
 int	exit_bin(t_data **shell, char **args)
 {
 	int		status;
+	bool	is_num;
 
 	status = 0;
-	if (args[0] && args[1])
-	{
-		ft_putendl_fd("minishell: exit: too many arguments", 2);
-		return (1);
-	}
+	is_num = str_is_num(args[0]);
 	if (args[0])
 	{
 		ft_putendl_fd("exit", 1);
-		if (str_is_num(args[0]))
+		if (!is_num)
+		{
+			status = 2;
+			print_error(args[0]);
+		}
+		else if (!args[1])
 			status = ft_atoi(args[0]) & 0xff;
 		else
 		{
-			print_error(args[0]);
-			status = 2;
+			ft_putendl_fd("minishell: exit: too many arguments", 2);
+			return (1);
 		}
 	}
 	return (exit_(status, *shell));

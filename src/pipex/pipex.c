@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 12:25:12 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/06 06:07:23 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/09 17:41:17 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,6 @@ static int	parent(t_cmd *cmd, int child_pid)
 	char	*error;
 	int		status;
 
-	status = 0;
-	if (!cmd->next)
-		waitpid(child_pid, &status, 0);
-	else
-		waitpid(child_pid, &status, WNOHANG);
-	status = WEXITSTATUS(status);
 	if (cmd->bin && cmd->builtin == NOTBUILTIN && !ft_strchr(cmd->bin, '/'))
 	{
 		error = ft_strjoin(cmd->bin, BADCMD_ERR);
@@ -30,6 +24,12 @@ static int	parent(t_cmd *cmd, int child_pid)
 		free(error);
 		return (127);
 	}
+	status = 0;
+	if (!cmd->next)
+		waitpid(child_pid, &status, 0);
+	else
+		waitpid(child_pid, &status, WUNTRACED);
+	status = WEXITSTATUS(status);
 	return (status);
 }
 

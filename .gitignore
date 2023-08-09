@@ -2,6 +2,7 @@ readline.supp
 valgrind.txt
 edgecases
 minishell
+debug/
 .nfs*
 .tmp
 temp
