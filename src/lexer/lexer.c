@@ -69,6 +69,7 @@ char	**lex_line(t_data *shell, char *in_line)
 		exit_(-1, shell);
 	if (!valid_lex(line))
 	{
+		shell->status = 2;
 		free(line);
 		return (NULL);
 	}
