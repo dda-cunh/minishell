@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-
+//	FIX CTRL+C/CTRL+D + shell->status return
 static void	here_doc(t_data *shell, char *delim, int tmp)
 {
 	size_t	d_len;
@@ -68,7 +68,7 @@ int	get_cmd_out(t_redir *redir, t_cmd *cmd)
 	outfd = 1;
 	if (redir && !redir->next && redir->direction == 'o')
 		return (get_output(redir, cmd));
-	while (redir)
+	while (redir && !get_shell()->sigint)
 	{
 		if (redir->direction == 'o')
 		{
@@ -122,7 +122,7 @@ int	get_cmd_in(t_data *shell, t_redir *redir)
 	{
 		if (redir && !redir->next && redir->direction == 'i')
 			return (get_input(shell, redir, false));
-		while (redir)
+		while (redir && !shell->sigint)
 		{
 			if (redir->direction == 'i')
 			{
