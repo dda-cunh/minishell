@@ -48,24 +48,6 @@ bool	valid_quotes(char *line)
 	return (true);
 }
 
-bool	valid_tkns(char *line)
-{
-	int	i;
-
-	i = 0;
-	while (line[i])
-	{
-		if (ft_isalnum(line[i]) || valid_tkn(line[i]))
-			i++;
-		else
-		{
-			print_tkn_err(line[i]);
-			return (false);
-		}
-	}
-	return (true);
-}
-
 /*
  0  3       11
 "ls > myfile"

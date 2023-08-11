@@ -22,20 +22,6 @@ int	find_next_quote(char *line, char quote)
 	return (i);
 }
 
-bool	valid_tkn(char tkn)
-{
-	int	i;
-
-	i = 0;
-	while (VALID_TKNS[i])
-	{
-		if (tkn == VALID_TKNS[i])
-			return (true);
-		i++;
-	}
-	return (false);
-}
-
 int	redir_found(char *line, char tkn)
 {
 	int	i;

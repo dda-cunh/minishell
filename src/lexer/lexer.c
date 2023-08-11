@@ -54,7 +54,7 @@ static bool	valid_lex(char *line)
 		print_tkn_err('|');
 		return (false);
 	}
-	else if (!valid_quotes(line) || !valid_tkns(line) || !valid_redirect(line))
+	else if (!valid_quotes(line) || !valid_redirect(line))
 		return (false);
 	return (true);
 }
