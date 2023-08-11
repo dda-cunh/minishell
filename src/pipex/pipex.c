@@ -108,6 +108,11 @@ int	pipex(t_data **shell, t_cmd *cmd)
 		cmd->outfd = get_cmd_out(cmd->redir, cmd);
 		if (cmd->outfd == 2)
 			return (1);
+		if ((*shell)->sigint)
+		{
+			status = (*shell)->status;
+			break ;
+		}
 		status = do_cmd(shell, cmd);
 		if (!cmd->next)
 			break ;
