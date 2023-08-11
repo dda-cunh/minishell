@@ -67,9 +67,7 @@ t_data	*init_shell(char **envi)
 {
 	t_data	*shell;
 
-	shell = malloc(sizeof(t_data));
-	if (!shell)
-		return (NULL);
+	shell = get_shell();
 	shell->env = copy_envi(envi);
 	if (!shell->env)
 		return (NULL);
