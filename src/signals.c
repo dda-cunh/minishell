@@ -29,7 +29,6 @@ void	heredoc_sig_handler(int sig)
 	if (sig == SIGINT)
 	{
 		ft_putendl_fd("", 2);
-		rl_replace_line("\xff", 0);
 		rl_done = 1;
 		rl_redisplay();
 		rl_on_new_line();
