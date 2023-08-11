@@ -71,7 +71,6 @@ static int	handle_builtin_exec(t_data **shell, t_cmd **cmd)
 
 static int	do_cmd(t_data **shell, t_cmd *cmd)
 {
-	(*shell)->sigint = false;
 	if ((*shell)->sigint)
 		return ((*shell)->status);
 	if (signal(SIGINT, exec_sig_handler) == SIG_ERR
@@ -104,6 +103,7 @@ int	pipex(t_data **shell, t_cmd *cmd)
 	status = 0;
 	if (pipeline(*shell, cmd))
 		exit_(-5, *shell);
+	(*shell)->sigint = false;
 	while (cmd)
 	{
 		cmd->infd = get_cmd_in(*shell, cmd->redir);
@@ -121,5 +121,7 @@ int	pipex(t_data **shell, t_cmd *cmd)
 		status = do_wait(cmd);
 	else
 		do_wait(cmd);
+	if ((*shell)->sigint)
+		status = (*shell)->status;
 	return (status);
 }
