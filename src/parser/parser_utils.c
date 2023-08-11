@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 18:36:22 by fmouronh          #+#    #+#             */
-/*   Updated: 2023/07/15 16:04:51 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/11 17:22:53 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,8 @@ char	*manage_redirects(t_cmd *cmd, char *tkns)
 	trim = ft_strdup(tkns);
 	if (!trim)
 		return (NULL);
-	i = 0;
-	while (trim[i])
+	i = -1;
+	while (trim[++i])
 	{
 		if (trim[i] == '\'' || trim[i] == '\"')
 			i += skip_quoted(&trim[i], trim[i]);
@@ -98,10 +98,8 @@ char	*manage_redirects(t_cmd *cmd, char *tkns)
 				free(tkns);
 				return (NULL);
 			}
-			i = 0;
+			i = -1;
 		}
-		else
-			i++;
 	}
 	free(tkns);
 	return (trim);
