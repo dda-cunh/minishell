@@ -120,7 +120,7 @@ compiled:
 
 valgrind:		$(NAME) | $(DEBUG_DIR)
 				if ! [ -f $(VAL_SUPPRE) ]; then printf "{\n\tignore_libreadline_conditional_jump_errors\n\tMemcheck:Leak\n\t...\n\tobj:*/libreadline.so.*\n}" > $(addprefix $(DEBUG_DIR), $(VAL_SUPPRE)); fi
-				valgrind --leak-check=full --show-leak-kinds=all --suppressions=$(addprefix $(DEBUG_DIR), $(VAL_SUPPRE)) --track-origins=yes --log-file=$(addprefix $(DEBUG_DIR), "valgrind.txt") ./minishell
+				valgrind --track-fds=yes --leak-check=full --show-leak-kinds=all --suppressions=$(addprefix $(DEBUG_DIR), $(VAL_SUPPRE)) --track-origins=yes --log-file=$(addprefix $(DEBUG_DIR), "valgrind.txt") ./minishell
 
 $(DEBUG_DIR):
 				mkdir -p $@

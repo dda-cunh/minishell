@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 12:25:12 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/11 21:31:22 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/11 22:49:08 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,23 +28,21 @@ static int	handle_builtin_exec(t_data **shell, t_cmd **cmd)
 	if (dup2(std_in_fd, STDIN_FILENO) == -1
 		|| dup2(std_out_fd, STDOUT_FILENO) == -1)
 		return (2);
+	close_fds((int []){std_in_fd, std_out_fd}, 2);
 	return (status);
 }
 
-static int	parent(t_cmd *cmd)
+
+static void	check_cmd(t_cmd *cmd)
 {
 	char	*error;
-	int		status;
 
-	status = 0;
 	if (cmd->bin && cmd->builtin == NOTBUILTIN && !ft_strchr(cmd->bin, '/'))
 	{
 		error = ft_strjoin(cmd->bin, BADCMD_ERR);
 		put_strerror(error, 0);
 		free(error);
-		status = 127;
 	}
-	return (status);
 }
 
 static void	child(t_data *shell, t_cmd **cmd, char **env)
@@ -66,6 +64,7 @@ static void	child(t_data *shell, t_cmd **cmd, char **env)
 	else
 		status = handle_builtin_exec(&shell, cmd);
 	do_close(*cmd);
+	close_fds((int []){0, 1, 2, 3}, 4);
 	exit_(status, shell);
 }
 
@@ -84,7 +83,7 @@ static int	do_cmd(t_data **shell, t_cmd *cmd)
 		if (!cmd->id)
 			child(*shell, &cmd, (*shell)->env);
 		else
-			return (parent(cmd));
+			check_cmd(cmd);
 	}
 	else
 		return (handle_builtin_exec(shell, &cmd));
