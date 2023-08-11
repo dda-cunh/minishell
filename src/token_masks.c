@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 06:05:12 by fmouronh          #+#    #+#             */
-/*   Updated: 2023/08/03 17:44:07 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/11 22:17:07 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,18 +41,18 @@ void	unset_mask(char *str, char tkn)
 
 void	trim_quotes(t_data *shell, char **args)
 {
+	char	quote[2];
 	char	*tmp;
-	char	quote;
 	int		i;
 
-	quote = '\0';
+	quote[1] = '\0';
 	i = 0;
 	while (args[i])
 	{
 		if (args[i][0] == '\'' || args[i][0] == '\"')
 		{
-			quote = args[i][0];
-			tmp = ft_strtrim(args[i], &quote);
+			quote[0] = args[i][0];
+			tmp = ft_strtrim(args[i], quote);
 			if (!tmp)
 				exit_(-1, shell);
 			free(args[i]);
