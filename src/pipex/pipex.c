@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 12:25:12 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/11 22:49:08 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/11 23:01:08 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,11 @@ static void	child(t_data *shell, t_cmd **cmd, char **env)
 	if (ref->builtin == NOTBUILTIN)
 		status = execve(ref->bin, ref->args, env);
 	else
+	{
 		status = handle_builtin_exec(&shell, cmd);
+	}
 	do_close(*cmd);
-	close_fds((int []){0, 1, 2, 3}, 4);
+	close_fds((int []){0, 1, 2}, 3);
 	exit_(status, shell);
 }
 
