@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 15:49:36 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/22 23:07:40 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/11 12:26:28 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,8 @@ static int	create_on_update(t_data *shell, const char *var,
 		return (-1);
 	}
 	args[0] = tempb;
-	free(tempb);
 	export_bin(&shell, args);
+	free(tempb);
 	free(args);
 	return (0);
 }

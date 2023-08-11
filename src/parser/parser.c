@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 21:04:30 by fmouronh          #+#    #+#             */
-/*   Updated: 2023/08/03 17:46:37 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/11 12:08:58 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ static t_cmd	*assign_next(t_data **shell, char *tokens, t_cmd *cmd_head)
 	cmd = NULL;
 	if (tokens)
 	{
-		cmd = malloc(sizeof(t_cmd));
+		cmd = ft_calloc(1, sizeof(t_cmd));
 		if (!cmd)
 		{
 			(*shell)->cmd = cmd_head;

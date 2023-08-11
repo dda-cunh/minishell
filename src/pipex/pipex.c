@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 12:25:12 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/09 18:11:20 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/11 12:24:27 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,28 +17,31 @@ static int	parent(t_cmd *cmd)
 	char	*error;
 	int		status;
 
-	do_close(cmd);
+	status = 0;
 	if (cmd->bin && cmd->builtin == NOTBUILTIN && !ft_strchr(cmd->bin, '/'))
 	{
 		error = ft_strjoin(cmd->bin, BADCMD_ERR);
 		put_strerror(error, 0);
 		free(error);
-		return (127);
+		status = 127;
 	}
-	status = 0;
-	if (!cmd->next)
-		status = do_wait(cmd);
 	return (status);
 }
 
 static void	child(t_data *shell, t_cmd **cmd, char **env)
 {
-	int	status;
+	t_cmd	*ref;
+	int		status;
 
 	if (!(*cmd)->bin)
 		exit_(0, shell);
 	if (dupper((*cmd)))
 		exit_(2, shell);
+	ref = *cmd;
+	while ((*cmd)->next)
+		*cmd = (*cmd)->next;
+	do_close(*cmd);
+	*cmd = ref;
 	if ((*cmd)->builtin == NOTBUILTIN)
 		status = execve((*cmd)->bin, (*cmd)->args, env);
 	else
@@ -66,7 +69,7 @@ static int	handle_builtin_exec(t_data **shell, t_cmd **cmd)
 	return (status);
 }
 
-static int	do_cmd(t_data **shell, t_cmd *cmd, int i_cmd)
+static int	do_cmd(t_data **shell, t_cmd *cmd)
 {
 	(*shell)->sigint = false;
 	if ((*shell)->sigint)
@@ -74,7 +77,7 @@ static int	do_cmd(t_data **shell, t_cmd *cmd, int i_cmd)
 	if (signal(SIGINT, exec_sig_handler) == SIG_ERR
 		|| signal(SIGQUIT, exec_sig_handler) == SIG_ERR)
 		exit_(-2, *shell);
-	if (!cmd->builtin || (cmd->next || (!cmd->next && i_cmd
+	if (!cmd->builtin || (cmd->next || (!cmd->next && cmd->prev
 				&& (cmd->builtin == CD || cmd->builtin == EXPORT
 					|| cmd->builtin == UNSET || cmd->builtin == EXIT))))
 	{
@@ -87,25 +90,36 @@ static int	do_cmd(t_data **shell, t_cmd *cmd, int i_cmd)
 			return (parent(cmd));
 	}
 	else
+	{
+		cmd->id = -69;
 		return (handle_builtin_exec(shell, &cmd));
+	}
 	return (0);
 }
 
 int	pipex(t_data **shell, t_cmd *cmd)
 {
 	int	status;
-	int	i_cmd;
 
-	i_cmd = 0;
 	status = 0;
+	if (pipeline(*shell, cmd))
+		exit_(-5, *shell);
 	while (cmd)
 	{
-		if (pipeline(*shell, cmd))
-			put_strerror(NULL, true);
-		else
-			status = do_cmd(shell, cmd, i_cmd);
+		cmd->infd = get_cmd_in(*shell, cmd->redir);
+		if (cmd->infd == 2)
+			return (2);
+		cmd->outfd = get_cmd_out(cmd->redir, cmd);
+		if (cmd->outfd == 2)
+			return (2);
+		status = do_cmd(shell, cmd);
+		if (!cmd->next)
+			break ;
 		cmd = cmd->next;
-		++i_cmd;
 	}
+	if (cmd->prev)
+		while (cmd && cmd->builtin != NOTBUILTIN)
+			cmd = cmd->prev;
+	do_wait(cmd);
 	return (status);
 }
