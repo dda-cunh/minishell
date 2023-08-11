@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-//	FIX CTRL+C/CTRL+D + shell->status return
+
 static void	here_doc(t_data *shell, char *delim, int tmp)
 {
 	size_t	d_len;
@@ -25,7 +25,9 @@ static void	here_doc(t_data *shell, char *delim, int tmp)
 		if (signal(SIGINT, heredoc_sig_handler) == SIG_ERR)
 			exit_(-2, shell);
 		line = readline(HD_PROMPT);
-		if (!line || *line == '\xff')
+		if (!line)
+			ft_putendl_fd("warning: here-document delimited by end-of-file", 2);
+		if (!line || shell->sigint)
 			break ;
 		if (ft_strncmp(delim, line, d_len) == 0
 			&& (ft_strlen(line) == d_len))
