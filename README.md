@@ -1,56 +1,57 @@
 #Bugs found
 
-## SHELL RETURN STATUS
-
-### invalid command:
-Minishell:
-	`✔ minishell →  dfsfsgg`
-	`dfsfsgg: command not found`
-	`✘ minishell →  echo $?`
-	`255`
-
+### Precedence of redirect management before execution, in pipex:
 Bash:
-	`fmouronh@c2r3s5:~/Documents/projects/minishell$ sbvvwvobv`
-	`sbvvwvobv: command not found`
-	`fmouronh@c2r3s5:~/Documents/projects/minishell$ echo $?`
-	`127`
+	`fmouronh@c2r3s5:~/Documents/projects/minishell$ ls > out | << EOF cat`
+	`> ^C`
+	`fmouronh@c2r3s5:~/Documents/projects/minishell$ ls`
+	`inc  Makefile  minishell  README.md  src  temp`
+	`fmouronh@c2r3s5:~/Documents/projects/minishell$` 
 
-### here-doc:
-On Ctrl+C:
-	`✔ minishell →  << EOF cat`
-	`minihell<>> spam`
-	`minihell<>> eggs`
+Minishell:
+	`✔ minishell →  ls > out | << EOF cat`
 	`minihell<>> ^C`
-	`spam`
-	`eggs`
-	`✔ minishell →   `
-
-On Ctrl+D:
-	`✔ minishell →  << EOF cat`
-	`minihell<>> spam`
-	`minihell<>> eggs`
-	`minihell<>> spam`
-	`eggs`
-	`✔ minishell →  `
+	`✘ minishell →  ls`
+	`inc  Makefile  minishell  out  README.md  src  temp`
 
 
-### Return status:
-SIGINT on piped blocking commands (ex `cat | cat | ls`) is returning wrong value
+### File lookup, possibly in search_bin:
+Bash:
+	`fmouronh@c2r3s5:~/Documents/projects/minishell$ /bin/ls/filethatdoesntexist`
+	`bash: /bin/ls/filethatdoesntexist: Not a directory`
+	`fmouronh@c2r3s5:~/Documents/projects/minishell$ /nofolder/nofile`
+	`bash: /nofolder/nofile: No such file or directory`
+	`fmouronh@c2r3s5:~/Documents/projects/minishell$ /bin/ls filethatdoesntexist`
+	`/bin/ls: cannot access 'filethatdoesntexist': No such file or directory`
+	`fmouronh@c2r3s5:~/Documents/projects/minishell$ `
+
+
 Minishell:
-	`✔ minishell →  cat | cat | ls`
-	`inc  Makefile  minishell  README.md  src  temp`
-	`	`
-	`^C`
-	`✘ minishell →  echo $?`
-	`130`
-	`✔ minishell →  `
+	`✘ minishell →  /bin/ls/filethatdoesntexist`
+	`✘ minishell →  /nofolder/nofile`
+	`✘ minishell →  /bin/ls filethatdoesntexist`
+	`/bin/ls: cannot access 'filethatdoesntexist': No such file or directory`
+
+
+### $PATH search needs to be done from left to right
+There are two executables named `test_bin`, in paths `~/Documents/projects` and `~/Documents/projects/minishell`
+They are a Hello World and a copy of minishell, respectively
 
 Bash:
-	`fmouronh@c2r3s5:~/Documents/projects/minishell$ cat | cat | ls`
-	`inc  Makefile  minishell  README.md  src  temp`
-	`	`
-	`^C`
-	`fmouronh@c2r3s5:~/Documents/projects/minishell$ echo $?`
-	`0`
+	`fmouronh@c2r3s5:~/Documents/projects/minishell$ export PATH=/nfs/homes/fmouronh/Documents/projects:/nfs/homes/fmouronh/Documents/projects/minishell`
+	`fmouronh@c2r3s5:~/Documents/projects/minishell$ test_bin`
+	`Hello World`
 	`fmouronh@c2r3s5:~/Documents/projects/minishell$ `
+
+Minishell:
+	`✔ minishell →  echo $SHLVL`
+	`2`
+	`✔ minishell →  export PATH=/nfs/homes/fmouronh/Documents/projects:/nfs/homes/fmouronh/Documents/projects/minishell`
+	`✔ minishell →  ls`
+	`ls: command not found`
+	`✘ minishell →  test_bin`
+	`test_bin: command not found`
+	`✔ minishell →  echo $SHLVL`
+	`3`
+	`✔ minishell →  `
 
