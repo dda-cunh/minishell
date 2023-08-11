@@ -6,11 +6,12 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 12:25:12 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/11 23:01:08 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/11 23:26:57 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+#include <signal.h>
 
 static int	handle_builtin_exec(t_data **shell, t_cmd **cmd)
 {
@@ -63,7 +64,9 @@ static void	child(t_data *shell, t_cmd **cmd, char **env)
 		status = execve(ref->bin, ref->args, env);
 	else
 	{
-		status = handle_builtin_exec(&shell, cmd);
+		if (signal(SIGPIPE, SIG_IGN) == SIG_ERR)
+			exit_(-2, shell);
+		status = exec_builtin(&shell, *ref);
 	}
 	do_close(*cmd);
 	close_fds((int []){0, 1, 2}, 3);
@@ -97,22 +100,13 @@ int	pipex(t_data **shell, t_cmd *cmd)
 	int	status;
 
 	status = 0;
+	(*shell)->sigint = false;
 	if (pipeline(*shell, cmd))
 		exit_(-5, *shell);
+	if ((*shell)->sigint)
+		return ((*shell)->status);
 	while (cmd)
 	{
-		(*shell)->sigint = false;
-		cmd->infd = get_cmd_in(*shell, cmd->redir);
-		if (cmd->infd == 2)
-			return (1);
-		cmd->outfd = get_cmd_out(cmd->redir, cmd);
-		if (cmd->outfd == 2)
-			return (1);
-		if ((*shell)->sigint)
-		{
-			status = (*shell)->status;
-			break ;
-		}
 		status = do_cmd(shell, cmd);
 		if (!cmd->next)
 			break ;

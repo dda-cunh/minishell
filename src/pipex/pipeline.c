@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 00:34:40 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/11 22:36:04 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/11 23:20:11 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,12 @@ int	pipeline(t_data *shell, t_cmd *cmd)
 	{
 		if (pipe(_pipe) == -1)
 			exit_(-5, shell);
+		cmd->infd = get_cmd_in(shell, cmd->redir);
+		if (cmd->infd == 2)
+			return (1);
+		cmd->outfd = get_cmd_out(cmd->redir, cmd);
+		if (cmd->outfd == 2)
+			return (1);
 		cmd->pipe[0] = _pipe[0];
 		cmd->pipe[1] = _pipe[1];
 		cmd = cmd->next;
