@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 00:34:40 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/11 12:21:17 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/11 21:08:53 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,21 @@ int	do_wait(t_cmd *tail)
 	int	status;
 	int	exit;
 
-	status = 0;
 	do_close(tail);
+	status = 0;
 	while (tail)
 	{
 		if (tail->id > 0)
+		{
 			waitpid(tail->id, &exit, 0);
-		if (!tail->next)
-			status = WEXITSTATUS(exit);
+			if (!tail->next)
+			{
+				if (get_shell()->sigint)
+					status = get_shell()->status;
+				else
+					status = WEXITSTATUS(exit);
+			}
+		}
 		tail = tail->prev;
 	}
 	return (status);

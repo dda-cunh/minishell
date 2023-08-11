@@ -6,11 +6,30 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 12:25:12 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/11 17:32:17 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/11 21:22:33 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+
+static int	handle_builtin_exec(t_data **shell, t_cmd **cmd)
+{
+	int	std_out_fd;
+	int	std_in_fd;
+	int	status;
+
+	status = 0;
+	std_out_fd = dup(STDOUT_FILENO);
+	std_in_fd = dup(STDIN_FILENO);
+	status = dupper(*cmd);
+	if (status)
+		return (2);
+	status = exec_builtin(shell, **cmd);
+	if (dup2(std_in_fd, STDIN_FILENO) == -1
+		|| dup2(std_out_fd, STDOUT_FILENO) == -1)
+		return (2);
+	return (status);
+}
 
 static int	parent(t_cmd *cmd)
 {
@@ -42,38 +61,16 @@ static void	child(t_data *shell, t_cmd **cmd, char **env)
 		*cmd = (*cmd)->next;
 	do_close(*cmd);
 	*cmd = ref;
-	if ((*cmd)->builtin == NOTBUILTIN)
-		status = execve((*cmd)->bin, (*cmd)->args, env);
+	if (ref->builtin == NOTBUILTIN)
+		status = execve(ref->bin, ref->args, env);
 	else
-		status = exec_builtin(&shell, **cmd);
+		status = handle_builtin_exec(&shell, cmd);
 	do_close(*cmd);
 	exit_(status, shell);
 }
 
-static int	handle_builtin_exec(t_data **shell, t_cmd **cmd)
-{
-	int	std_out_fd;
-	int	std_in_fd;
-	int	status;
-
-	status = 0;
-	std_out_fd = dup(STDOUT_FILENO);
-	std_in_fd = dup(STDIN_FILENO);
-	status = dupper(*cmd);
-	if (status)
-		return (2);
-	status = exec_builtin(shell, **cmd);
-	if (dup2(std_in_fd, STDIN_FILENO) == -1
-		|| dup2(std_out_fd, STDOUT_FILENO) == -1)
-		return (2);
-	return (status);
-}
-
 static int	do_cmd(t_data **shell, t_cmd *cmd)
 {
-	(*shell)->sigint = false;
-	if ((*shell)->sigint)
-		return ((*shell)->status);
 	if (signal(SIGINT, exec_sig_handler) == SIG_ERR
 		|| signal(SIGQUIT, exec_sig_handler) == SIG_ERR)
 		exit_(-2, *shell);
@@ -90,10 +87,7 @@ static int	do_cmd(t_data **shell, t_cmd *cmd)
 			return (parent(cmd));
 	}
 	else
-	{
-		cmd->id = -69;
 		return (handle_builtin_exec(shell, &cmd));
-	}
 	return (0);
 }
 
@@ -106,12 +100,13 @@ int	pipex(t_data **shell, t_cmd *cmd)
 		exit_(-5, *shell);
 	while (cmd)
 	{
+		(*shell)->sigint = false;
 		cmd->infd = get_cmd_in(*shell, cmd->redir);
 		if (cmd->infd == 2)
-			return (2);
+			return (1);
 		cmd->outfd = get_cmd_out(cmd->redir, cmd);
 		if (cmd->outfd == 2)
-			return (2);
+			return (1);
 		status = do_cmd(shell, cmd);
 		if (!cmd->next)
 			break ;
