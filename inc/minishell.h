@@ -31,8 +31,6 @@
 
 # define HD_PROMPT	"\x1b[36mmini\x1b[31mhell\x1b[0m<>> "
 
-# define VALID_TKNS "|> <$/\'?\"=_-.[]{}+*:"
-
 # define BADCMD_ERR	": command not found"
 # define SHLVL_ERR	"minishell: shell level (1000) too high, resetting to 1\n"
 
@@ -127,8 +125,6 @@ char			**lex_line(t_data *shell, char *in_line);
 void			print_tkn_err(char tkn);
 bool			valid_redirect(char *line);
 bool			valid_quotes(char *line);
-bool			valid_tkn(char tkn);
-bool			valid_tkns(char *line);
 int				find_next_quote(char *line, char quote);
 int				redir_found(char *line, char tkn);
 
