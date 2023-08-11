@@ -1,14 +1,14 @@
 #Bugs found
 
 ### Precedence of redirect management before execution, in pipex:
-Bash:
+Bash:\
 	`fmouronh@c2r3s5:~/Documents/projects/minishell$ ls > out | << EOF cat`\
 	`> ^C`\
 	`fmouronh@c2r3s5:~/Documents/projects/minishell$ ls`\
 	`inc  Makefile  minishell  README.md  src  temp`\
 	`fmouronh@c2r3s5:~/Documents/projects/minishell$`
 
-Minishell:
+Minishell:\
 	`✔ minishell →  ls > out | << EOF cat`\
 	`minihell<>> ^C`\
 	`✘ minishell →  ls`\
@@ -16,7 +16,7 @@ Minishell:
 
 
 ### File lookup, possibly in search_bin:
-Bash:
+Bash:\
 	`fmouronh@c2r3s5:~/Documents/projects/minishell$ /bin/ls/filethatdoesntexist`\
 	`bash: /bin/ls/filethatdoesntexist: Not a directory`\
 	`fmouronh@c2r3s5:~/Documents/projects/minishell$ /nofolder/nofile`\
@@ -26,7 +26,7 @@ Bash:
 	`fmouronh@c2r3s5:~/Documents/projects/minishell$ `
 
 
-Minishell:
+Minishell:\
 	`✘ minishell →  /bin/ls/filethatdoesntexist`\
 	`✘ minishell →  /nofolder/nofile`\
 	`✘ minishell →  /bin/ls filethatdoesntexist`\
@@ -37,13 +37,13 @@ Minishell:
 For this test, there were two executables named `test_bin`, in paths `~/Documents/projects` and `~/Documents/projects/minishell`\
 They are a Hello World and a copy of minishell, respectively
 
-Bash:
+Bash:\
 	`fmouronh@c2r3s5:~/Documents/projects/minishell$ export PATH=/nfs/homes/fmouronh/Documents/projects:/nfs/homes/fmouronh/Documents/projects/minishell`\
 	`fmouronh@c2r3s5:~/Documents/projects/minishell$ test_bin`\
 	`Hello World`\
 	`fmouronh@c2r3s5:~/Documents/projects/minishell$ `
 
-Minishell:
+Minishell:\
 	`✔ minishell →  echo $SHLVL`\
 	`2`\
 	`✔ minishell →  export PATH=/nfs/homes/fmouronh/Documents/projects:/nfs/homes/fmouronh/Documents/projects/minishell`\
