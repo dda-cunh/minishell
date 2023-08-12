@@ -38,7 +38,8 @@ static void	check_cmd(t_cmd *cmd)
 {
 	char	*error;
 
-	if (cmd->bin && cmd->builtin == NOTBUILTIN && !ft_strchr(cmd->bin, '/'))
+	if (cmd->bin && cmd->builtin == NOTBUILTIN && !ft_strchr(cmd->bin, '/')
+		&& access(cmd->bin, F_OK) != 0)
 	{
 		error = ft_strjoin(cmd->bin, BADCMD_ERR);
 		put_strerror(error, 0);

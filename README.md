@@ -33,7 +33,7 @@ Minishell:\
 	`/bin/ls: cannot access 'filethatdoesntexist': No such file or directory`
 
 
-### $PATH search needs to be done from left to right
+### $PATH search needs to be done from left to right	FIXED
 For this test, there were two executables named `test_bin`, in paths `~/Documents/projects` and `~/Documents/projects/minishell`\
 They are a Hello World and a copy of minishell, respectively
 

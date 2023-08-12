@@ -54,7 +54,6 @@ static char	*check_cmd_path(char *cmd, char **envp)
 		free(tmp_cmd);
 	}
 	free_2d(path);
-	ft_putendl_fd("Minishell: No such file or directory", 2);
 	return (ft_strdup(cmd));
 }
 
@@ -94,10 +93,9 @@ char	*get_bin(char *s, char **envp)
 		cmd = ft_split(s, ' ');
 		if (!cmd)
 			return (NULL);
-		if (!access(cmd[0], F_OK))
-			bin = ft_strdup(cmd[0]);
-		else
-			bin = check_cmd_path(cmd[0], envp);
+		bin = check_cmd_path(cmd[0], envp);
+		if (access(cmd[0], F_OK) != 0)
+			ft_putendl_fd("Minishell: No such file or directory", 2);
 		free_2d(cmd);
 	}
 	return (bin);
