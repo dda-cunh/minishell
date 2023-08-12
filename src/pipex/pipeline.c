@@ -82,7 +82,7 @@ int	pipeline(t_data *shell, t_cmd *cmd)
 {
 	int	_pipe[2];
 
-	while (cmd)
+	while (cmd && !shell->sigint)
 	{
 		if (pipe(_pipe) == -1)
 			exit_(-5, shell);
