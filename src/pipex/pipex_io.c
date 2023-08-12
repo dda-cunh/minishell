@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 20:52:22 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/11 20:36:59 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/12 19:36:09 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,13 +97,11 @@ static int	get_input(t_data *shell, t_redir *redir, bool fake)
 		if (fake)
 			tmp = open("/dev/null", O_WRONLY, 0777);
 		else
-			tmp = open(shell->tmp_path, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+			tmp = get_tmp(&redir);
 		if (tmp == -1)
 			return (2);
 		here_doc(shell, redir->name, tmp);
-		close(tmp);
-		if (!fake)
-			infd = open(shell->tmp_path, O_RDONLY, 0777);
+		infd = tmp;
 	}
 	else
 		infd = open(redir->name, O_RDONLY, 0777);

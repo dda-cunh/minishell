@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/11 21:08:57 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/12 19:33:08 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 # include <readline/history.h>
 # include <dirent.h>
 # include <signal.h>
+# include <sys/stat.h>
+# include <sys/types.h>
 # include <time.h>
 # include "libft/libft.h"
 
@@ -72,7 +74,6 @@ typedef struct s_data
 {
 	char			**env;
 	struct s_cmd	*cmd;
-	char			*tmp_path;
 	bool			sigint;
 	unsigned char	status;
 }				t_data;
@@ -139,6 +140,7 @@ int				get_cmd_in(t_data *shell, t_redir *redir);
 int				get_cmd_out(t_redir *redir, t_cmd *cmd);
 int				pipeline(t_data *shell, t_cmd *cmd);
 int				pipex(t_data **shell, t_cmd *cmd);
+int				get_tmp(t_redir **redir);
 int				do_wait(t_cmd *tail);
 int				cmd_index(int infd);
 int				dupper(t_cmd *cmd);

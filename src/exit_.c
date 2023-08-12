@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 15:04:01 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/03 18:38:22 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/12 19:37:12 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,6 @@ static void	free_all(t_data **shell)
 			free_2d((*shell)->env);
 		if ((*shell)->cmd)
 			free_cmd((*shell)->cmd);
-		if ((*shell)->tmp_path)
-			free((*shell)->tmp_path);
 	}
 }
 

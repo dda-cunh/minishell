@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 15:17:11 by fmouronh          #+#    #+#             */
-/*   Updated: 2023/08/06 04:24:33 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/12 19:27:05 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,20 +49,6 @@ static char	**copy_envi(char **envi)
 	return (minish_envi);
 }
 
-static int	set_tmp(t_data **shell)
-{
-	char	*sh_addr;
-
-	sh_addr = ft_itoa(**(int **)shell);
-	if (!sh_addr)
-		exit_(-1, *shell);
-	(*shell)->tmp_path = ft_strjoin("/tmp/minihell_tmp", sh_addr);
-	free(sh_addr);
-	if (!(*shell)->tmp_path)
-		exit_(-1, *shell);
-	return (0);
-}
-
 t_data	*init_shell(char **envi)
 {
 	t_data	*shell;
@@ -73,7 +59,6 @@ t_data	*init_shell(char **envi)
 		return (NULL);
 	update_env(&shell);
 	shell->cmd = NULL;
-	set_tmp(&shell);
 	shell->status = 0;
 	return (shell);
 }
