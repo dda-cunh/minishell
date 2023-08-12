@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/12 19:33:08 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/12 20:01:08 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,13 +134,14 @@ void			parse_tokens(t_data **shell, char **tokens);
 char			*manage_redirects(t_cmd *cmd, char *tkns);
 
 /*		PIPEX		*/
-char			**get_cmd(char *s, char **envp);
+void			here_doc(t_data *shell, char *delim, int tmp);
 void			do_close(t_cmd *cmd);
+char			**get_cmd(char *s, char **envp);
 int				get_cmd_in(t_data *shell, t_redir *redir);
 int				get_cmd_out(t_redir *redir, t_cmd *cmd);
 int				pipeline(t_data *shell, t_cmd *cmd);
 int				pipex(t_data **shell, t_cmd *cmd);
-int				get_tmp(t_redir **redir);
+int				get_tmp(t_data *shell, t_redir **redir);
 int				do_wait(t_cmd *tail);
 int				cmd_index(int infd);
 int				dupper(t_cmd *cmd);

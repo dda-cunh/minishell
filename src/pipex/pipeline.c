@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 00:34:40 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/11 23:20:11 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/12 20:04:51 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,20 +80,26 @@ int	dupper(t_cmd *cmd)
 
 int	pipeline(t_data *shell, t_cmd *cmd)
 {
-	int	_pipe[2];
+	t_cmd	*ref;
 
+	ref = cmd;
 	while (cmd && !shell->sigint)
 	{
-		if (pipe(_pipe) == -1)
-			exit_(-5, shell);
 		cmd->infd = get_cmd_in(shell, cmd->redir);
 		if (cmd->infd == 2)
 			return (1);
+		if (shell->sigint)
+			close(cmd->infd);
+		cmd = cmd->next;
+	}
+	cmd = ref;
+	while (cmd && !shell->sigint)
+	{
+		if (pipe(cmd->pipe) == -1)
+			exit_(-5, shell);
 		cmd->outfd = get_cmd_out(cmd->redir, cmd);
 		if (cmd->outfd == 2)
 			return (1);
-		cmd->pipe[0] = _pipe[0];
-		cmd->pipe[1] = _pipe[1];
 		cmd = cmd->next;
 	}
 	return (0);

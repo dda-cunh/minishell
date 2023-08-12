@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/12 19:22:57 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/12 19:34:11 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/12 20:02:06 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,16 @@ static char	*get_tmp_path(t_redir **redir)
 	return (path);
 }
 
-int	get_tmp(t_redir **redir)
+int	get_tmp(t_data *shell, t_redir **redir)
 {
 	char	*path;
-	int		fd;
+	int		tmp;
 
 	path = get_tmp_path(redir);
-	fd = open(path, O_RDWR | O_CREAT, 0777);
+	tmp = open(path, O_WRONLY | O_CREAT, 0777);
+	here_doc(shell, (*redir)->name, tmp);
+	close(tmp);
+	tmp = open(path, O_RDONLY, 0777);
 	free(path);
-	return (fd);
+	return (tmp);
 }

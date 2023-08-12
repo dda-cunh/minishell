@@ -6,13 +6,13 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 20:52:22 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/12 19:36:09 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/12 20:01:19 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-static void	here_doc(t_data *shell, char *delim, int tmp)
+void	here_doc(t_data *shell, char *delim, int tmp)
 {
 	size_t	d_len;
 	char	*line;
@@ -97,10 +97,9 @@ static int	get_input(t_data *shell, t_redir *redir, bool fake)
 		if (fake)
 			tmp = open("/dev/null", O_WRONLY, 0777);
 		else
-			tmp = get_tmp(&redir);
+			tmp = get_tmp(shell, &redir);
 		if (tmp == -1)
 			return (2);
-		here_doc(shell, redir->name, tmp);
 		infd = tmp;
 	}
 	else

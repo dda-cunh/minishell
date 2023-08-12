@@ -6,12 +6,11 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 12:25:12 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/11 23:26:57 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/12 20:07:55 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-#include <signal.h>
 
 static int	handle_builtin_exec(t_data **shell, t_cmd **cmd)
 {
@@ -75,6 +74,8 @@ static void	child(t_data *shell, t_cmd **cmd, char **env)
 
 static int	do_cmd(t_data **shell, t_cmd *cmd)
 {
+	if (!cmd->bin)
+		return (0);
 	if (signal(SIGINT, exec_sig_handler) == SIG_ERR
 		|| signal(SIGQUIT, exec_sig_handler) == SIG_ERR)
 		exit_(-2, *shell);
