@@ -96,6 +96,8 @@ static bool	assign_tokens(char *tokens, t_cmd *cmd, char **envi)
 {
 	char	*trim;
 
+	cmd->bin = NULL;
+	cmd->redir = NULL;
 	trim = ft_strdup(tokens);
 	if (!trim)
 		return (false);
@@ -131,35 +133,31 @@ static t_cmd	*assign_next(t_data **shell, char *tokens, t_cmd *cmd_head)
 	return (cmd);
 }
 
-t_cmd	*parse_tokens(t_data **shell, char **tokens)
+void	parse_tokens(t_data **shell, char **tokens)
 {
-	t_cmd	*cmd_head;
 	t_cmd	*prev;
 	t_cmd	*cmd;
 	int		i;
 
-	cmd_head = malloc(sizeof(t_cmd));
-	if (!cmd_head)
+	(*shell)->cmd = malloc(sizeof(t_cmd));
+	if (!(*shell)->cmd)
 		exit_(-1, *shell);
-	cmd = cmd_head;
+	cmd = (*shell)->cmd;
 	i = 0;
 	prev = NULL;
 	while (tokens[i])
 	{
-		cmd->bin = NULL;
-		cmd->redir = NULL;
 		cmd->prev = prev;
 		if (!assign_tokens(tokens[i], cmd, (*shell)->env))
 		{
 			free_2d(tokens);
-			(*shell)->cmd = cmd_head;
+			(*shell)->cmd = (*shell)->cmd;
 			exit_(-1, (*shell));
 		}
 		trim_quotes(*shell, cmd->args);
 		i++;
 		prev = cmd;
-		cmd->next = assign_next(shell, tokens[i], cmd_head);
+		cmd->next = assign_next(shell, tokens[i], (*shell)->cmd);
 		cmd = cmd->next;
 	}
-	return (cmd_head);
 }

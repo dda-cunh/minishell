@@ -91,7 +91,7 @@ int	minishell(t_data *shell)
 		if (!tokens)
 			continue ;
 		expander(shell, tokens);
-		shell->cmd = parse_tokens(&shell, tokens);
+		parse_tokens(&shell, tokens);
 		free_2d(tokens);
 		if (!shell->cmd)
 			continue ;

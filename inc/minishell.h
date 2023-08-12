@@ -129,7 +129,7 @@ int				find_next_quote(char *line, char quote);
 int				redir_found(char *line, char tkn);
 
 /*		PARSER		*/
-t_cmd			*parse_tokens(t_data **shell, char **tokens);
+void			parse_tokens(t_data **shell, char **tokens);
 char			*manage_redirects(t_cmd *cmd, char *tkns);
 
 /*		PIPEX		*/

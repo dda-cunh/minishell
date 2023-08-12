@@ -33,7 +33,6 @@ static int	handle_builtin_exec(t_data **shell, t_cmd **cmd)
 	return (status);
 }
 
-
 static void	check_cmd(t_cmd *cmd)
 {
 	char	*error;
