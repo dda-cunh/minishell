@@ -143,6 +143,7 @@ int				get_cmd_out(t_redir *redir, t_cmd *cmd);
 int				pipeline(t_data *shell, t_cmd *cmd);
 int				pipex(t_data **shell, t_cmd *cmd);
 int				get_tmp(t_data *shell, t_redir **redir);
+void			heredoc_interrupt(char *line, bool sigint);
 int				do_wait(t_cmd *tail);
 int				cmd_index(int infd);
 int				dupper(t_cmd *cmd);

@@ -58,6 +58,7 @@ SRC			=	$(addprefix $(SRC_DIR),	exec_builtin.c \
 																parser.c) \
 										$(addprefix $(PIP_DIR), pipex_utils.c \
 																pipex_io.c \
+																pipex_io_patch.c \
 																pipeline.c \
 																pipex.c))
 
