@@ -94,7 +94,7 @@ char	*get_bin(char *s, char **envp)
 		if (!cmd)
 			return (NULL);
 		bin = check_cmd_path(cmd[0], envp);
-		if (access(cmd[0], F_OK) != 0)
+		if (access(bin, F_OK) != 0)
 			ft_putendl_fd("Minishell: No such file or directory", 2);
 		free_2d(cmd);
 	}
