@@ -54,6 +54,7 @@ static char	*check_cmd_path(char *cmd, char **envp)
 		free(tmp_cmd);
 	}
 	free_2d(path);
+	ft_putendl_fd("Minishell: No such file or directory", 2);
 	return (ft_strdup(cmd));
 }
 
@@ -70,7 +71,7 @@ static char	*builtin_bin(char *s)
 		function = ft_strdup("pwd");
 	else if (!ft_strncmp(s, "export", 7))
 		function = ft_strdup("export");
-	else if (!ft_strncmp(s, "unset", 5))
+	else if (!ft_strncmp(s, "unset", 6))
 		function = ft_strdup("unset");
 	else if (!ft_strncmp(s, "env", 4))
 		function = ft_strdup("env");

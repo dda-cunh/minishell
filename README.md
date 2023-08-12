@@ -15,7 +15,7 @@ Minishell:\
 	`inc  Makefile  minishell  out  README.md  src  temp`
 
 
-### File lookup, possibly in search_bin:
+### File lookup, possibly in get_bin:	FIXED
 Bash:\
 	`fmouronh@c2r3s5:~/Documents/projects/minishell$ /bin/ls/filethatdoesntexist`\
 	`bash: /bin/ls/filethatdoesntexist: Not a directory`\
