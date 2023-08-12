@@ -16,7 +16,7 @@ void	main_sig_handler(int sig)
 {
 	if (sig == SIGINT)
 	{
-		ft_putendl_fd("", 2);
+		ft_putendl_fd("", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
@@ -28,7 +28,7 @@ void	heredoc_sig_handler(int sig)
 {
 	if (sig == SIGINT)
 	{
-		ft_putendl_fd("", 2);
+		ft_putendl_fd("", 1);
 		rl_done = 1;
 		rl_redisplay();
 		rl_on_new_line();
@@ -44,7 +44,7 @@ void	exec_sig_handler(int sig)
 	get_shell()->sigint = true;
 	if (sig == SIGINT)
 	{
-		ft_putendl_fd("", 2);
+		ft_putendl_fd("", 1);
 		get_shell()->status = 130;
 	}
 	else if (sig == SIGQUIT)

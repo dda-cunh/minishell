@@ -56,10 +56,9 @@ static char	*set_redir(t_cmd *cmd, char *tkns, int index, char tkn)
 	j = i;
 	while (tkns[j] && tkns[j] != ' ' && tkns[j] != '<' && tkns[j] != '>')
 		j++;
-	redir->name = ft_calloc((j - i) + 1, sizeof(char));
+	redir->name = get_redir_name(&tkns[i], (j - i) + 1);
 	if (!redir->name)
 		return (NULL);
-	ft_strlcpy(redir->name, &tkns[i], (j - i) + 1);
 	trim = ft_strreplace(tkns, index, (j - index), " ");
 	if (!trim)
 		return (NULL);

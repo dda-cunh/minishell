@@ -22,6 +22,7 @@ static char	*get_status(t_data *shell, char *tokens, int index)
 		exit_(-1, shell);
 	expanded = ft_strreplace(tokens, index - 1, 2, status_str);
 	free(status_str);
+	free(tokens);
 	if (!expanded)
 		exit_(-1, shell);
 	return (expanded);

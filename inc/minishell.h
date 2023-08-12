@@ -132,6 +132,7 @@ int				redir_found(char *line, char tkn);
 /*		PARSER		*/
 void			parse_tokens(t_data **shell, char **tokens);
 char			*manage_redirects(t_cmd *cmd, char *tkns);
+char			*get_redir_name(char *offset, int size);
 
 /*		PIPEX		*/
 void			here_doc(t_data *shell, char *delim, int tmp);
