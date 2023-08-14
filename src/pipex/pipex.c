@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 12:25:12 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/14 16:19:40 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/14 18:18:15 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,9 @@ static void	child(t_data *shell, t_cmd **cmd, char **env)
 	while ((*cmd)->next)
 		*cmd = (*cmd)->next;
 	do_close(*cmd);
+	if (signal(SIGINT, exec_sig_handler) == SIG_ERR
+		|| signal(SIGQUIT, exec_sig_handler) == SIG_ERR)
+		exit_(-2, shell);
 	*cmd = ref;
 	if (ref->builtin == NOTBUILTIN)
 		status = execve(ref->bin, ref->args, env);
@@ -80,9 +83,6 @@ static int	do_cmd(t_data **shell, t_cmd *cmd)
 {
 	if (!cmd->bin)
 		return (0);
-	if (signal(SIGINT, exec_sig_handler) == SIG_ERR
-		|| signal(SIGQUIT, exec_sig_handler) == SIG_ERR)
-		exit_(-2, *shell);
 	if (!cmd->builtin || (cmd->next || (!cmd->next && cmd->prev
 				&& (cmd->builtin == CD || cmd->builtin == EXPORT
 					|| cmd->builtin == UNSET || cmd->builtin == EXIT))))
@@ -112,6 +112,9 @@ int	pipex(t_data **shell, t_cmd *cmd)
 		return ((*shell)->status);
 	while (cmd)
 	{
+		if (signal(SIGINT, SIG_IGN) == SIG_ERR
+			|| signal(SIGQUIT, SIG_IGN) == SIG_ERR)
+			exit_(-2, *shell);
 		status = do_cmd(shell, cmd);
 		if (!cmd->next)
 			break ;
