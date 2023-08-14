@@ -35,6 +35,8 @@ t_cmd	*free_cmd(t_cmd *cmd)
 {
 	if (cmd->next)
 		free_cmd(cmd->next);
+	else
+		do_close(cmd);
 	if (cmd->bin)
 		free(cmd->bin);
 	if (cmd->args)

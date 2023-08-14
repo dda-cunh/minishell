@@ -24,6 +24,10 @@ void	do_close(t_cmd *tail)
 		close(tail->infd);
 	if (tail->outfd > 2 && redir_has_direction(tail->redir, 'o'))
 		close(tail->outfd);
+	tail->pipe[0] = -1;
+	tail->pipe[1] = -1;
+	tail->infd = -1;
+	tail->outfd = -1;
 	if (tail->prev)
 		do_close(tail->prev);
 	return ;
