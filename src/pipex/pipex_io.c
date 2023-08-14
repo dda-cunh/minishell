@@ -95,10 +95,7 @@ static int	get_input(t_data *shell, t_redir *redir, bool fake)
 	infd = 0;
 	if (redir->dbl_tkn)
 	{
-		if (fake)
-			tmp = open("/dev/null", O_WRONLY, 0777);
-		else
-			tmp = get_tmp(shell, &redir);
+		tmp = get_tmp(shell, &redir);
 		if (tmp == -1)
 			return (2);
 		infd = tmp;
