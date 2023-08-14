@@ -63,9 +63,6 @@ static void	child(t_data *shell, t_cmd **cmd, char **env)
 	while ((*cmd)->next)
 		*cmd = (*cmd)->next;
 	do_close(*cmd);
-	if (signal(SIGINT, exec_sig_handler) == SIG_ERR
-		|| signal(SIGQUIT, exec_sig_handler) == SIG_ERR)
-		exit_(-2, shell);
 	*cmd = ref;
 	if (ref->builtin == NOTBUILTIN)
 		status = execve(ref->bin, ref->args, env);
@@ -81,6 +78,9 @@ static void	child(t_data *shell, t_cmd **cmd, char **env)
 
 static int	do_cmd(t_data **shell, t_cmd *cmd)
 {
+	if (signal(SIGINT, exec_sig_handler) == SIG_ERR
+		|| signal(SIGQUIT, exec_sig_handler) == SIG_ERR)
+		exit_(-2, *shell);
 	if (!cmd->bin)
 		return (0);
 	if (!cmd->builtin || (cmd->next || (!cmd->next && cmd->prev

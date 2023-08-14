@@ -59,6 +59,12 @@ static char	*prompt(t_data *shell)
 {
 	char	*line;
 
+	if (shell->sigint && (shell->status == 130 || shell->status == 131))
+	{
+		if (shell->status == 131)
+			ft_putstr_fd("Quit (core dumped)", 2);
+		ft_putendl_fd("", 2);
+	}
 	if (!shell->status)
 		line = readline(ANSI_GREEN EXIT_OK ANSI_CYAN PROMPT ANSI_RESET);
 	else
