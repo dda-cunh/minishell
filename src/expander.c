@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 18:15:44 by fmouronh          #+#    #+#             */
-/*   Updated: 2023/07/10 15:15:58 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/14 15:44:33 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,10 @@ static int	search_var_tkn(char *tokens)
 		if (tokens[i] == '\'')
 		{
 			i++;
-			while (tokens[i] != '\'')
+			while (tokens[i] && tokens[i] != '\'')
 				i++;
+			if (!tokens[i])
+				break ;
 		}
 		if (tokens[i] == '$')
 			return (i + 1);

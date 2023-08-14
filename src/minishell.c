@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/12 19:37:00 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/14 15:54:05 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ static char	*prompt(t_data *shell)
 		line = readline(ANSI_RED EXIT_KO ANSI_CYAN PROMPT ANSI_RESET);
 	if (!line)
 	{
-		printf("exit\n");
+		ft_putendl_fd("exit\n", 2);
 		exit_(shell->status, shell);
 	}
 	if (*line)

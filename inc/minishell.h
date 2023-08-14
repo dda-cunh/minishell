@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/12 20:01:08 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/14 16:12:33 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ typedef enum e_builtin
 	EXPORT = 4,
 	UNSET = 5,
 	ENV = 6,
-	EXIT = 7
+	EXIT = 7,
+	MINISHELL = 8
 }			t_builtin;
 
 typedef struct s_redir

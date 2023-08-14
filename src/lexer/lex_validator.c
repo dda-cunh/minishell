@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 09:39:30 by fmouronh          #+#    #+#             */
-/*   Updated: 2023/07/06 15:27:15 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/14 15:41:03 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ bool	valid_redirect(char *line)
 	{
 		if (line[i] == '\"' || line[i] == '\'')
 		{
-			while (line[i] != '\"' && line[i] != '\'')
+			while (line[i] && line[i] != '\"' && line[i] != '\'')
 				i++;
 		}
 		if (line[i] == '<' || line[i] == '>')

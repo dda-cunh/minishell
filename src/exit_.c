@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 15:04:01 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/12 19:37:12 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/14 15:47:23 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ static void	free_all(t_data **shell)
 
 int	exit_(int status, t_data *shell)
 {
+	close_fds((int []){0, 1, 2}, 3);
 	free_all(&shell);
 	clear_history();
 	exit(status);

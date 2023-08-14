@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 12:25:12 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/12 20:07:55 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/14 16:19:40 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,11 @@ static int	handle_builtin_exec(t_data **shell, t_cmd **cmd)
 	status = dupper(*cmd);
 	if (status)
 		return (2);
+	if ((*cmd)->builtin == EXIT)
+	{
+		close_fds((int []){std_in_fd, std_out_fd}, 2);
+		do_close(*cmd);
+	}
 	status = exec_builtin(shell, **cmd);
 	if (dup2(std_in_fd, STDIN_FILENO) == -1
 		|| dup2(std_out_fd, STDOUT_FILENO) == -1)
@@ -68,7 +73,6 @@ static void	child(t_data *shell, t_cmd **cmd, char **env)
 		status = exec_builtin(&shell, *ref);
 	}
 	do_close(*cmd);
-	close_fds((int []){0, 1, 2}, 3);
 	exit_(status, shell);
 }
 
