@@ -43,7 +43,7 @@ int	do_wait(t_cmd *tail)
 			waitpid(tail->id, &exit, 0);
 			if (!tail->next)
 			{
-				if (get_shell()->sigint && (exit == 130 || exit == 131))
+				if (get_shell()->sigint && exit != 0)
 					status = get_shell()->status;
 				else if (tail->bin && tail->builtin == NOTBUILTIN
 					&& !ft_strchr(tail->bin, '/'))
