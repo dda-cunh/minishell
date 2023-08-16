@@ -100,11 +100,11 @@ int	pipeline(t_data *shell, t_cmd *cmd)
 	cmd = ref;
 	while (cmd && !shell->sigint)
 	{
-		if (pipe(cmd->pipe) == -1)
-			exit_(-5, shell);
 		cmd->outfd = get_cmd_out(cmd->redir, cmd);
 		if (cmd->outfd == 2)
 			return (1);
+		if (pipe(cmd->pipe) == -1)
+			exit_(-5, shell);
 		cmd = cmd->next;
 	}
 	return (0);
