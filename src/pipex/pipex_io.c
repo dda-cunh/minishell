@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 20:52:22 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/12 20:01:19 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/16 22:23:53 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,10 @@ static int	get_output(t_redir *redir, t_cmd *cmd)
 		else
 			outfd = open(redir->name, O_WRONLY | O_CREAT | O_TRUNC, 0777);
 		if (outfd == -1)
+		{
 			put_strerror(redir->name, true);
+			return (2);
+		}
 		if (cmd->bin && ((!redir->next && !cmd->next)
 				|| !redir_has_direction(redir->next, 'o')))
 			return (outfd);
@@ -103,8 +106,11 @@ static int	get_input(t_data *shell, t_redir *redir, bool fake)
 	else
 		infd = open(redir->name, O_RDONLY, 0777);
 	if (infd == -1)
+	{
 		put_strerror(redir->name, true);
-	if (fake && infd)
+		return (2);
+	}
+	if (fake)
 		close(infd);
 	return (infd);
 }

@@ -6,27 +6,11 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 17:54:33 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/16 20:18:48 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/16 22:00:29 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-
-// static void	debug_2d(char **matrix)
-// {
-// 	ft_putendl_fd("|||||||||||||||||||||||", 1);
-// 	if (matrix)
-// 	{
-// 		while (*matrix)
-// 		{
-// 			ft_putchar_fd('|', 1);
-// 			ft_putstr_fd(*matrix++, 1);
-// 			ft_putendl_fd("|", 1);
-// 		}
-// 	}
-// 	ft_putendl_fd("|||||||||||||||||||||||", 1);
-// 	return ;
-// }
 
 static int	changedir(t_data **shell, char *path)
 {
@@ -81,8 +65,8 @@ int	cd(t_data **shell, char **path)
 	{
 		if (*(path + 1))
 		{
-			ft_putendl_fd("minishell: cd: too many arguments", 2);
-			ret = 1;
+			put_strerror("minishell: cd: too many arguments", 0);
+			return (1);
 		}
 		else
 		{

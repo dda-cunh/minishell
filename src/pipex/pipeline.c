@@ -6,11 +6,24 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 00:34:40 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/12 20:04:51 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/16 22:06:15 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+
+static int	get_status(t_cmd *tail, int exit)
+{
+	if (get_shell()->sigint && (exit == 2 || exit == 131))
+		return (get_shell()->status);
+	else if (!tail->builtin && !ft_strchr(tail->bin, '/'))
+		return (127);
+	else if (tail->builtin == NOTBUILTIN && !access(tail->bin, F_OK)
+		&& access(tail->bin, X_OK))
+		return (126);
+	else
+		return (WEXITSTATUS(exit));
+}
 
 void	do_close(t_cmd *tail)
 {
@@ -42,15 +55,7 @@ int	do_wait(t_cmd *tail)
 		{
 			waitpid(tail->id, &exit, 0);
 			if (!tail->next)
-			{
-				if (get_shell()->sigint && (exit == 2 || exit == 131))
-					status = get_shell()->status;
-				else if (tail->bin && tail->builtin == NOTBUILTIN
-					&& !ft_strchr(tail->bin, '/'))
-					status = 127;
-				else
-					status = WEXITSTATUS(exit);
-			}
+				status = get_status(tail, exit);
 		}
 		tail = tail->prev;
 	}

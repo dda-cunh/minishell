@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 12:25:12 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/14 18:18:15 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/16 22:12:58 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,21 @@ static void	check_cmd(t_cmd *cmd)
 {
 	char	*error;
 
-	if (cmd->bin && cmd->builtin == NOTBUILTIN && !ft_strchr(cmd->bin, '/')
-		&& access(cmd->bin, F_OK) != 0)
+	error = NULL;
+	if (cmd->builtin == NOTBUILTIN && !ft_strchr(cmd->bin, '/'))
 	{
 		error = ft_strjoin(cmd->bin, BADCMD_ERR);
 		put_strerror(error, 0);
-		free(error);
 	}
+	else if (cmd->builtin == NOTBUILTIN && !access(cmd->bin, F_OK))
+	{
+		if (access(cmd->bin, X_OK))
+		{
+			error = ft_strjoin(cmd->bin, ": Permission denied");
+			put_strerror(error, 0);
+		}
+	}
+	free(error);
 }
 
 static void	child(t_data *shell, t_cmd **cmd, char **env)
@@ -83,20 +91,15 @@ static int	do_cmd(t_data **shell, t_cmd *cmd)
 		exit_(-2, *shell);
 	if (!cmd->bin)
 		return (0);
-	if (!cmd->builtin || (cmd->next || (!cmd->next && cmd->prev
-				&& (cmd->builtin == CD || cmd->builtin == EXPORT
-					|| cmd->builtin == UNSET || cmd->builtin == EXIT))))
-	{
-		cmd->id = fork();
-		if (cmd->id == -1)
-			return (2);
-		if (!cmd->id)
-			child(*shell, &cmd, (*shell)->env);
-		else
-			check_cmd(cmd);
-	}
-	else
+	if (cmd->builtin && (!cmd->next && !cmd->prev))
 		return (handle_builtin_exec(shell, &cmd));
+	cmd->id = fork();
+	if (cmd->id == -1)
+		return (2);
+	if (!cmd->id)
+		child(*shell, &cmd, (*shell)->env);
+	else
+		check_cmd(cmd);
 	return (0);
 }
 
@@ -107,7 +110,7 @@ int	pipex(t_data **shell, t_cmd *cmd)
 	status = 0;
 	(*shell)->sigint = false;
 	if (pipeline(*shell, cmd))
-		exit_(-5, *shell);
+		return (1);
 	if ((*shell)->sigint)
 		return ((*shell)->status);
 	while (cmd)

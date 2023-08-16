@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 15:04:01 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/14 15:47:23 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/16 22:18:58 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	put_strerror(char *arg, bool print_strerror)
 {
 	ft_putstr_fd(ANSI_RED, 2);
 	ft_putstr_fd(arg, 2);
+	ft_putchar_fd(' ', 2);
 	if (print_strerror)
 		ft_putstr_fd(strerror(errno), 2);
 	ft_putendl_fd(ANSI_RESET, 2);
