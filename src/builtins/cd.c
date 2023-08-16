@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 17:54:33 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/09 17:46:30 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/16 20:18:48 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static int	do_alt(t_data **shell, char *alt_var)
 	int		ret;
 
 	alt_value = get_env_val(*shell, alt_var);
-	if (!alt_value)
+	if (!*alt_value)
 	{
 		ft_putstr_fd("minishell: cd: ", 2);
 		ft_putstr_fd(alt_var, 2);
