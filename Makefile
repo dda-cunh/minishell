@@ -41,6 +41,7 @@ SRC			=	$(addprefix $(SRC_DIR), minishell.c \
 																token_masks.c \
 																init_shell.c \
 																expander.c \
+																expander_patch.c \
 																signals.c \
 																get_bin.c \
 																utils.c \

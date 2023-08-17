@@ -35,7 +35,7 @@ static void	free_strings(char *str1, char *str2, char *str3)
 	free(str3);
 }
 
-static char	*expand_var(t_data *shell, char *tokens, int index)
+static char	*expand_var(t_data *shell, char *tokens, int index, bool *dquotes)
 {
 	char	*var_name;
 	char	*var_val;
@@ -45,7 +45,7 @@ static char	*expand_var(t_data *shell, char *tokens, int index)
 	i = index;
 	if (tokens[i] == '?')
 		return (get_status(shell, tokens, index));
-	else if (ignore_expansion(tokens[i]))
+	else if (ignore_expansion(tokens[i], dquotes))
 	{
 		tokens[i - 1] = '\xff';
 		return (tokens);
@@ -64,18 +64,16 @@ static char	*expand_var(t_data *shell, char *tokens, int index)
 	return (expanded);
 }
 
-static int	search_var_tkn(char *tokens)
+static int	search_var_tkn(char *tokens, bool *dquotes)
 {
 	int		i;
-	bool	dquotes;
 
 	i = 0;
-	dquotes = false;
 	while (tokens[i])
 	{
 		if (tokens[i] == '\"')
-			dquotes = !dquotes;
-		if (tokens[i] == '\'' && !dquotes)
+			*dquotes = !*dquotes;
+		if (tokens[i] == '\'' && !*dquotes)
 		{
 			i++;
 			while (tokens[i] && tokens[i] != '\'')
@@ -92,16 +90,18 @@ static int	search_var_tkn(char *tokens)
 
 void	expander(t_data *shell, char **tokens)
 {
-	int	var_i;
-	int	i;
+	bool	dquotes;
+	int		var_i;
+	int		i;
 
 	var_i = 0;
 	i = 0;
 	while (tokens[i])
 	{
-		var_i = search_var_tkn(tokens[i]);
+		dquotes = false;
+		var_i = search_var_tkn(tokens[i], &dquotes);
 		if (var_i >= 0)
-			tokens[i] = expand_var(shell, tokens[i], var_i);
+			tokens[i] = expand_var(shell, tokens[i], var_i, &dquotes);
 		else
 		{
 			unset_mask(tokens[i], '$');

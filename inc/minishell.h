@@ -93,7 +93,7 @@ int				rl_sig_event(void);
 
 /*		MINISHELL	*/
 void			expander(t_data *shell, char **tokens);
-bool			ignore_expansion(char tkn);
+bool			ignore_expansion(char tkn, bool *dquotes);
 char			*get_bin(char *s, char **envp);
 int				minishell(t_data *shell);
 

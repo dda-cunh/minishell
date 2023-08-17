@@ -12,9 +12,11 @@
 
 #include "minishell.h"
 
-bool	ignore_expansion(char tkn)
+bool	ignore_expansion(char tkn, bool *dquotes)
 {
-	if (!tkn || tkn == ' ' || tkn == '\'' || tkn == '\"')
+	if (!tkn || tkn == ' ')
+		return (true);
+	else if ((tkn == '\'' || tkn == '\"') && *dquotes)
 		return (true);
 	else
 		return (false);
