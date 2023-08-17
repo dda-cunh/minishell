@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/12 19:22:57 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/17 14:19:16 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/17 16:51:12 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,19 @@ bool	is_dir(const char *path)
 		return (0);
 	closedir(dir);
 	return (1);
+}
+
+bool	redir_has_direction(t_redir *redir, char direction)
+{
+	if (!redir)
+		return (false);
+	while (redir)
+	{
+		if (redir->direction == direction)
+			return (true);
+		redir = redir->next;
+	}
+	return (false);
 }
 
 static char	*get_tmp_path(t_redir **redir)

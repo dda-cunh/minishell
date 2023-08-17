@@ -6,23 +6,23 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 15:49:36 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/11 12:26:28 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/17 16:56:05 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
 
-bool	redir_has_direction(t_redir *redir, char direction)
+void	flush_stdout(void)
 {
-	if (!redir)
-		return (false);
-	while (redir)
-	{
-		if (redir->direction == direction)
-			return (true);
-		redir = redir->next;
-	}
-	return (false);
+	int	stdout_fileno;
+
+	stdout_fileno = dup(STDOUT_FILENO);
+	if (stdout_fileno == -1)
+		exit_(-1, get_shell());
+	close(STDOUT_FILENO);
+	if (dup2(stdout_fileno, STDOUT_FILENO) == -1)
+		exit_(-1, get_shell());
+	close(stdout_fileno);
 }
 
 int	get_env_index(t_data *shell, const char *env_var)

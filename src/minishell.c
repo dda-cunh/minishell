@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/14 15:54:05 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/17 16:56:19 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ int	minishell(t_data *shell)
 
 	while (true)
 	{
+		flush_stdout();
 		if (signal(SIGINT, main_sig_handler) == SIG_ERR
 			|| signal(SIGQUIT, SIG_IGN) == SIG_ERR)
 			exit_(-3, shell);

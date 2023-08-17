@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 14:49:51 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/17 16:15:26 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/17 16:54:19 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,10 +113,10 @@ int				exec_builtin(t_data **shell, t_cmd cmd);
 
 /*	UTILS FUNCTIONS	*/
 char			*get_env_val(t_data *shell, const char *var);
+void			flush_stdout(void);
 int				get_env_index(t_data *shell, const char *env_var);
 int				update_env_val(t_data **shell, const char *var,
 					const char *new_val, bool should_create);
-bool			redir_has_direction(t_redir *redir, char direction);
 
 /*	TOKEN MASKS		*/
 int				set_mask(char *str, char quote, char tkn);
@@ -140,11 +140,12 @@ char			*do_remove(char *removed, char *str, int start, int *i);
 int				praise_teh_norminette(char *tkns, int i);
 
 /*		PIPEX		*/
+bool			redir_has_direction(t_redir *redir, char direction);
+bool			is_dir(const char *path);
 void			here_doc(t_data *shell, char *delim, int tmp);
 void			heredoc_interrupt(char *line, bool sigint);
 void			do_close(t_cmd *cmd);
 char			**get_cmd(char *s, char **envp);
-bool			is_dir(const char *path);
 int				get_cmd_in(t_data *shell, t_redir *redir);
 int				get_cmd_out(t_redir *redir, t_cmd *cmd);
 int				pipeline(t_data *shell, t_cmd *cmd);
