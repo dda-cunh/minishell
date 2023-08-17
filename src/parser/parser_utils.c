@@ -71,12 +71,10 @@ static char	*set_redir(t_cmd *cmd, char *tkns, int index, char tkn)
 		j++;
 	}
 	redir->name = get_redir_name(&tkns[i], (j - i) + 1);
-	if (!redir->name)
-		return (NULL);
 	trim = ft_strreplace(tkns, index, (j - index), " ");
-	if (!trim)
-		return (NULL);
 	free(tkns);
+	if (!redir->name || !trim)
+		return (NULL);
 	return (trim);
 }
 

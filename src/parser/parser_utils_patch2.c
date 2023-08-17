@@ -21,7 +21,7 @@ char	*do_remove(char *removed, char *str, int start, int *i)
 		exit_(-1, get_shell());
 	ft_strlcpy(result, removed, ft_strlen(removed));
 	ft_strlcat(result, &str[start], ft_strlen(result) + i[1] - start + 1);
-	ft_strlcat(result, &str[i[1] + 1], ft_strlen(result) + i[0] - i[1]);
+	ft_strlcat(result, &str[i[1] + 1], ft_strlen(result) + i[0] - i[1] + 1);
 	free(removed);
 	return (result);
 }
