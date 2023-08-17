@@ -63,13 +63,7 @@ static char	*set_redir(t_cmd *cmd, char *tkns, int index, char tkn)
 		redir->dbl_tkn = true;
 	while (tkns[i] && (tkns[i] == ' ' || tkns[i] == tkn))
 		i++;
-	j = i;
-	while (tkns[j] && tkns[j] != ' ' && tkns[j] != '<' && tkns[j] != '>')
-	{
-		if (tkns[j] == '\"' || tkns[j] == '\'')
-			j += skip_quoted(&tkns[j], tkns[j]);
-		j++;
-	}
+	j = praise_teh_norminette(tkns, i);
 	redir->name = get_redir_name(&tkns[i], (j - i) + 1);
 	trim = ft_strreplace(tkns, index, (j - index), " ");
 	free(tkns);
