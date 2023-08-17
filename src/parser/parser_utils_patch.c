@@ -35,3 +35,60 @@ char	*get_redir_name(char *offset, int size)
 		return (trim_file_quotes(file, file[0]));
 	return (file);
 }
+
+static int	skip_quotes(char *str, char quote)
+{
+	int	i;
+
+	i = 1;
+	while (str[i] && str[i] != quote)
+		i++;
+	return (i);
+}
+
+static char	*search_quotes(char *str)
+{
+	char	*result;
+	int		start;
+	int		i[2];
+
+	result = NULL;
+	start = 0;
+	i[0] = 0;
+	i[1] = 0;
+	while (str[i[0]])
+	{
+		if (str[i[0]] == '\"' || str[i[0]] == '\'')
+		{
+			i[1] = i[0];
+			i[0] += skip_quotes(&str[i[0]], str[i[0]]);
+			result = do_remove(result, str, start, i);
+			start = i[0] + 1;
+		}
+		else
+			i[0]++;
+	}
+	if (start == 0)
+		return (str);
+	free(str);
+	return (result);
+}
+
+void	remove_quotes(t_cmd *cmd)
+{
+	t_redir	*redir;
+	int		i;
+
+	redir = cmd->redir;
+	i = 0;
+	while (cmd->args[i])
+	{
+		cmd->args[i] = search_quotes(cmd->args[i]);
+		i++;
+	}
+	while (redir)
+	{
+		redir->name = search_quotes(redir->name);
+		redir = redir->next;
+	}
+}

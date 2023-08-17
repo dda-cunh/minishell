@@ -113,6 +113,7 @@ static bool	assign_tokens(char *tokens, t_cmd *cmd, char **envi)
 	cmd->builtin = is_builtin(cmd->args[0]);
 	cmd->bin = get_bin(cmd->args[0], envi);
 	cmd->id = -69;
+	remove_quotes(cmd);
 	return (true);
 }
 
