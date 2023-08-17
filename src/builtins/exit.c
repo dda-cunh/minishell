@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 21:17:46 by fmouronh          #+#    #+#             */
-/*   Updated: 2023/08/09 18:13:39 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/17 12:10:04 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,29 +19,21 @@ static void	print_error(char *arg)
 	ft_putendl_fd(": numeric argument required", 2);
 }
 
-static bool	str_is_num(char *arg)
-{
-	if (*arg == '-')
-		arg++;
-	while (*arg)
-	{
-		if (!ft_isdigit(*arg))
-			return (false);
-		arg++;
-	}
-	return (true);
-}
-
 int	exit_bin(t_data **shell, char **args)
 {
-	int		status;
 	bool	is_num;
+	int		status;
 
 	status = 0;
 	if (args[0])
 	{
-		is_num = str_is_num(args[0]);
-		ft_putendl_fd("exit", 1);
+		ft_putendl_fd("exit", 2);
+		if (args[1])
+		{
+			ft_putendl_fd("minishell: exit: too many arguments", 2);
+			return (1);
+		}
+		is_num = ft_sislong(args[0]);
 		if (!is_num)
 		{
 			status = 2;
@@ -49,11 +41,6 @@ int	exit_bin(t_data **shell, char **args)
 		}
 		else if (!args[1])
 			status = ft_atoi(args[0]) & 0xff;
-		else
-		{
-			ft_putendl_fd("minishell: exit: too many arguments", 2);
-			return (1);
-		}
 	}
 	return (exit_(status, *shell));
 }

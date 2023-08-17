@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 18:16:59 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/07/22 23:02:51 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/17 11:49:03 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,5 +80,7 @@ void			free_2d(char **split);
 void			close_fds(int fd[], int n);
 int				len_2d(char **matrix);
 char			*ft_notdir(char *path);
+int				ft_sisnum(const char *s);
+int				ft_sislong(const char *s);
 
 #endif

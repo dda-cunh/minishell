@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 12:25:12 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/16 22:12:58 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/17 12:55:52 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,22 @@ static int	handle_builtin_exec(t_data **shell, t_cmd **cmd)
 	status = 0;
 	std_out_fd = dup(STDOUT_FILENO);
 	std_in_fd = dup(STDIN_FILENO);
-	status = dupper(*cmd);
-	if (status)
-		return (2);
 	if ((*cmd)->builtin == EXIT)
 	{
+		if (dup2(std_in_fd, STDIN_FILENO) == -1
+			|| dup2(std_out_fd, STDOUT_FILENO) == -1)
+			return (2);
 		close_fds((int []){std_in_fd, std_out_fd}, 2);
+		std_in_fd = -1;
+		std_out_fd = -1;
 		do_close(*cmd);
 	}
 	status = exec_builtin(shell, **cmd);
-	if (dup2(std_in_fd, STDIN_FILENO) == -1
-		|| dup2(std_out_fd, STDOUT_FILENO) == -1)
+	if (((*cmd)->builtin != EXIT && dup2(std_in_fd, STDIN_FILENO) == -1)
+		|| ((*cmd)->builtin != EXIT && dup2(std_out_fd, STDOUT_FILENO) == -1))
 		return (2);
-	close_fds((int []){std_in_fd, std_out_fd}, 2);
+	if ((*cmd)->builtin != EXIT)
+		close_fds((int []){std_in_fd, std_out_fd}, 2);
 	return (status);
 }
 
@@ -47,13 +50,10 @@ static void	check_cmd(t_cmd *cmd)
 		error = ft_strjoin(cmd->bin, BADCMD_ERR);
 		put_strerror(error, 0);
 	}
-	else if (cmd->builtin == NOTBUILTIN && !access(cmd->bin, F_OK))
+	else if (cmd->builtin == NOTBUILTIN && access(cmd->bin, X_OK))
 	{
-		if (access(cmd->bin, X_OK))
-		{
-			error = ft_strjoin(cmd->bin, ": Permission denied");
-			put_strerror(error, 0);
-		}
+		error = ft_strjoin(cmd->bin, ": Permission denied");
+		put_strerror(error, 0);
 	}
 	free(error);
 }
@@ -89,8 +89,10 @@ static int	do_cmd(t_data **shell, t_cmd *cmd)
 	if (signal(SIGINT, exec_sig_handler) == SIG_ERR
 		|| signal(SIGQUIT, exec_sig_handler) == SIG_ERR)
 		exit_(-2, *shell);
-	if (!cmd->bin || cmd->infd == 2 || cmd->outfd == 2)
+	if (!cmd->bin)
 		return (0);
+	if (cmd->infd == 2 || cmd->outfd == 2)
+		return (1);
 	if (cmd->builtin && (!cmd->next && !cmd->prev))
 		return (handle_builtin_exec(shell, &cmd));
 	cmd->id = fork();

@@ -46,6 +46,8 @@ SRC		= 	ft_memset.c \
 			ft_len_2d.c \
 			ft_notdir.c \
 			ft_strdup_tail.c \
+			ft_sisnum.c \
+			ft_sislong.c \
 			get_next_line.c \
 			get_next_line_utils.c
 

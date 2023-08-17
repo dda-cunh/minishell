@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 17:54:33 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/16 22:00:29 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/17 11:33:39 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,11 @@ int	cd(t_data **shell, char **path)
 		else
 		{
 			ret = changedir(shell, *path);
-			if (errno && ret == errno)
+			if (ret)
+			{
+				ret = 1;
 				put_strerror("minishell: cd: ", 1);
+			}
 		}
 	}
 	return (ret);
