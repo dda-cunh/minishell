@@ -63,7 +63,8 @@ static char	*search_quotes(char *str)
 			i[1] = i[0];
 			i[0] += skip_quotes(&str[i[0]], str[i[0]]);
 			result = do_remove(result, str, start, i);
-			start = i[0] + 1;
+			i[0]++;
+			start = i[0];
 		}
 		else
 			i[0]++;
