@@ -53,6 +53,16 @@ bool	valid_quotes(char *line)
 "ls > myfile"
 */
 
+static int	skip_quotes(char *tkns, char quote)
+{
+	int	i;
+
+	i = 1;
+	while (tkns[i] && tkns[i] != quote)
+		i++;
+	return (i);
+}
+
 bool	valid_redirect(char *line)
 {
 	int		i;
@@ -61,10 +71,7 @@ bool	valid_redirect(char *line)
 	while (line[i])
 	{
 		if (line[i] == '\"' || line[i] == '\'')
-		{
-			while (line[i] && line[i] != '\"' && line[i] != '\'')
-				i++;
-		}
+			i += skip_quotes(&line[i], line[i]);
 		if (line[i] == '<' || line[i] == '>')
 		{
 			i++;
