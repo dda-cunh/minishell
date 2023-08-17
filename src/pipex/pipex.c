@@ -89,7 +89,7 @@ static int	do_cmd(t_data **shell, t_cmd *cmd)
 	if (signal(SIGINT, exec_sig_handler) == SIG_ERR
 		|| signal(SIGQUIT, exec_sig_handler) == SIG_ERR)
 		exit_(-2, *shell);
-	if (!cmd->bin)
+	if (!cmd->bin || cmd->infd == 2 || cmd->outfd == 2)
 		return (0);
 	if (cmd->builtin && (!cmd->next && !cmd->prev))
 		return (handle_builtin_exec(shell, &cmd));

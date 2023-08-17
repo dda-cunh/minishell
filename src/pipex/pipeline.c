@@ -91,8 +91,6 @@ int	pipeline(t_data *shell, t_cmd *cmd)
 	while (cmd && !shell->sigint)
 	{
 		cmd->infd = get_cmd_in(shell, cmd->redir);
-		if (cmd->infd == 2)
-			return (1);
 		if (shell->sigint)
 			close(cmd->infd);
 		cmd = cmd->next;
@@ -101,8 +99,6 @@ int	pipeline(t_data *shell, t_cmd *cmd)
 	while (cmd && !shell->sigint)
 	{
 		cmd->outfd = get_cmd_out(cmd->redir, cmd);
-		if (cmd->outfd == 2)
-			return (1);
 		if (pipe(cmd->pipe) == -1)
 			exit_(-5, shell);
 		cmd = cmd->next;
