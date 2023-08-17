@@ -45,7 +45,7 @@ static char	*expand_var(t_data *shell, char *tokens, int index)
 	i = index;
 	if (tokens[i] == '?')
 		return (get_status(shell, tokens, index));
-	else if (tokens[i] == ' ' || !tokens[i] || tokens[i] == '\"')
+	else if (ignore_expansion(tokens[i]))
 	{
 		tokens[i - 1] = '\xff';
 		return (tokens);
