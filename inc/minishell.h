@@ -136,6 +136,7 @@ char			*manage_redirects(t_cmd *cmd, char *tkns);
 char			*get_redir_name(char *offset, int size);
 void			remove_quotes(t_cmd *cmd);
 char			*do_remove(char *removed, char *str, int start, int *i);
+int				praise_teh_norminette(char *tkns, int i);
 
 /*		PIPEX		*/
 void			here_doc(t_data *shell, char *delim, int tmp);

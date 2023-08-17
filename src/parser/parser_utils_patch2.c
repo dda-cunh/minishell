@@ -12,6 +12,30 @@
 
 #include "minishell.h"
 
+static int	skip_quoted(char *str, char quote)
+{
+	int	i;
+
+	i = 1;
+	while (str[i] && str[i] != quote)
+		i++;
+	return (i);
+}
+
+int	praise_teh_norminette(char *tkns, int i)
+{
+	int	j;
+
+	j = i;
+	while (tkns[j] && tkns[j] != ' ' && tkns[j] != '<' && tkns[j] != '>')
+	{
+		if (tkns[j] == '\"' || tkns[j] == '\'')
+			j += skip_quoted(&tkns[j], tkns[j]);
+		j++;
+	}
+	return (j);
+}
+
 char	*do_remove(char *removed, char *str, int start, int *i)
 {
 	char	*result;
