@@ -28,6 +28,13 @@ static char	*get_status(t_data *shell, char *tokens, int index)
 	return (expanded);
 }
 
+static void	free_strings(char *str1, char *str2, char *str3)
+{
+	free(str1);
+	free(str2);
+	free(str3);
+}
+
 static char	*expand_var(t_data *shell, char *tokens, int index)
 {
 	char	*var_name;
@@ -38,6 +45,11 @@ static char	*expand_var(t_data *shell, char *tokens, int index)
 	i = index;
 	if (tokens[i] == '?')
 		return (get_status(shell, tokens, index));
+	else if (tokens[i] == ' ' || !tokens[i])
+	{
+		tokens[i - 1] = '\xff';
+		return (tokens);
+	}
 	while (tokens[i] && ft_isalnum(tokens[i]))
 		i++;
 	var_name = ft_calloc(i - index + 1, sizeof(char));
@@ -46,9 +58,7 @@ static char	*expand_var(t_data *shell, char *tokens, int index)
 	ft_strlcpy(var_name, &tokens[index], i - index + 1);
 	var_val = get_env_val(shell, var_name);
 	expanded = ft_strreplace(tokens, index - 1, i - index + 1, var_val);
-	free(var_name);
-	free(var_val);
-	free(tokens);
+	free_strings(var_name, var_val, tokens);
 	if (!expanded)
 		exit_(-1, shell);
 	return (expanded);
@@ -89,6 +99,9 @@ void	expander(t_data *shell, char **tokens)
 		if (var_i >= 0)
 			tokens[i] = expand_var(shell, tokens[i], var_i);
 		else
+		{
+			unset_mask(tokens[i], '$');
 			i++;
+		}
 	}
 }
