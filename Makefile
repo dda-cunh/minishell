@@ -25,24 +25,26 @@ LEX_DIR		=	lexer/
 
 PAR_DIR		=	parser/
 
+COM_DIR		=	common/
+
 LFT_DIR		=	libft/
 
 LFT_FULL	=	$(addprefix $(INC_DIR), $(LFT_DIR))
 
 LINKS		=	-L$(LFT_FULL) -lft -lreadline
 
-SRC			=	$(addprefix $(SRC_DIR),	exec_builtin.c \
-										init_shell.c \
-										init_shell_env.c \
-										signals.c \
-										token_masks.c \
-										minishell.c \
-										expander.c \
-										expander_patch.c \
-										get_bin.c \
-										utils.c \
-										exit_.c \
+SRC			=	$(addprefix $(SRC_DIR), minishell.c \
 										main.c \
+										$(addprefix $(COM_DIR), init_shell_env.c  \
+																expander_patch.c \
+																exec_builtin.c \
+																token_masks.c \
+																init_shell.c \
+																expander.c \
+																signals.c \
+																get_bin.c \
+																utils.c \
+																exit_.c) \
 										$(addprefix $(BIN_DIR), export.c \
 																export_noargs.c \
 																unset.c \
@@ -67,7 +69,8 @@ SRC			=	$(addprefix $(SRC_DIR),	exec_builtin.c \
 OBJ_DIRS	=	$(OBJ_DIR)	$(addprefix $(OBJ_DIR), $(BIN_DIR)) \
 							$(addprefix $(OBJ_DIR), $(LEX_DIR)) \
 							$(addprefix $(OBJ_DIR), $(PAR_DIR)) \
-							$(addprefix $(OBJ_DIR), $(PIP_DIR))
+							$(addprefix $(OBJ_DIR), $(PIP_DIR)) \
+							$(addprefix $(OBJ_DIR), $(COM_DIR))
 
 OBJ 		= 	$(SRC:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)
 
