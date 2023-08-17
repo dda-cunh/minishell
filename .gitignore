@@ -1,5 +1,4 @@
-readline.supp
-valgrind.txt
+minishell_tester/
 edgecases
 minishell
 debug/
