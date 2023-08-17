@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 00:34:40 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/17 12:56:15 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/17 14:30:05 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,11 @@ static int	get_status(t_cmd *tail, int exit)
 {
 	if (get_shell()->sigint && (exit == 2 || exit == 131))
 		return (get_shell()->status);
-	else if (!tail->builtin && !ft_strchr(tail->bin, '/'))
+	else if ((!tail->builtin && (!ft_strchr(tail->bin, '/')
+				|| access(tail->bin, F_OK))))
 		return (127);
-	else if (tail->builtin == NOTBUILTIN && access(tail->bin, X_OK))
+	else if (tail->builtin == NOTBUILTIN && (!access(tail->bin, F_OK)
+			&& (access(tail->bin, X_OK) || is_dir(tail->bin))))
 		return (126);
 	else
 		return (WEXITSTATUS(exit));

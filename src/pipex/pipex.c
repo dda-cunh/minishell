@@ -6,7 +6,7 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 12:25:12 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/17 12:55:52 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/17 14:34:17 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ static int	handle_builtin_exec(t_data **shell, t_cmd **cmd)
 	status = 0;
 	std_out_fd = dup(STDOUT_FILENO);
 	std_in_fd = dup(STDIN_FILENO);
+	dupper(*cmd);
 	if ((*cmd)->builtin == EXIT)
 	{
 		if (dup2(std_in_fd, STDIN_FILENO) == -1
@@ -45,15 +46,24 @@ static void	check_cmd(t_cmd *cmd)
 	char	*error;
 
 	error = NULL;
-	if (cmd->builtin == NOTBUILTIN && !ft_strchr(cmd->bin, '/'))
+	if ((!cmd->builtin && (!ft_strchr(cmd->bin, '/')
+				|| access(cmd->bin, F_OK))))
 	{
 		error = ft_strjoin(cmd->bin, BADCMD_ERR);
 		put_strerror(error, 0);
 	}
-	else if (cmd->builtin == NOTBUILTIN && access(cmd->bin, X_OK))
+	else if (cmd->builtin == NOTBUILTIN && !access(cmd->bin, F_OK))
 	{
-		error = ft_strjoin(cmd->bin, ": Permission denied");
-		put_strerror(error, 0);
+		if (is_dir(cmd->bin))
+		{
+			error = ft_strjoin(cmd->bin, ": Is a directory");
+			put_strerror(error, 0);
+		}
+		else if (access(cmd->bin, X_OK))
+		{
+			error = ft_strjoin(cmd->bin, ": Permission denied");
+			put_strerror(error, 0);
+		}
 	}
 	free(error);
 }

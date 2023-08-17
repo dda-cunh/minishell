@@ -6,11 +6,22 @@
 /*   By: dda-cunh <dda-cunh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/12 19:22:57 by dda-cunh          #+#    #+#             */
-/*   Updated: 2023/08/12 20:02:06 by dda-cunh         ###   ########.fr       */
+/*   Updated: 2023/08/17 14:19:16 by dda-cunh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+
+bool	is_dir(const char *path)
+{
+	DIR	*dir;
+
+	dir = opendir(path);
+	if (!dir)
+		return (0);
+	closedir(dir);
+	return (1);
+}
 
 static char	*get_tmp_path(t_redir **redir)
 {
