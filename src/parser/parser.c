@@ -155,7 +155,6 @@ void	parse_tokens(t_data **shell, char **tokens)
 			(*shell)->cmd = (*shell)->cmd;
 			exit_(-1, (*shell));
 		}
-		trim_quotes(*shell, cmd->args);
 		i++;
 		prev = cmd;
 		cmd->next = assign_next(shell, tokens[i], (*shell)->cmd);

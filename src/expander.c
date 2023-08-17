@@ -66,12 +66,16 @@ static char	*expand_var(t_data *shell, char *tokens, int index)
 
 static int	search_var_tkn(char *tokens)
 {
-	int	i;
+	int		i;
+	bool	dquotes;
 
 	i = 0;
+	dquotes = false;
 	while (tokens[i])
 	{
-		if (tokens[i] == '\'')
+		if (tokens[i] == '\"')
+			dquotes = !dquotes;
+		if (tokens[i] == '\'' && !dquotes)
 		{
 			i++;
 			while (tokens[i] && tokens[i] != '\'')
