@@ -38,6 +38,16 @@ static t_redir	*gen_redir(t_cmd *cmd, char tkn)
 	return (redir);
 }
 
+static int	skip_quoted(char *str, char tkn)
+{
+	int	i;
+
+	i = 1;
+	while (str[i] && str[i] != tkn)
+		i++;
+	return (i);
+}
+
 static char	*set_redir(t_cmd *cmd, char *tkns, int index, char tkn)
 {
 	t_redir	*redir;
@@ -55,7 +65,11 @@ static char	*set_redir(t_cmd *cmd, char *tkns, int index, char tkn)
 		i++;
 	j = i;
 	while (tkns[j] && tkns[j] != ' ' && tkns[j] != '<' && tkns[j] != '>')
+	{
+		if (tkns[j] == '\"' || tkns[j] == '\'')
+			j += skip_quoted(&tkns[j], tkns[j]);
 		j++;
+	}
 	redir->name = get_redir_name(&tkns[i], (j - i) + 1);
 	if (!redir->name)
 		return (NULL);
@@ -64,16 +78,6 @@ static char	*set_redir(t_cmd *cmd, char *tkns, int index, char tkn)
 		return (NULL);
 	free(tkns);
 	return (trim);
-}
-
-static int	skip_quoted(char *str, char tkn)
-{
-	int	i;
-
-	i = 1;
-	while (str[i] && str[i] != tkn)
-		i++;
-	return (i);
 }
 
 char	*manage_redirects(t_cmd *cmd, char *tkns)
